@@ -1,0 +1,262 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper function to check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Helper function to get user role
+    function getUserRole() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+    }
+    
+    // Helper function to check if user has specific role
+    function hasRole(role) {
+      return isAuthenticated() && getUserRole() == role;
+    }
+    
+    // Helper function to check if user has any of the specified roles
+    function hasAnyRole(roles) {
+      return isAuthenticated() && getUserRole() in roles;
+    }
+    
+    // Helper function to check if user is admin
+    function isAdmin() {
+      return hasRole("admin");
+    }
+    
+    // Helper function to check if user is store owner
+    function isStore() {
+      return hasRole("store");
+    }
+    
+    // Helper function to check if user is customer
+    function isCustomer() {
+      return hasRole("customer");
+    }
+    
+    // Helper function to check if user owns the resource
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+    
+    // Users collection - User profiles and roles
+    match /users/{userId} {
+      // Users can read their own profile
+      allow read: if isAuthenticated() && isOwner(userId);
+      
+      // Users can create their own profile during registration
+      allow create: if isAuthenticated() && 
+        isOwner(userId) && 
+        request.resource.data.uid == userId &&
+        request.resource.data.role in ["customer", "store"];
+      
+      // Users can update their own profile (except role)
+      allow update: if isAuthenticated() && 
+        isOwner(userId) && 
+        !("role" in request.resource.data.diff(resource.data).affectedKeys());
+      
+      // Admins can read all user profiles
+      allow read: if isAdmin();
+      
+      // Admins can update any user's role and profile
+      allow update: if isAdmin();
+      
+      // Admins can delete users (soft delete recommended)
+      allow delete: if isAdmin();
+    }
+    
+    // Stores collection - Store information and settings
+    match /stores/{storeId} {
+      // Anyone can read store information (for browsing)
+      allow read: if isAuthenticated();
+      
+      // Only store owners can create stores
+      allow create: if isAuthenticated() && 
+        hasAnyRole(["store", "admin"]) &&
+        (isAdmin() || request.resource.data.ownerId == request.auth.uid);
+      
+      // Store owners can update their own stores
+      allow update: if isAuthenticated() && 
+        (isAdmin() || 
+         (isStore() && resource.data.ownerId == request.auth.uid));
+      
+      // Only admins can delete stores
+      allow delete: if isAdmin();
+    }
+    
+    // Products collection - Store products
+    match /products/{productId} {
+      // Anyone can read products (for browsing)
+      allow read: if isAuthenticated();
+      
+      // Store owners can create products for their stores
+      allow create: if isAuthenticated() && 
+        hasAnyRole(["store", "admin"]) &&
+        (isAdmin() || request.resource.data.storeOwnerId == request.auth.uid);
+      
+      // Store owners can update their own products
+      allow update: if isAuthenticated() && 
+        (isAdmin() || 
+         (isStore() && resource.data.storeOwnerId == request.auth.uid));
+      
+      // Store owners and admins can delete products
+      allow delete: if isAuthenticated() && 
+        (isAdmin() || 
+         (isStore() && resource.data.storeOwnerId == request.auth.uid));
+    }
+    
+    // Orders collection - Customer orders
+    match /orders/{orderId} {
+      // Customers can read their own orders
+      // Store owners can read orders for their products
+      // Admins can read all orders
+      allow read: if isAuthenticated() && 
+        (isAdmin() || 
+         resource.data.customerId == request.auth.uid ||
+         resource.data.storeOwnerId == request.auth.uid);
+      
+      // Only authenticated customers can create orders
+      allow create: if isAuthenticated() && 
+        request.resource.data.customerId == request.auth.uid;
+      
+      // Store owners can update order status
+      // Customers can update certain fields (like delivery address before processing)
+      // Admins can update anything
+      allow update: if isAuthenticated() && 
+        (isAdmin() || 
+         (isStore() && resource.data.storeOwnerId == request.auth.uid) ||
+         (isCustomer() && resource.data.customerId == request.auth.uid && 
+          resource.data.status == "pending"));
+      
+      // Only admins can delete orders (for cleanup)
+      allow delete: if isAdmin();
+    }
+    
+    // Cart collection - Shopping cart items
+    match /carts/{userId} {
+      // Users can only access their own cart
+      allow read, write: if isAuthenticated() && isOwner(userId);
+    }
+    
+    // Cart items subcollection
+    match /carts/{userId}/items/{itemId} {
+      // Users can only access items in their own cart
+      allow read, write: if isAuthenticated() && isOwner(userId);
+    }
+    
+    // Wishlist collection - User wishlists
+    match /wishlists/{userId} {
+      // Users can only access their own wishlist
+      allow read, write: if isAuthenticated() && isOwner(userId);
+      
+      // Admins can read all wishlists (for analytics)
+      allow read: if isAdmin();
+    }
+    
+    // Reviews collection - Product reviews
+    match /reviews/{reviewId} {
+      // Anyone can read reviews
+      allow read: if isAuthenticated();
+      
+      // Only customers who purchased the product can create reviews
+      // (This would require additional validation logic)
+      allow create: if isAuthenticated() && 
+        hasAnyRole(["customer", "admin"]) &&
+        request.resource.data.userId == request.auth.uid;
+      
+      // Users can update their own reviews
+      allow update: if isAuthenticated() && 
+        (isAdmin() || resource.data.userId == request.auth.uid);
+      
+      // Users can delete their own reviews, admins can delete any
+      allow delete: if isAuthenticated() && 
+        (isAdmin() || resource.data.userId == request.auth.uid);
+    }
+    
+    // Categories collection - Product categories
+    match /categories/{categoryId} {
+      // Anyone can read categories
+      allow read: if isAuthenticated();
+      
+      // Only admins can manage categories
+      allow write: if isAdmin();
+    }
+    
+    // Analytics collection - Store and system analytics
+    match /analytics/{document=**} {
+      // Only admins and relevant store owners can read analytics
+      allow read: if isAuthenticated() && 
+        (isAdmin() || 
+         (isStore() && resource.data.storeOwnerId == request.auth.uid));
+      
+      // Only system can write analytics (via server-side functions)
+      allow write: if false; // Use Cloud Functions for analytics writes
+    }
+    
+    // Notifications collection - User notifications
+    match /notifications/{userId}/messages/{messageId} {
+      // Users can read their own notifications
+      allow read: if isAuthenticated() && isOwner(userId);
+      
+      // Users can mark notifications as read
+      allow update: if isAuthenticated() && 
+        isOwner(userId) &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(["read", "readAt"]);
+      
+      // System creates notifications (via Cloud Functions)
+      allow create: if false; // Use Cloud Functions for notification creation
+      
+      // Admins can read all notifications
+      allow read: if isAdmin();
+    }
+    
+    // Settings collection - App-wide settings
+    match /settings/{settingId} {
+      // Anyone can read public settings
+      allow read: if isAuthenticated();
+      
+      // Only admins can update settings
+      allow write: if isAdmin();
+    }
+    
+    // Audit logs - System audit trail
+    match /audit/{logId} {
+      // Only admins can read audit logs
+      allow read: if isAdmin();
+      
+      // No one can write audit logs directly (use Cloud Functions)
+      allow write: if false;
+    }
+    
+    // Support tickets - Customer support
+    match /support/{ticketId} {
+      // Users can read their own tickets
+      allow read: if isAuthenticated() && 
+        (isAdmin() || resource.data.userId == request.auth.uid);
+      
+      // Users can create support tickets
+      allow create: if isAuthenticated() && 
+        request.resource.data.userId == request.auth.uid;
+      
+      // Users can update their own tickets (add messages)
+      // Admins can update any ticket
+      allow update: if isAuthenticated() && 
+        (isAdmin() || resource.data.userId == request.auth.uid);
+    }
+    
+    // Reports collection - Store reports and analytics
+    match /reports/{reportId} {
+      // Store owners can read reports for their stores
+      // Admins can read all reports
+      allow read: if isAuthenticated() && 
+        (isAdmin() || 
+         (isStore() && resource.data.storeOwnerId == request.auth.uid));
+      
+      // Only system generates reports (via Cloud Functions)
+      allow write: if false;
+    }
+  }
+}

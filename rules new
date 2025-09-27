@@ -1,0 +1,208 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ===== USER MANAGEMENT =====
+    // Users can read and write their own user document
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+      
+      // Admins can read all user documents
+      allow read: if request.auth != null && 
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+      
+      // Admins can update user roles and data
+      allow write: if request.auth != null && 
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+    }
+    
+    // ===== STORE MANAGEMENT =====
+    // Store owners can manage their store data
+    match /stores/{storeId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && 
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "store" ||
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin");
+    }
+    
+    // ===== AI MARKETPLACE PRODUCTS =====
+    // Products collection - core of the AI marketplace
+    match /products/{productId} {
+      // READ: Allow authenticated users to read all active products
+      // Also allow public read for marketplace browsing (unauthenticated users)
+      allow read: if true; // Public read for marketplace
+      
+      // CREATE: Only store owners and admins can create products
+      allow create: if request.auth != null && 
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "store" ||
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin") &&
+        // Ensure required fields are present
+        request.resource.data.keys().hasAll(['name', 'description', 'price', 'category', 'status', 'storeOwnerId']) &&
+        // Validate data types
+        request.resource.data.name is string &&
+        request.resource.data.description is string &&
+        request.resource.data.price is number &&
+        request.resource.data.price >= 0 &&
+        request.resource.data.category is string &&
+        request.resource.data.status in ['active', 'inactive', 'maintenance', 'deprecated', 'out_of_stock'] &&
+        request.resource.data.storeOwnerId == request.auth.uid;
+      
+      // UPDATE: Store owners can update their own products, admins can update any
+      allow update: if request.auth != null && 
+        ((resource.data.storeOwnerId == request.auth.uid) ||
+         (exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin")) &&
+        // Ensure critical fields cannot be changed maliciously
+        request.resource.data.storeOwnerId == resource.data.storeOwnerId &&
+        // Validate updated data types
+        request.resource.data.price is number &&
+        request.resource.data.price >= 0 &&
+        request.resource.data.status in ['active', 'inactive', 'maintenance', 'deprecated', 'out_of_stock'];
+      
+      // DELETE: Only product owner or admin can delete
+      allow delete: if request.auth != null && 
+        (resource.data.storeOwnerId == request.auth.uid ||
+         (exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin"));
+    }
+    
+    // ===== ORDER MANAGEMENT =====
+    // Orders - handles AI model purchases and usage tracking
+    match /orders/{orderId} {
+      // READ: Users can read their own orders (as customer or store owner)
+      allow read: if request.auth != null && 
+        (resource.data.customerId == request.auth.uid ||
+         resource.data.storeOwnerId == request.auth.uid ||
+         (exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin"));
+      
+      // CREATE: Authenticated users can create orders for themselves
+      allow create: if request.auth != null && 
+        request.auth.uid == request.resource.data.customerId &&
+        // Validate required fields
+        request.resource.data.keys().hasAll(['customerId', 'productId', 'amount', 'status']) &&
+        request.resource.data.status == 'pending';
+      
+      // UPDATE: Store owners can update order status, admins have full access
+      allow update: if request.auth != null && 
+        (resource.data.storeOwnerId == request.auth.uid ||
+         (exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin"));
+    }
+    
+    // ===== API USAGE TRACKING =====
+    // Usage logs - tracks API calls and token consumption
+    match /usage_logs/{logId} {
+      // READ: Users can read their own usage logs
+      allow read: if request.auth != null && 
+        (resource.data.userId == request.auth.uid ||
+         resource.data.storeOwnerId == request.auth.uid ||
+         (exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin"));
+      
+      // CREATE: System can create usage logs
+      allow create: if request.auth != null &&
+        request.resource.data.userId == request.auth.uid;
+      
+      // UPDATE/DELETE: Only admins can modify logs
+      allow update, delete: if request.auth != null && 
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+    }
+    
+    // ===== FAVORITES & WISHLIST =====
+    // User favorites - AI models bookmarked by users
+    match /favorites/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // ===== REVIEWS & RATINGS =====
+    // Product reviews and ratings
+    match /reviews/{reviewId} {
+      // READ: Public read for all reviews
+      allow read: if true;
+      
+      // CREATE: Authenticated users can create reviews
+      allow create: if request.auth != null &&
+        request.auth.uid == request.resource.data.userId &&
+        request.resource.data.rating is number &&
+        request.resource.data.rating >= 1 &&
+        request.resource.data.rating <= 5;
+      
+      // UPDATE/DELETE: Users can modify their own reviews, admins have full access
+      allow update, delete: if request.auth != null && 
+        (resource.data.userId == request.auth.uid ||
+         (exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin"));
+    }
+    
+    // ===== NOTIFICATIONS =====
+    // User notifications
+    match /notifications/{notificationId} {
+      allow read, write: if request.auth != null && 
+        resource.data.userId == request.auth.uid;
+      
+      // Admins can create system-wide notifications
+      allow create: if request.auth != null && 
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+    }
+    
+    // ===== ANALYTICS & METRICS =====
+    // Platform analytics (admin only)
+    match /analytics/{document=**} {
+      allow read, write: if request.auth != null && 
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+    }
+    
+    // ===== SYSTEM SETTINGS =====
+    // Platform configuration and settings
+    match /settings/{document=**} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && 
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+    }
+  }
+}
+
+// ===== FIREBASE STORAGE RULES =====
+// Rules for file uploads (product images, avatars, etc.)
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Product images - can be read by anyone, written by store owners
+    match /products/{productId}/{allPaths=**} {
+      allow read: if true; // Public read for product images
+      allow write: if request.auth != null &&
+        exists(/databases/(default)/documents/users/$(request.auth.uid)) &&
+        (get(/databases/(default)/documents/users/$(request.auth.uid)).data.role == "store" ||
+         get(/databases/(default)/documents/users/$(request.auth.uid)).data.role == "admin");
+    }
+    
+    // User avatars - users can manage their own avatars
+    match /avatars/{userId} {
+      allow read: if true; // Public read for avatars
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // API documentation files
+    match /docs/{productId}/{allPaths=**} {
+      allow read: if request.auth != null; // Authenticated users can read docs
+      allow write: if request.auth != null &&
+        exists(/databases/(default)/documents/products/$(productId)) &&
+        get(/databases/(default)/documents/products/$(productId)).data.storeOwnerId == request.auth.uid;
+    }
+    
+    // System files (admin only)
+    match /system/{allPaths=**} {
+      allow read, write: if request.auth != null &&
+        exists(/databases/(default)/documents/users/$(request.auth.uid)) &&
+        get(/databases/(default)/documents/users/$(request.auth.uid)).data.role == "admin";
+    }
+  }
+}

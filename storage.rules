@@ -1,0 +1,192 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // Helper function to check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Helper function to get user role from Firestore
+    function getUserRole() {
+      return firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role;
+    }
+    
+    // Helper function to check if user has specific role
+    function hasRole(role) {
+      return isAuthenticated() && getUserRole() == role;
+    }
+    
+    // Helper function to check if user is admin
+    function isAdmin() {
+      return hasRole("admin");
+    }
+    
+    // Helper function to check if user is store owner
+    function isStore() {
+      return hasRole("store");
+    }
+    
+    // Helper function to validate file size (in bytes)
+    function isValidSize(maxSize) {
+      return resource.size <= maxSize;
+    }
+    
+    // Helper function to validate image file type
+    function isValidImageType() {
+      return resource.contentType.matches('image/.*');
+    }
+    
+    // Helper function to validate document file type
+    function isValidDocumentType() {
+      return resource.contentType in ['application/pdf', 'text/plain', 'application/msword', 
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    }
+    
+    // User profile pictures
+    match /users/{userId}/profile/{fileName} {
+      // Users can read and write their own profile pictures
+      allow read, write: if isAuthenticated() && 
+        request.auth.uid == userId &&
+        isValidImageType() &&
+        isValidSize(5 * 1024 * 1024); // 5MB limit
+      
+      // Admins can read all profile pictures
+      allow read: if isAdmin();
+    }
+    
+    // Store images (logos, banners, etc.)
+    match /stores/{storeId}/images/{fileName} {
+      // Anyone can read store images (public)
+      allow read: if true;
+      
+      // Store owners can upload images to their stores
+      // Admins can upload to any store
+      allow write: if isAuthenticated() && 
+        (isAdmin() || 
+         (isStore() && 
+          firestore.get(/databases/(default)/documents/stores/$(storeId)).data.ownerId == request.auth.uid)) &&
+        isValidImageType() &&
+        isValidSize(10 * 1024 * 1024); // 10MB limit
+    }
+    
+    // Product images
+    match /products/{productId}/images/{fileName} {
+      // Anyone can read product images (public)
+      allow read: if true;
+      
+      // Store owners can upload images for their products
+      // Admins can upload to any product
+      allow write: if isAuthenticated() && 
+        (isAdmin() || 
+         (isStore() && 
+          firestore.get(/databases/(default)/documents/products/$(productId)).data.storeOwnerId == request.auth.uid)) &&
+        isValidImageType() &&
+        isValidSize(10 * 1024 * 1024); // 10MB limit
+    }
+    
+    // Category images
+    match /categories/{categoryId}/images/{fileName} {
+      // Anyone can read category images (public)
+      allow read: if true;
+      
+      // Only admins can manage category images
+      allow write: if isAdmin() &&
+        isValidImageType() &&
+        isValidSize(5 * 1024 * 1024); // 5MB limit
+    }
+    
+    // User documents (for verification, etc.)
+    match /users/{userId}/documents/{fileName} {
+      // Users can read and write their own documents
+      allow read, write: if isAuthenticated() && 
+        request.auth.uid == userId &&
+        (isValidImageType() || isValidDocumentType()) &&
+        isValidSize(20 * 1024 * 1024); // 20MB limit
+      
+      // Admins can read all user documents
+      allow read: if isAdmin();
+    }
+    
+    // Store documents (business licenses, certificates, etc.)
+    match /stores/{storeId}/documents/{fileName} {
+      // Store owners can manage their store documents
+      allow read, write: if isAuthenticated() && 
+        (isAdmin() || 
+         (isStore() && 
+          firestore.get(/databases/(default)/documents/stores/$(storeId)).data.ownerId == request.auth.uid)) &&
+        (isValidImageType() || isValidDocumentType()) &&
+        isValidSize(50 * 1024 * 1024); // 50MB limit
+      
+      // Admins can read all store documents
+      allow read: if isAdmin();
+    }
+    
+    // Order receipts and invoices
+    match /orders/{orderId}/receipts/{fileName} {
+      // Customers can read receipts for their orders
+      // Store owners can read receipts for orders from their store
+      allow read: if isAuthenticated() && 
+        (isAdmin() || 
+         firestore.get(/databases/(default)/documents/orders/$(orderId)).data.customerId == request.auth.uid ||
+         firestore.get(/databases/(default)/documents/orders/$(orderId)).data.storeOwnerId == request.auth.uid);
+      
+      // Only system can write receipts (via Cloud Functions)
+      allow write: if false;
+    }
+    
+    // Support ticket attachments
+    match /support/{ticketId}/attachments/{fileName} {
+      // Users can read attachments for their tickets
+      allow read: if isAuthenticated() && 
+        (isAdmin() || 
+         firestore.get(/databases/(default)/documents/support/$(ticketId)).data.userId == request.auth.uid);
+      
+      // Users can upload attachments to their tickets
+      allow write: if isAuthenticated() && 
+        firestore.get(/databases/(default)/documents/support/$(ticketId)).data.userId == request.auth.uid &&
+        (isValidImageType() || isValidDocumentType()) &&
+        isValidSize(10 * 1024 * 1024); // 10MB limit
+      
+      // Admins can manage all attachments
+      allow write: if isAdmin();
+    }
+    
+    // Temporary uploads (for processing)
+    match /temp/{userId}/{fileName} {
+      // Users can upload to their temp directory
+      allow read, write: if isAuthenticated() && 
+        request.auth.uid == userId &&
+        isValidSize(50 * 1024 * 1024); // 50MB limit
+      
+      // Temp files should have TTL (Time To Live) - handle via Cloud Functions
+    }
+    
+    // System backups and exports
+    match /backups/{fileName} {
+      // Only admins can access backups
+      allow read, write: if isAdmin();
+    }
+    
+    // Public assets (app icons, default images, etc.)
+    match /public/{fileName} {
+      // Anyone can read public assets
+      allow read: if true;
+      
+      // Only admins can manage public assets
+      allow write: if isAdmin();
+    }
+    
+    // Analytics exports and reports
+    match /reports/{storeId}/{fileName} {
+      // Store owners can read reports for their stores
+      allow read: if isAuthenticated() && 
+        (isAdmin() || 
+         (isStore() && 
+          firestore.get(/databases/(default)/documents/stores/$(storeId)).data.ownerId == request.auth.uid));
+      
+      // Only system generates reports (via Cloud Functions)
+      allow write: if false;
+    }
+  }
+}
