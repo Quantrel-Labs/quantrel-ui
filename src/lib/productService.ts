@@ -30,6 +30,8 @@ export interface Product {
   limit: number // Usage limit per month
   tokens: number // Number of tokens included
   apiDocs: string // Markdown content for API documentation
+  apiKey: string // API key for this model
+  allowedOrigin: string // Allowed origin for this model
   status: "active" | "inactive" | "maintenance" | "deprecated" | "out_of_stock"
   images: string[]
   storeOwnerId: string

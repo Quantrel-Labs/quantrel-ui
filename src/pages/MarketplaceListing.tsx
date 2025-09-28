@@ -5,6 +5,8 @@ import { Badge } from "@/components/ui/badge"
 import { useToast } from "@/context/ToastContext"
 import { useAuth } from "@/hooks/useAuth"
 import { productService, Product } from "@/lib/productService"
+import ChatInterface from "@/components/ChatInterface"
+import ModelInfoModal from "@/components/ModelInfoModal"
 
 interface MarketplaceListingProps {
   showCreatorInfo?: boolean
@@ -15,6 +17,9 @@ export default function MarketplaceListing({ showCreatorInfo = true }: Marketpla
   const { user } = useAuth()
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
+  const [showChat, setShowChat] = useState(false)
+  const [showModelInfo, setShowModelInfo] = useState(false)
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -37,6 +42,8 @@ export default function MarketplaceListing({ showCreatorInfo = true }: Marketpla
               limit: 1000000,
               tokens: 4096,
               apiDocs: "# GPT-4 Vision API Documentation...",
+              apiKey: "sk-demo123456789",
+              allowedOrigin: "https://api.openai.com",
               images: [],
               status: "active",
               stock: 1000000,
@@ -57,6 +64,8 @@ export default function MarketplaceListing({ showCreatorInfo = true }: Marketpla
               limit: 500000,
               tokens: 8192,
               apiDocs: "# CodeGen API Documentation...",
+              apiKey: "cg-demo987654321",
+              allowedOrigin: "https://api.codegen.dev",
               images: [],
               status: "active",
               stock: 500000,
@@ -77,6 +86,16 @@ export default function MarketplaceListing({ showCreatorInfo = true }: Marketpla
     }
     loadProducts()
   }, [user])
+
+  const handleTryNow = (product: Product) => {
+    setSelectedProduct(product)
+    setShowChat(true)
+  }
+
+  const handleViewDocs = (product: Product) => {
+    setSelectedProduct(product)
+    setShowModelInfo(true)
+  }
 
   if (loading) {
     return (
@@ -179,7 +198,7 @@ export default function MarketplaceListing({ showCreatorInfo = true }: Marketpla
                     <Button 
                       className="flex-1 bg-gradient-to-r from-white/20 to-gray-300/20 backdrop-blur-sm border border-white/20 text-white hover:from-white/30 hover:to-gray-300/30 hover:scale-105 transition-all duration-300"
                       size="sm"
-                      onClick={() => showInfo("Coming Soon", `Integration demo for ${product.name} will be available soon!`)}
+                      onClick={() => handleTryNow(product)}
                     >
                       Try Now
                     </Button>
@@ -187,7 +206,7 @@ export default function MarketplaceListing({ showCreatorInfo = true }: Marketpla
                       variant="outline" 
                       size="sm"
                       className="border-white/20 text-gray-300 hover:bg-white/10 backdrop-blur-sm hover:scale-105 transition-all duration-300"
-                      onClick={() => showInfo("API Documentation", `Opening documentation for ${product.name}...`)}
+                      onClick={() => handleViewDocs(product)}
                     >
                       View Docs
                     </Button>
@@ -210,6 +229,24 @@ export default function MarketplaceListing({ showCreatorInfo = true }: Marketpla
           </div>
         )}
       </div>
+
+      {/* Chat Interface Modal */}
+      {selectedProduct && (
+        <ChatInterface
+          isOpen={showChat}
+          onClose={() => setShowChat(false)}
+          product={selectedProduct}
+        />
+      )}
+
+      {/* Model Info Modal */}
+      {selectedProduct && (
+        <ModelInfoModal
+          isOpen={showModelInfo}
+          onClose={() => setShowModelInfo(false)}
+          product={selectedProduct}
+        />
+      )}
     </div>
   )
 }

@@ -49,6 +49,8 @@ function ProductModal({ isOpen, onClose, onSave, editProduct }: ProductModalProp
     limit: "",
     tokens: "",
     apiDocs: "",
+    apiKey: "",
+    allowedOrigin: "",
     status: "active" as "active" | "inactive" | "maintenance" | "deprecated" | "out_of_stock",
     stock: "",
     imageFiles: [] as File[]
@@ -72,6 +74,8 @@ function ProductModal({ isOpen, onClose, onSave, editProduct }: ProductModalProp
         limit: editProduct.limit.toString(),
         tokens: editProduct.tokens.toString(),
         apiDocs: editProduct.apiDocs,
+        apiKey: editProduct.apiKey || "",
+        allowedOrigin: editProduct.allowedOrigin || "",
         status: editProduct.status,
         stock: isNaN(editProduct.stock) ? "0" : editProduct.stock.toString(),
         imageFiles: []
@@ -88,6 +92,8 @@ function ProductModal({ isOpen, onClose, onSave, editProduct }: ProductModalProp
         limit: "",
         tokens: "",
         apiDocs: "",
+        apiKey: "",
+        allowedOrigin: "",
         status: "active",
         stock: "",
         imageFiles: []
@@ -111,7 +117,9 @@ function ProductModal({ isOpen, onClose, onSave, editProduct }: ProductModalProp
     if (!formData.category) newErrors.category = "AI model type is required"
     if (!formData.limit || parseInt(formData.limit) < 0) newErrors.limit = "Valid usage limit is required"
     if (!formData.tokens || parseInt(formData.tokens) < 0) newErrors.tokens = "Valid token count is required"
-    if (!formData.apiDocs.trim()) newErrors.apiDocs = "API documentation is required"
+  if (!formData.apiDocs.trim()) newErrors.apiDocs = "API documentation is required"
+  if (!formData.apiKey.trim()) newErrors.apiKey = "API key is required"
+  if (!formData.allowedOrigin.trim()) newErrors.allowedOrigin = "Allowed origin is required"
 
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
@@ -134,6 +142,8 @@ function ProductModal({ isOpen, onClose, onSave, editProduct }: ProductModalProp
         limit: parseInt(formData.limit),
         tokens: parseInt(formData.tokens),
         apiDocs: formData.apiDocs,
+        apiKey: formData.apiKey.trim(),
+        allowedOrigin: formData.allowedOrigin.trim(),
         status: formData.status,
         stock: parseInt(formData.stock) || 0,
         images: []
@@ -305,7 +315,7 @@ function ProductModal({ isOpen, onClose, onSave, editProduct }: ProductModalProp
               </div>
             </div>
 
-            {/* Category and Status */}
+            {/* Category, Status, API Key, Allowed Origin */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label htmlFor="category" className="block text-sm font-medium mb-2 text-gray-200">
@@ -342,6 +352,36 @@ function ProductModal({ isOpen, onClose, onSave, editProduct }: ProductModalProp
                   <option value="maintenance">Under Maintenance</option>
                   <option value="deprecated">Deprecated</option>
                 </select>
+              </div>
+            </div>
+
+            {/* API Key and Allowed Origin */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="apiKey" className="block text-sm font-medium mb-2 text-gray-200">
+                  API Key *
+                </label>
+                <Input
+                  id="apiKey"
+                  value={formData.apiKey}
+                  onChange={(e) => handleInputChange("apiKey", e.target.value)}
+                  placeholder="Enter API key for this model"
+                  className={`bg-gray-800 border-gray-600 text-white ${errors.apiKey ? "border-red-500" : ""}`}
+                />
+                {errors.apiKey && <p className="text-red-400 text-sm mt-1">{errors.apiKey}</p>}
+              </div>
+              <div>
+                <label htmlFor="allowedOrigin" className="block text-sm font-medium mb-2 text-gray-200">
+                  Allowed Origin *
+                </label>
+                <Input
+                  id="allowedOrigin"
+                  value={formData.allowedOrigin}
+                  onChange={(e) => handleInputChange("allowedOrigin", e.target.value)}
+                  placeholder="e.g. https://yourdomain.com"
+                  className={`bg-gray-800 border-gray-600 text-white ${errors.allowedOrigin ? "border-red-500" : ""}`}
+                />
+                {errors.allowedOrigin && <p className="text-red-400 text-sm mt-1">{errors.allowedOrigin}</p>}
               </div>
             </div>
 

@@ -110,26 +110,38 @@ export default function CustomerDashboard() {
     }
   }
   return (
-    <div className="p-6 space-y-6">
+    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black text-white p-6 space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold">Welcome back, {user?.displayName?.split(' ')[0] || "Developer"}! 🤖</h1>
-          <p className="text-gray-600">Monitor your AI model usage and performance</p>
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">Welcome back, {user?.displayName?.split(' ')[0] || "Customer"}! 🤖</h1>
+          <p className="text-gray-300">Your AI models and usage dashboard</p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline">Monitor Usage</Button>
-          <Button>Browse AI Models</Button>
+          <Button variant="outline" className="border-white/20 text-gray-300 hover:bg-white/10 backdrop-blur-sm">
+            Monitor Usage
+          </Button>
+          <Button className="bg-gradient-to-r from-white/20 to-gray-300/20 backdrop-blur-sm border border-white/20 text-white hover:from-white/30 hover:to-gray-300/30">
+            Browse AI Models
+          </Button>
         </div>
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-lg p-4">
-        <h3 className="font-semibold text-blue-900 mb-3">🎯 Quick Actions</h3>
+      <div className="bg-gradient-to-r from-white/5 to-gray-300/5 backdrop-blur-xl border border-white/10 rounded-lg p-4 shadow-2xl">
+        <h3 className="font-semibold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent mb-3">🎯 Quick Actions</h3>
         <div className="flex flex-wrap gap-2">
-          <Button size="sm" variant="outline">Try Favorite Models</Button>
-          <Button size="sm" variant="outline">Monitor APIs</Button>
-          <Button size="sm" variant="outline">View Credits</Button>
-          <Button size="sm" variant="outline">Developer Support</Button>
+          <Button size="sm" variant="outline" className="border-white/20 text-gray-300 hover:bg-white/10 backdrop-blur-sm">
+            Try Favorite Models
+          </Button>
+          <Button size="sm" variant="outline" className="border-white/20 text-gray-300 hover:bg-white/10 backdrop-blur-sm">
+            Monitor APIs
+          </Button>
+          <Button size="sm" variant="outline" className="border-white/20 text-gray-300 hover:bg-white/10 backdrop-blur-sm">
+            View Credits
+          </Button>
+          <Button size="sm" variant="outline" className="border-white/20 text-gray-300 hover:bg-white/10 backdrop-blur-sm">
+            Customer Support
+          </Button>
         </div>
       </div>
       

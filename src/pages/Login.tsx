@@ -46,24 +46,24 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-black via-gray-900 to-black py-12 px-4 sm:px-6 lg:px-8">
+      <Card className="w-full max-w-md bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">Sign in</CardTitle>
-          <p className="text-center text-sm text-gray-600">
+          <CardTitle className="text-2xl font-bold text-center bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">Sign in</CardTitle>
+          <p className="text-center text-sm text-gray-300">
             Enter your email and password to access your account
           </p>
         </CardHeader>
         <CardContent>
           {error && (
-            <div className="mb-4 p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-md">
+            <div className="mb-4 p-3 text-sm text-red-200 bg-red-500/20 backdrop-blur-sm border border-red-500/30 rounded-md">
               {error}
             </div>
           )}
           
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <label htmlFor="email" className="text-sm font-medium">
+              <label htmlFor="email" className="text-sm font-medium text-gray-200">
                 Email
               </label>
               <Input
@@ -73,10 +73,11 @@ export default function Login() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                className="bg-white/10 backdrop-blur-sm border-white/20 text-white placeholder:text-gray-400 focus:border-white/40"
               />
             </div>
             <div className="space-y-2">
-              <label htmlFor="password" className="text-sm font-medium">
+              <label htmlFor="password" className="text-sm font-medium text-gray-200">
                 Password
               </label>
               <Input
@@ -86,9 +87,10 @@ export default function Login() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                className="bg-white/10 backdrop-blur-sm border-white/20 text-white placeholder:text-gray-400 focus:border-white/40"
               />
             </div>
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            <Button type="submit" className="w-full bg-gradient-to-r from-white/20 to-gray-300/20 backdrop-blur-sm border border-white/20 text-white hover:from-white/30 hover:to-gray-300/30" disabled={isLoading}>
               {isLoading ? "Signing in..." : "Sign in"}
             </Button>
           </form>
@@ -96,16 +98,16 @@ export default function Login() {
           <div className="mt-4">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t" />
+                <span className="w-full border-t border-white/20" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-white px-2 text-gray-500">Or continue with</span>
+                <span className="bg-gray-900 px-2 text-gray-400">Or continue with</span>
               </div>
             </div>
             
             <Button 
               variant="outline" 
-              className="w-full mt-4" 
+              className="w-full mt-4 bg-white/5 backdrop-blur-sm border-white/20 text-gray-300 hover:bg-white/10 hover:text-white" 
               onClick={handleGoogleSignIn}
               disabled={isGoogleLoading}
             >
@@ -123,9 +125,9 @@ export default function Login() {
             </Button>
           </div>
           
-          <div className="mt-4 text-center text-sm">
+          <div className="mt-4 text-center text-sm text-gray-400">
             Don't have an account?{" "}
-            <Link to="/register" className="text-blue-600 hover:underline">
+            <Link to="/register" className="text-blue-400 hover:text-blue-300 hover:underline">
               Sign up
             </Link>
           </div>
