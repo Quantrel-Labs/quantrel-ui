@@ -202,215 +202,237 @@ function ProductModal({ isOpen, onClose, onSave, editProduct }: ProductModalProp
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
-      <Card className="w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-gray-900 border-gray-700">
-        <CardHeader className="border-b border-gray-700">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <Card className="w-full max-w-4xl max-h-[90vh] overflow-y-auto card-glass animate-fade-in-up">
+        <CardHeader className="border-b border-white/10 bg-gradient-to-r from-white/5 to-transparent">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-white">
-              {editProduct ? "Edit AI Model/Agent" : "Publish New AI Model/Agent"}
+            <CardTitle className="text-xl font-bold gradient-text">
+              {editProduct ? "Edit AI Model" : "Publish New AI Model"}
             </CardTitle>
-            <Button variant="ghost" size="sm" onClick={onClose} className="text-gray-400 hover:text-white">✕</Button>
+            <Button variant="ghost" size="sm" onClick={onClose} className="text-white/60 hover:text-white hover:bg-white/10 rounded-full w-8 h-8 p-0 transition-all duration-200">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </Button>
           </div>
         </CardHeader>
-        <CardContent className="p-6">
-          <form onSubmit={handleSubmit} className="space-y-6">
+        <CardContent className="p-8">
+          <form onSubmit={handleSubmit} className="space-y-8">
             {/* Basic Information */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium mb-2 text-gray-200">
-                  AI Model/Agent Name *
-                </label>
-                <Input
-                  id="name"
-                  value={formData.name}
-                  onChange={(e) => handleInputChange("name", e.target.value)}
-                  placeholder="e.g., GPT-4 Vision Pro, CodeGen Assistant"
-                  className={`bg-gray-800 border-gray-600 text-white ${errors.name ? "border-red-500" : ""}`}
-                />
-                {errors.name && <p className="text-red-400 text-sm mt-1">{errors.name}</p>}
-              </div>
+            <div className="space-y-2">
+              <h3 className="text-lg font-semibold gradient-text mb-4">Basic Information</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label htmlFor="name" className="block text-sm font-medium text-white/90">
+                    AI Model Name *
+                  </label>
+                  <Input
+                    id="name"
+                    value={formData.name}
+                    onChange={(e) => handleInputChange("name", e.target.value)}
+                    placeholder="e.g., GPT-4 Vision Pro"
+                    className={`glass-input text-white placeholder:text-white/50 border-0 h-12 ${errors.name ? "ring-2 ring-red-400" : ""} transition-all duration-300`}
+                  />
+                  {errors.name && <p className="text-red-300 text-sm animate-fade-in-up">{errors.name}</p>}
+                </div>
 
-              <div>
-                <label htmlFor="llmApiUsing" className="block text-sm font-medium mb-2 text-gray-200">
-                  LLM/API Provider *
-                </label>
-                <Input
-                  id="llmApiUsing"
-                  value={formData.llmApiUsing}
-                  onChange={(e) => handleInputChange("llmApiUsing", e.target.value)}
-                  placeholder="e.g., OpenAI GPT-4, Anthropic Claude, Custom API"
-                  className={`bg-gray-800 border-gray-600 text-white ${errors.llmApiUsing ? "border-red-500" : ""}`}
-                />
-                {errors.llmApiUsing && <p className="text-red-400 text-sm mt-1">{errors.llmApiUsing}</p>}
+                <div className="space-y-2">
+                  <label htmlFor="llmApiUsing" className="block text-sm font-medium text-white/90">
+                    LLM/API Provider *
+                  </label>
+                  <Input
+                    id="llmApiUsing"
+                    value={formData.llmApiUsing}
+                    onChange={(e) => handleInputChange("llmApiUsing", e.target.value)}
+                    placeholder="e.g., OpenAI GPT-4"
+                    className={`glass-input text-white placeholder:text-white/50 border-0 h-12 ${errors.llmApiUsing ? "ring-2 ring-red-400" : ""} transition-all duration-300`}
+                  />
+                  {errors.llmApiUsing && <p className="text-red-300 text-sm animate-fade-in-up">{errors.llmApiUsing}</p>}
+                </div>
               </div>
             </div>
 
             {/* Description */}
-            <div>
-              <label htmlFor="description" className="block text-sm font-medium mb-2 text-gray-200">
-                Model Description *
-              </label>
-              <textarea
-                id="description"
-                value={formData.description}
-                onChange={(e) => handleInputChange("description", e.target.value)}
-                placeholder="Describe capabilities, use cases, performance metrics..."
-                rows={4}
-                className={`w-full px-3 py-2 bg-gray-800 border border-gray-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                  errors.description ? "border-red-500" : ""
-                }`}
-              />
-              {errors.description && <p className="text-red-400 text-sm mt-1">{errors.description}</p>}
-            </div>
-
-            {/* Pricing and Limits */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <label htmlFor="price" className="block text-sm font-medium mb-2 text-gray-200">
-                  Cost per 1K Tokens ($) *
+            <div className="space-y-2">
+              <h3 className="text-lg font-semibold gradient-text mb-4">Model Description</h3>
+              <div className="space-y-2">
+                <label htmlFor="description" className="block text-sm font-medium text-white/90">
+                  Detailed Description *
                 </label>
-                <Input
-                  id="price"
-                  type="number"
-                  step="0.001"
-                  min="0"
-                  value={formData.price}
-                  onChange={(e) => handleInputChange("price", e.target.value)}
-                  placeholder="0.002"
-                  className={`bg-gray-800 border-gray-600 text-white ${errors.price ? "border-red-500" : ""}`}
+                <textarea
+                  id="description"
+                  value={formData.description}
+                  onChange={(e) => handleInputChange("description", e.target.value)}
+                  placeholder="Describe capabilities, use cases, performance metrics, and key features..."
+                  rows={4}
+                  className={`w-full px-4 py-3 glass-input text-white placeholder:text-white/50 border-0 rounded-xl resize-none focus:ring-2 focus:ring-gradient-from-primary/50 ${
+                    errors.description ? "ring-2 ring-red-400" : ""
+                  } transition-all duration-300`}
                 />
-                {errors.price && <p className="text-red-400 text-sm mt-1">{errors.price}</p>}
-              </div>
-
-              <div>
-                <label htmlFor="limit" className="block text-sm font-medium mb-2 text-gray-200">
-                  Monthly Usage Limit *
-                </label>
-                <Input
-                  id="limit"
-                  type="number"
-                  min="0"
-                  value={formData.limit}
-                  onChange={(e) => handleInputChange("limit", e.target.value)}
-                  placeholder="1000000"
-                  className={`bg-gray-800 border-gray-600 text-white ${errors.limit ? "border-red-500" : ""}`}
-                />
-                {errors.limit && <p className="text-red-400 text-sm mt-1">{errors.limit}</p>}
-              </div>
-
-              <div>
-                <label htmlFor="tokens" className="block text-sm font-medium mb-2 text-gray-200">
-                  Max Tokens per Request *
-                </label>
-                <Input
-                  id="tokens"
-                  type="number"
-                  min="0"
-                  value={formData.tokens}
-                  onChange={(e) => handleInputChange("tokens", e.target.value)}
-                  placeholder="4096"
-                  className={`bg-gray-800 border-gray-600 text-white ${errors.tokens ? "border-red-500" : ""}`}
-                />
-                {errors.tokens && <p className="text-red-400 text-sm mt-1">{errors.tokens}</p>}
+                {errors.description && <p className="text-red-300 text-sm animate-fade-in-up">{errors.description}</p>}
               </div>
             </div>
 
-            {/* Category, Status, API Key, Allowed Origin */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label htmlFor="category" className="block text-sm font-medium mb-2 text-gray-200">
-                  AI Model Type *
-                </label>
-                <select
-                  id="category"
-                  value={formData.category}
-                  onChange={(e) => handleInputChange("category", e.target.value)}
-                  className={`w-full px-3 py-2 bg-gray-800 border border-gray-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                    errors.category ? "border-red-500" : ""
-                  }`}
-                >
-                  <option value="">Select AI model type</option>
-                  {categories.map(cat => (
-                    <option key={cat} value={cat}>{cat}</option>
-                  ))}
-                </select>
-                {errors.category && <p className="text-red-400 text-sm mt-1">{errors.category}</p>}
-              </div>
+            {/* Pricing and Technical Specs */}
+            <div className="space-y-2">
+              <h3 className="text-lg font-semibold gradient-text mb-4">Pricing & Technical Specs</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="space-y-2">
+                  <label htmlFor="price" className="block text-sm font-medium text-white/90">
+                    Cost per 1K Tokens ($) *
+                  </label>
+                  <Input
+                    id="price"
+                    type="number"
+                    step="0.001"
+                    min="0"
+                    value={formData.price}
+                    onChange={(e) => handleInputChange("price", e.target.value)}
+                    placeholder="0.002"
+                    className={`glass-input text-white placeholder:text-white/50 border-0 h-12 ${errors.price ? "ring-2 ring-red-400" : ""} transition-all duration-300`}
+                  />
+                  {errors.price && <p className="text-red-300 text-sm animate-fade-in-up">{errors.price}</p>}
+                </div>
 
-              <div>
-                <label htmlFor="status" className="block text-sm font-medium mb-2 text-gray-200">
-                  Status
-                </label>
-                <select
-                  id="status"
-                  value={formData.status}
-                  onChange={(e) => handleInputChange("status", e.target.value as "active" | "inactive" | "maintenance" | "deprecated")}
-                  className="w-full px-3 py-2 bg-gray-800 border border-gray-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="active">Active</option>
-                  <option value="inactive">Inactive</option>
-                  <option value="maintenance">Under Maintenance</option>
-                  <option value="deprecated">Deprecated</option>
-                </select>
+                <div className="space-y-2">
+                  <label htmlFor="limit" className="block text-sm font-medium text-white/90">
+                    Monthly Usage Limit *
+                  </label>
+                  <Input
+                    id="limit"
+                    type="number"
+                    min="0"
+                    value={formData.limit}
+                    onChange={(e) => handleInputChange("limit", e.target.value)}
+                    placeholder="1,000,000"
+                    className={`glass-input text-white placeholder:text-white/50 border-0 h-12 ${errors.limit ? "ring-2 ring-red-400" : ""} transition-all duration-300`}
+                  />
+                  {errors.limit && <p className="text-red-300 text-sm animate-fade-in-up">{errors.limit}</p>}
+                </div>
+
+                <div className="space-y-2">
+                  <label htmlFor="tokens" className="block text-sm font-medium text-white/90">
+                    Max Tokens per Request *
+                  </label>
+                  <Input
+                    id="tokens"
+                    type="number"
+                    min="0"
+                    value={formData.tokens}
+                    onChange={(e) => handleInputChange("tokens", e.target.value)}
+                    placeholder="4,096"
+                    className={`glass-input text-white placeholder:text-white/50 border-0 h-12 ${errors.tokens ? "ring-2 ring-red-400" : ""} transition-all duration-300`}
+                  />
+                  {errors.tokens && <p className="text-red-300 text-sm animate-fade-in-up">{errors.tokens}</p>}
+                </div>
               </div>
             </div>
 
-            {/* API Key and Allowed Origin */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label htmlFor="apiKey" className="block text-sm font-medium mb-2 text-gray-200">
-                  API Key *
-                </label>
-                <Input
-                  id="apiKey"
-                  value={formData.apiKey}
-                  onChange={(e) => handleInputChange("apiKey", e.target.value)}
-                  placeholder="Enter API key for this model"
-                  className={`bg-gray-800 border-gray-600 text-white ${errors.apiKey ? "border-red-500" : ""}`}
-                />
-                {errors.apiKey && <p className="text-red-400 text-sm mt-1">{errors.apiKey}</p>}
+            {/* Category and Configuration */}
+            <div className="space-y-2">
+              <h3 className="text-lg font-semibold gradient-text mb-4">Model Configuration</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label htmlFor="category" className="block text-sm font-medium text-white/90">
+                    AI Model Type *
+                  </label>
+                  <select
+                    id="category"
+                    value={formData.category}
+                    onChange={(e) => handleInputChange("category", e.target.value)}
+                    className={`w-full h-12 px-4 glass-input text-white border-0 rounded-xl focus:ring-2 focus:ring-gradient-from-primary/50 ${
+                      errors.category ? "ring-2 ring-red-400" : ""
+                    } transition-all duration-300`}
+                  >
+                    <option value="" className="bg-dark-800 text-white">Select AI model type</option>
+                    {categories.map(cat => (
+                      <option key={cat} value={cat} className="bg-dark-800 text-white">{cat}</option>
+                    ))}
+                  </select>
+                  {errors.category && <p className="text-red-300 text-sm animate-fade-in-up">{errors.category}</p>}
+                </div>
+
+                <div className="space-y-2">
+                  <label htmlFor="status" className="block text-sm font-medium text-white/90">
+                    Availability Status
+                  </label>
+                  <select
+                    id="status"
+                    value={formData.status}
+                    onChange={(e) => handleInputChange("status", e.target.value as "active" | "inactive" | "maintenance" | "deprecated")}
+                    className="w-full h-12 px-4 glass-input text-white border-0 rounded-xl focus:ring-2 focus:ring-gradient-from-primary/50 transition-all duration-300"
+                  >
+                    <option value="active" className="bg-dark-800 text-white">🟢 Active & Available</option>
+                    <option value="inactive" className="bg-dark-800 text-white">🔴 Inactive</option>
+                    <option value="maintenance" className="bg-dark-800 text-white">🟡 Under Maintenance</option>
+                    <option value="deprecated" className="bg-dark-800 text-white">⚠️ Deprecated</option>
+                  </select>
+                </div>
               </div>
-              <div>
-                <label htmlFor="allowedOrigin" className="block text-sm font-medium mb-2 text-gray-200">
-                  Allowed Origin *
-                </label>
-                <Input
-                  id="allowedOrigin"
-                  value={formData.allowedOrigin}
-                  onChange={(e) => handleInputChange("allowedOrigin", e.target.value)}
-                  placeholder="e.g. https://yourdomain.com"
-                  className={`bg-gray-800 border-gray-600 text-white ${errors.allowedOrigin ? "border-red-500" : ""}`}
-                />
-                {errors.allowedOrigin && <p className="text-red-400 text-sm mt-1">{errors.allowedOrigin}</p>}
+            </div>
+
+            {/* API Configuration */}
+            <div className="space-y-2">
+              <h3 className="text-lg font-semibold gradient-text mb-4">API Configuration</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label htmlFor="apiKey" className="block text-sm font-medium text-white/90">
+                    API Key *
+                  </label>
+                  <Input
+                    id="apiKey"
+                    value={formData.apiKey}
+                    onChange={(e) => handleInputChange("apiKey", e.target.value)}
+                    placeholder="sk-proj-abc123xyz789..."
+                    className={`glass-input text-white placeholder:text-white/50 border-0 h-12 ${errors.apiKey ? "ring-2 ring-red-400" : ""} transition-all duration-300`}
+                  />
+                  {errors.apiKey && <p className="text-red-300 text-sm animate-fade-in-up">{errors.apiKey}</p>}
+                </div>
+                
+                <div className="space-y-2">
+                  <label htmlFor="allowedOrigin" className="block text-sm font-medium text-white/90">
+                    Allowed Origin *
+                  </label>
+                  <Input
+                    id="allowedOrigin"
+                    value={formData.allowedOrigin}
+                    onChange={(e) => handleInputChange("allowedOrigin", e.target.value)}
+                    placeholder="https://yourdomain.com"
+                    className={`glass-input text-white placeholder:text-white/50 border-0 h-12 ${errors.allowedOrigin ? "ring-2 ring-red-400" : ""} transition-all duration-300`}
+                  />
+                  {errors.allowedOrigin && <p className="text-red-300 text-sm animate-fade-in-up">{errors.allowedOrigin}</p>}
+                </div>
               </div>
             </div>
 
             {/* Tags */}
-            <div>
-              <label className="block text-sm font-medium mb-2 text-gray-200">
-                Tags
-              </label>
-              <div className="space-y-2">
-                <div className="flex gap-2">
+            <div className="space-y-2">
+              <h3 className="text-lg font-semibold gradient-text mb-4">Tags & Keywords</h3>
+              <div className="space-y-4">
+                <div className="flex gap-3">
                   <Input
                     value={tagInput}
                     onChange={(e) => setTagInput(e.target.value)}
-                    placeholder="Add tags (e.g., natural-language, image-processing)"
-                    className="bg-gray-800 border-gray-600 text-white"
+                    placeholder="Add tags (e.g., natural-language, vision, code-gen)"
+                    className="glass-input text-white placeholder:text-white/50 border-0 h-12 flex-1 transition-all duration-300"
                     onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
                   />
-                  <Button type="button" onClick={addTag} variant="outline" className="border-gray-600 text-gray-300">
-                    Add
+                  <Button 
+                    type="button" 
+                    onClick={addTag} 
+                    className="btn-gradient h-12 px-6 font-medium rounded-xl"
+                  >
+                    Add Tag
                   </Button>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {formData.tags.map((tag, index) => (
                     <Badge 
                       key={index} 
-                      className="bg-blue-600 text-white cursor-pointer hover:bg-blue-700"
+                      className="bg-gradient-primary text-white cursor-pointer hover:bg-gradient-accent px-3 py-1 rounded-full text-sm font-medium transition-all duration-200 hover:scale-105"
                       onClick={() => removeTag(tag)}
                     >
-                      {tag} ×
+                      {tag} <span className="ml-1 text-white/80">×</span>
                     </Badge>
                   ))}
                 </div>
@@ -418,24 +440,22 @@ function ProductModal({ isOpen, onClose, onSave, editProduct }: ProductModalProp
             </div>
 
             {/* API Documentation */}
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <label className="block text-sm font-medium text-gray-200">
-                  API Documentation (Markdown) *
-                </label>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold gradient-text">API Documentation</h3>
                 <Button
                   type="button"
                   variant="outline"
                   size="sm"
                   onClick={() => setShowPreview(!showPreview)}
-                  className="border-gray-600 text-gray-300"
+                  className="glass-input border-0 text-white/80 hover:text-white hover:glass px-4 py-2 rounded-lg transition-all duration-200"
                 >
-                  {showPreview ? "Edit" : "Preview"}
+                  {showPreview ? "📝 Edit" : "👀 Preview"}
                 </Button>
               </div>
               
               {showPreview ? (
-                <div className="border border-gray-600 rounded-md p-4 bg-gray-800 min-h-[200px]">
+                <div className="card-glass p-6 min-h-[200px] rounded-xl">
                   <MarkdownPreview content={formData.apiDocs} />
                 </div>
               ) : (
@@ -453,7 +473,7 @@ POST /api/v1/generate
 - **input** (string): The input text to process
 - **max_tokens** (number): Maximum tokens in response
 
-## Example
+## Example Request
 \`\`\`json
 {
   "input": "Hello, how are you?",
@@ -461,53 +481,63 @@ POST /api/v1/generate
 }
 \`\`\`
 
-## Response
+## Response Format
 \`\`\`json
 {
   "output": "Generated response...",
-  "tokens_used": 45
+  "tokens_used": 45,
+  "model": "your-model-name"
 }
 \`\`\``}
                   rows={12}
-                  className={`w-full px-3 py-2 bg-gray-800 border border-gray-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-sm ${
-                    errors.apiDocs ? "border-red-500" : ""
-                  }`}
+                  className={`w-full px-4 py-3 glass-input text-white placeholder:text-white/50 border-0 rounded-xl font-mono text-sm resize-none focus:ring-2 focus:ring-gradient-from-primary/50 ${
+                    errors.apiDocs ? "ring-2 ring-red-400" : ""
+                  } transition-all duration-300`}
                 />
               )}
-              {errors.apiDocs && <p className="text-red-400 text-sm mt-1">{errors.apiDocs}</p>}
+              {errors.apiDocs && <p className="text-red-300 text-sm animate-fade-in-up">{errors.apiDocs}</p>}
             </div>
 
             {/* Image Upload */}
-            <div>
-              <label className="block text-sm font-medium mb-2 text-gray-200">
-                Model Screenshots & Demos
-              </label>
-              <ImageUpload
-                images={formData.imageFiles}
-                onImagesChange={(images) => setFormData(prev => ({ ...prev, imageFiles: images }))}
-                maxImages={5}
-              />
+            <div className="space-y-2">
+              <h3 className="text-lg font-semibold gradient-text mb-4">Visual Assets</h3>
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-white/90">
+                  Model Screenshots & Demos
+                </label>
+                <div className="glass p-4 rounded-xl">
+                  <ImageUpload
+                    images={formData.imageFiles}
+                    onImagesChange={(images) => setFormData(prev => ({ ...prev, imageFiles: images }))}
+                    maxImages={5}
+                  />
+                </div>
+              </div>
             </div>
 
             {/* Submit Buttons */}
-            <div className="flex gap-3 pt-6 border-t border-gray-700">
+            <div className="flex gap-4 pt-8 border-t border-white/10">
               <Button 
                 type="button" 
                 variant="outline" 
                 onClick={onClose} 
-                className="flex-1 border-gray-600 text-gray-300 hover:bg-gray-800"
+                className="flex-1 glass-input border-0 text-white/80 hover:text-white hover:glass h-12 rounded-xl font-medium transition-all duration-300"
               >
                 Cancel
               </Button>
               <Button 
                 type="submit" 
                 disabled={isSubmitting} 
-                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+                className="flex-1 btn-gradient h-12 rounded-xl font-semibold transition-all duration-300 disabled:opacity-50"
               >
-                {isSubmitting 
-                  ? (editProduct ? "Updating Model..." : "Publishing Model...") 
-                  : (editProduct ? "Update AI Model/Agent" : "Publish AI Model/Agent")
-                }
+                {isSubmitting ? (
+                  <div className="flex items-center space-x-2">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                    <span>{editProduct ? "Updating..." : "Publishing..."}</span>
+                  </div>
+                ) : (
+                  <span>{editProduct ? "Update Model" : "🚀 Publish Model"}</span>
+                )}
               </Button>
             </div>
           </form>
@@ -553,6 +583,8 @@ export default function EnhancedProductManagement() {
             images: [],
             status: "active",
             stock: 1000000,
+            apiKey: "sk-proj-abc123xyz789",
+            allowedOrigin: "https://myapp.com",
             storeOwnerId: user?.uid || "",
             storeOwnerName: user?.displayName || "AI Developer",
             storeOwnerAvatar: user?.photoURL || "",
@@ -573,6 +605,8 @@ export default function EnhancedProductManagement() {
             images: [],
             status: "active",
             stock: 500000,
+            apiKey: "sk-codegen-def456uvw012",
+            allowedOrigin: "*.developer-portal.com",
             storeOwnerId: user?.uid || "",
             storeOwnerName: user?.displayName || "AI Developer",
             storeOwnerAvatar: user?.photoURL || "",
@@ -743,50 +777,56 @@ export default function EnhancedProductManagement() {
   }
 
   return (
-    <div className="space-y-6 bg-gray-900 text-white min-h-screen">
+    <div className="space-y-8 text-white min-h-screen">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-6">
-        <div>
-          <h2 className="text-2xl font-bold text-white">AI Model & Agent Hub</h2>
-          <p className="text-gray-400">Manage your AI models, agents, and API services</p>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 p-8">
+        <div className="space-y-2">
+          <h2 className="text-4xl font-bold gradient-text">AI Model Hub</h2>
+          <p className="text-white/70 text-lg">Manage and monetize your AI models and agents</p>
         </div>
-        <Button onClick={() => setShowAddModal(true)} className="bg-blue-600 hover:bg-blue-700 text-white">
-          + Publish New Model/Agent
+        <Button 
+          onClick={() => setShowAddModal(true)} 
+          className="btn-gradient h-12 px-8 rounded-xl font-semibold transition-all duration-300 hover:scale-105"
+        >
+          <span className="flex items-center space-x-2">
+            <span>🚀</span>
+            <span>Publish New Model</span>
+          </span>
         </Button>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-6">
-        <Card className="bg-gray-800 border-gray-700">
-          <CardContent className="p-4">
-            <div className="text-2xl font-bold text-white">{products.length}</div>
-            <p className="text-sm text-gray-400">Total AI Models</p>
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 px-8">
+        <Card className="card-glass animate-fade-in-up">
+          <CardContent className="p-6 text-center">
+            <div className="text-3xl font-bold gradient-text">{products.length}</div>
+            <p className="text-white/70 font-medium">Total Models</p>
           </CardContent>
         </Card>
-        <Card className="bg-gray-800 border-gray-700">
-          <CardContent className="p-4">
-            <div className="text-2xl font-bold text-green-400">{activeProducts}</div>
-            <p className="text-sm text-gray-400">Active Models</p>
+        <Card className="card-glass animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+          <CardContent className="p-6 text-center">
+            <div className="text-3xl font-bold text-green-400">{activeProducts}</div>
+            <p className="text-white/70 font-medium">Active Models</p>
           </CardContent>
         </Card>
-        <Card className="bg-gray-800 border-gray-700">
-          <CardContent className="p-4">
-            <div className="text-2xl font-bold text-blue-400">${totalValue.toLocaleString()}</div>
-            <p className="text-sm text-gray-400">Total API Value</p>
+        <Card className="card-glass animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+          <CardContent className="p-6 text-center">
+            <div className="text-3xl font-bold gradient-text-accent">${totalValue.toLocaleString()}</div>
+            <p className="text-white/70 font-medium">Revenue Potential</p>
           </CardContent>
         </Card>
-        <Card className="bg-gray-800 border-gray-700">
-          <CardContent className="p-4">
-            <div className="text-2xl font-bold text-orange-400">{lowLimitProducts}</div>
-            <p className="text-sm text-gray-400">Low Limit Models</p>
+        <Card className="card-glass animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+          <CardContent className="p-6 text-center">
+            <div className="text-3xl font-bold text-orange-400">{lowLimitProducts}</div>
+            <p className="text-white/70 font-medium">Attention Needed</p>
           </CardContent>
         </Card>
       </div>
 
       {/* Products Table */}
-      <Card className="bg-gray-800 border-gray-700 mx-6">
-        <CardHeader className="border-b border-gray-700">
-          <CardTitle className="text-white">Your AI Models & Agents</CardTitle>
+      <Card className="card-glass mx-8 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+        <CardHeader className="border-b border-white/10 bg-gradient-to-r from-white/5 to-transparent">
+          <CardTitle className="text-xl font-bold gradient-text">Your AI Model Portfolio</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="overflow-x-auto">
