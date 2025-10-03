@@ -7,6 +7,17 @@ import { useAuth } from "@/hooks/useAuth"
 import { productService, Product } from "@/lib/productService"
 import ChatInterface from "@/components/ChatInterface"
 import ModelInfoModal from "@/components/ModelInfoModal"
+import { 
+  Bot, 
+  Code, 
+  ImageIcon, 
+  BarChart3, 
+  PenTool, 
+  Headphones, 
+  Eye, 
+  Languages,
+  Wrench
+} from "lucide-react"
 
 interface MarketplaceListingProps {
   showCreatorInfo?: boolean
@@ -34,11 +45,11 @@ export default function MarketplaceListing({ showCreatorInfo = true }: Marketpla
             {
               id: "1",
               name: "GPT-4 Vision Pro",
-              description: "Advanced multimodal AI model capable of understanding both text and images. Perfect for content analysis, document processing, and visual AI applications with industry-leading accuracy.",
+              description: "Advanced multimodal AI model for text and images",
               llmApiUsing: "OpenAI GPT-4 Vision",
               price: 0.03,
               category: "Language Models",
-              tags: ["multimodal", "vision", "text-generation", "content-analysis"],
+              tags: ["multimodal", "vision", "text-generation"],
               limit: 1000000,
               tokens: 4096,
               apiDocs: "# GPT-4 Vision API Documentation...",
@@ -55,12 +66,12 @@ export default function MarketplaceListing({ showCreatorInfo = true }: Marketpla
             },
             {
               id: "2", 
-              name: "CodeGen Assistant Pro",
-              description: "Specialized code generation AI that supports 40+ programming languages. Includes debugging, optimization, code review, and comprehensive documentation features.",
+              name: "CodeGen Assistant",
+              description: "AI coding assistant for 40+ programming languages",
               llmApiUsing: "Custom CodeGen Model v2.1",
               price: 0.02,
               category: "Code Generation",
-              tags: ["programming", "code-generation", "debugging", "optimization"],
+              tags: ["programming", "code-generation", "debugging"],
               limit: 500000,
               tokens: 8192,
               apiDocs: "# CodeGen API Documentation...",
@@ -74,6 +85,138 @@ export default function MarketplaceListing({ showCreatorInfo = true }: Marketpla
               storeOwnerAvatar: "https://via.placeholder.com/40",
               createdAt: new Date("2024-11-15"),
               updatedAt: new Date("2024-12-10")
+            },
+            {
+              id: "3",
+              name: "DALL-E Image Creator",
+              description: "Generate stunning images from text descriptions",
+              llmApiUsing: "OpenAI DALL-E 3",
+              price: 0.04,
+              category: "Image Generation",
+              tags: ["image-generation", "art", "creative"],
+              limit: 100000,
+              tokens: 1024,
+              apiDocs: "# DALL-E API Documentation...",
+              apiKey: "sk-dalle123",
+              allowedOrigin: "https://api.openai.com",
+              images: [],
+              status: "active",
+              stock: 100000,
+              storeOwnerId: "demo3",
+              storeOwnerName: "Creative AI",
+              storeOwnerAvatar: "https://via.placeholder.com/40",
+              createdAt: new Date("2024-12-01"),
+              updatedAt: new Date("2024-12-15")
+            },
+            {
+              id: "4",
+              name: "DataAnalyzer Pro",
+              description: "Advanced data analysis and insights generation",
+              llmApiUsing: "Custom Analytics Model",
+              price: 0.025,
+              category: "Data Analysis",
+              tags: ["analytics", "insights", "business-intelligence"],
+              limit: 750000,
+              tokens: 8192,
+              apiDocs: "# DataAnalyzer API Documentation...",
+              apiKey: "da-pro456",
+              allowedOrigin: "https://api.dataanalyzer.com",
+              images: [],
+              status: "active",
+              stock: 750000,
+              storeOwnerId: "demo4",
+              storeOwnerName: "Analytics Hub",
+              storeOwnerAvatar: "https://via.placeholder.com/40",
+              createdAt: new Date("2024-11-20"),
+              updatedAt: new Date("2024-12-12")
+            },
+            {
+              id: "5",
+              name: "ContentWriter AI",
+              description: "Professional content writing and copywriting AI",
+              llmApiUsing: "GPT-4 Turbo",
+              price: 0.015,
+              category: "Content Writing",
+              tags: ["writing", "copywriting", "marketing"],
+              limit: 2000000,
+              tokens: 4096,
+              apiDocs: "# ContentWriter API Documentation...",
+              apiKey: "cw-ai789",
+              allowedOrigin: "https://api.contentwriter.ai",
+              images: [],
+              status: "active",
+              stock: 2000000,
+              storeOwnerId: "demo5",
+              storeOwnerName: "Content Labs",
+              storeOwnerAvatar: "https://via.placeholder.com/40",
+              createdAt: new Date("2024-11-25"),
+              updatedAt: new Date("2024-12-14")
+            },
+            {
+              id: "6",
+              name: "AudioSync Pro",
+              description: "Advanced audio processing and transcription",
+              llmApiUsing: "Whisper v3 Enhanced",
+              price: 0.008,
+              category: "Audio Processing",
+              tags: ["audio", "transcription", "speech-to-text"],
+              limit: 1500000,
+              tokens: 2048,
+              apiDocs: "# AudioSync API Documentation...",
+              apiKey: "as-pro321",
+              allowedOrigin: "https://api.audiosync.com",
+              images: [],
+              status: "active",
+              stock: 1500000,
+              storeOwnerId: "demo6",
+              storeOwnerName: "Audio Tech",
+              storeOwnerAvatar: "https://via.placeholder.com/40",
+              createdAt: new Date("2024-11-18"),
+              updatedAt: new Date("2024-12-13")
+            },
+            {
+              id: "7",
+              name: "VisionAnalyzer",
+              description: "Computer vision and image analysis toolkit",
+              llmApiUsing: "Custom Vision Model",
+              price: 0.035,
+              category: "Vision Models",
+              tags: ["computer-vision", "image-analysis", "object-detection"],
+              limit: 500000,
+              tokens: 1024,
+              apiDocs: "# VisionAnalyzer API Documentation...",
+              apiKey: "va-model654",
+              allowedOrigin: "https://api.visionanalyzer.com",
+              images: [],
+              status: "active",
+              stock: 500000,
+              storeOwnerId: "demo7",
+              storeOwnerName: "Vision AI Labs",
+              storeOwnerAvatar: "https://via.placeholder.com/40",
+              createdAt: new Date("2024-11-22"),
+              updatedAt: new Date("2024-12-11")
+            },
+            {
+              id: "8",
+              name: "TranslateMax",
+              description: "Real-time translation for 100+ languages",
+              llmApiUsing: "Google Translate API Enhanced",
+              price: 0.012,
+              category: "Translation",
+              tags: ["translation", "multilingual", "localization"],
+              limit: 3000000,
+              tokens: 2048,
+              apiDocs: "# TranslateMax API Documentation...",
+              apiKey: "tm-max987",
+              allowedOrigin: "https://api.translatemax.com",
+              images: [],
+              status: "active",
+              stock: 3000000,
+              storeOwnerId: "demo8",
+              storeOwnerName: "Language Bridge",
+              storeOwnerAvatar: "https://via.placeholder.com/40",
+              createdAt: new Date("2024-11-28"),
+              updatedAt: new Date("2024-12-16")
             }
           ])
         }
@@ -99,7 +242,7 @@ export default function MarketplaceListing({ showCreatorInfo = true }: Marketpla
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black flex items-center justify-center">
+      <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center bg-white/5 backdrop-blur-xl rounded-lg p-8 border border-white/10">
           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-white/30 mx-auto"></div>
           <p className="mt-4 text-gray-300">Loading AI marketplace...</p>
@@ -108,120 +251,135 @@ export default function MarketplaceListing({ showCreatorInfo = true }: Marketpla
     )
   }
 
+  // Helper function to get category icon and color
+  const getCategoryIcon = (category: string) => {
+    switch (category) {
+      case "Language Models":
+        return <Bot className="w-5 h-5 text-white" />
+      case "Code Generation":
+        return <Code className="w-5 h-5 text-white" />
+      case "Image Generation":
+        return <ImageIcon className="w-5 h-5 text-white" />
+      case "Data Analysis":
+        return <BarChart3 className="w-5 h-5 text-white" />
+      case "Content Writing":
+        return <PenTool className="w-5 h-5 text-white" />
+      case "Audio Processing":
+        return <Headphones className="w-5 h-5 text-white" />
+      case "Vision Models":
+        return <Eye className="w-5 h-5 text-white" />
+      case "Translation":
+        return <Languages className="w-5 h-5 text-white" />
+      default:
+        return <Wrench className="w-5 h-5 text-white" />
+    }
+  }
+
+  const getCategoryColor = (category: string) => {
+    const colors: { [key: string]: string } = {
+      "Language Models": "bg-orange-500",
+      "Code Generation": "bg-yellow-500",
+      "Image Generation": "bg-purple-500",
+      "Data Analysis": "bg-blue-500",
+      "Content Writing": "bg-green-500",
+      "Audio Processing": "bg-pink-500",
+      "Vision Models": "bg-cyan-500",
+      "Translation": "bg-indigo-500",
+    }
+    return colors[category] || "bg-gray-500"
+  }
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black text-white">
-      <div className="bg-gradient-to-r from-white/10 to-gray-300/10 backdrop-blur-xl p-8 border-b border-white/10">
+    <div className="min-h-screen bg-black text-white">
+      {/* Header */}
+      <div className="bg-black px-8 pt-8 pb-6">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">AI Marketplace</h1>
-          <p className="text-xl text-gray-300 mb-6">
+          <h1 className="text-3xl font-semibold text-white mb-2">AI Marketplace</h1>
+          <p className="text-gray-400 text-sm">
             Discover and integrate cutting-edge AI models and agents for your projects
           </p>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-8 py-6">
-        <p className="text-gray-400">
-          Showing {products.length} AI models and agents
-        </p>
-      </div>
-
+      {/* Content */}
       <div className="max-w-7xl mx-auto px-8 pb-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {products.map((product) => (
-            <Card key={product.id} className="hover:border-white/30 transition-all duration-300 hover:scale-105 hover:bg-white/10 group">
-              <CardHeader>
-                <div className="flex items-start justify-between mb-2">
-                  <div className="flex-1">
-                    <CardTitle className="text-lg text-white mb-2">{product.name}</CardTitle>
-                    <Badge className="bg-white/20 text-white border border-white/30 backdrop-blur-sm">
-                      {product.status}
-                    </Badge>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {products.map((product) => {
+            const categoryColor = getCategoryColor(product.category)
+            return (
+              <div 
+                key={product.id} 
+                className="group cursor-pointer"
+                onClick={() => handleTryNow(product)}
+              >
+                <div className="rounded-xl p-4 transition-all duration-200 hover:bg-white/[0.02]">
+                  {/* Icon and Title Row */}
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className={`w-10 h-10 ${categoryColor} rounded-full flex items-center justify-center flex-shrink-0`}>
+                      {getCategoryIcon(product.category)}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <h3 className="text-white font-medium text-sm leading-tight mb-1 truncate">
+                        {product.name}
+                      </h3>
+                      <p className="text-gray-400 text-xs leading-tight truncate">
+                        {product.description.length > 40 
+                          ? `${product.description.substring(0, 40)}...`
+                          : product.description
+                        }
+                      </p>
+                    </div>
                   </div>
-                  <div className="text-right">
-                    <div className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">${(product.price || 0).toFixed(3)}</div>
-                    <div className="text-xs text-gray-400">per 1K tokens</div>
-                  </div>
-                </div>
-                
-                {showCreatorInfo && product.storeOwnerName && (
-                  <div className="flex items-center gap-2 mb-3 bg-white/5 backdrop-blur-sm rounded-lg p-2 border border-white/10">
-                    <img 
-                      src={product.storeOwnerAvatar || "https://via.placeholder.com/24"} 
-                      alt={product.storeOwnerName || "Store Owner"}
-                      className="w-6 h-6 rounded-full border border-white/20"
-                    />
-                    <span className="text-sm text-gray-300">by {product.storeOwnerName}</span>
-                  </div>
-                )}
 
-                <Badge className="bg-gradient-to-r from-white/10 to-gray-300/10 backdrop-blur-sm text-gray-300 border border-white/20 mb-3">
-                  {product.category}
-                </Badge>
-              </CardHeader>
-              
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="w-full h-32 bg-gradient-to-r from-white/5 to-gray-300/5 backdrop-blur-sm rounded-lg overflow-hidden flex items-center justify-center border border-white/10 group-hover:border-white/20 transition-all duration-300">
-                    {product.images && product.images.length > 0 ? (
+                  {/* Creator Info */}
+                  {showCreatorInfo && product.storeOwnerName && (
+                    <div className="flex items-center gap-2 mb-3">
                       <img 
-                        src={product.images[0]} 
-                        alt={product.name}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                        src={product.storeOwnerAvatar || "https://via.placeholder.com/16"} 
+                        alt={product.storeOwnerName}
+                        className="w-4 h-4 rounded-full"
                       />
-                    ) : (
-                      <div className="text-4xl text-gray-400 group-hover:text-gray-300 transition-colors duration-300">🤖</div>
-                    )}
-                  </div>
-
-                  <p className="text-gray-300 text-sm line-clamp-3">
-                    {product.description || "No description available"}
-                  </p>
-
-                  {product.llmApiUsing && (
-                    <div className="text-xs text-gray-300 bg-white/5 backdrop-blur-sm px-2 py-1 rounded border border-white/10">
-                      Powered by: {product.llmApiUsing}
+                      <span className="text-gray-400 text-xs">
+                        by {product.storeOwnerName}
+                      </span>
                     </div>
                   )}
 
-                  <div className="grid grid-cols-2 gap-2 text-xs text-gray-400">
-                    <div>
-                      <span className="font-medium">Max Tokens:</span><br />
-                      {(product.tokens || 0).toLocaleString()}
+                  {/* Pricing */}
+                  <div className="flex items-center justify-between">
+                    <div className="text-white text-sm font-medium">
+                      ${(product.price || 0).toFixed(3)}/1K
                     </div>
-                    <div>
-                      <span className="font-medium">Monthly Limit:</span><br />
-                      {(product.limit || 0).toLocaleString()}
-                    </div>
-                  </div>
-
-                  <div className="flex gap-2 pt-2">
-                    <Button 
-                      className="flex-1 bg-gradient-to-r from-white/20 to-gray-300/20 backdrop-blur-sm border border-white/20 text-white hover:from-white/30 hover:to-gray-300/30 hover:scale-105 transition-all duration-300"
-                      size="sm"
-                      onClick={() => handleTryNow(product)}
-                    >
-                      Try Now
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      className="border-white/20 text-gray-300 hover:bg-white/10 backdrop-blur-sm hover:scale-105 transition-all duration-300"
-                      onClick={() => handleViewDocs(product)}
+                    <button 
+                      className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-gray-400 hover:text-white text-xs px-2 py-1 hover:bg-white/[0.05] rounded"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handleViewDocs(product)
+                      }}
                     >
                       View Docs
-                    </Button>
+                    </button>
+                  </div>
+
+                  {/* Category Badge - Bottom */}
+                  <div className="mt-3 pt-3 border-t border-white/[0.05]">
+                    <div className="text-gray-400 text-xs">
+                      {product.category}
+                    </div>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-          ))}
+              </div>
+            )
+          })}
         </div>
 
         {products.length === 0 && (
           <div className="text-center py-12">
-            <div className="bg-white/5 backdrop-blur-xl rounded-lg p-12 border border-white/10 max-w-md mx-auto">
-              <div className="text-6xl mb-4">🔍</div>
-              <h3 className="text-xl font-semibold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent mb-2">No models found</h3>
+            <div className="rounded-lg p-12 max-w-md mx-auto">
+              <div className="w-16 h-16 mx-auto mb-4 bg-white/[0.03] rounded-full flex items-center justify-center">
+                <Bot className="w-8 h-8 text-gray-400" />
+              </div>
+              <h3 className="text-xl font-semibold text-white mb-2">No models found</h3>
               <p className="text-gray-400">
                 No AI models are currently available in the marketplace.
               </p>

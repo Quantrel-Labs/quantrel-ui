@@ -1,13 +1,19 @@
 // DOCS: Main navigation bar with authentication state
 
+import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { useAuth } from "@/hooks/useAuth"
-import { ROLES } from "@/lib/roles"
+
+const primaryLinks = [
+  { label: "Product", href: "/" },
+  { label: "Marketplace", href: "/marketplace" }
+]
 
 export default function Navbar() {
   const { user, role, signOut, loading } = useAuth()
   const navigate = useNavigate()
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const handleSignOut = async () => {
     await signOut()
@@ -18,87 +24,125 @@ export default function Navbar() {
     return "/dashboard"
   }
 
-  if (loading) {
-    return (
-      <nav className="bg-black/20 backdrop-blur-xl border-b border-white/10 shadow-lg">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex items-center">
-              <Link to="/" className="text-xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-                AI Marketplace
-              </Link>
-            </div>
-            <div className="flex items-center space-x-4">
-              <div className="w-20 h-8 bg-white/10 animate-pulse rounded-lg backdrop-blur-sm"></div>
-            </div>
-          </div>
+  const renderAuthSection = () => {
+    if (loading) {
+      return (
+        <div className="flex items-center gap-3">
+          <div className="h-10 w-24 animate-pulse rounded-lg bg-white/[0.05]" />
+          <div className="h-10 w-28 animate-pulse rounded-lg bg-white/[0.05]" />
         </div>
-      </nav>
+      )
+    }
+
+    if (user) {
+      return (
+        <div className="flex items-center gap-3">
+          <div className="hidden sm:flex flex-col text-right text-sm">
+            <span className="font-medium text-white">{user.displayName || user.email}</span>
+            {role && <span className="text-xs uppercase tracking-wider text-gray-400">{role}</span>}
+          </div>
+          <Button
+            variant="ghost"
+            size="default"
+            onClick={handleSignOut}
+            className="font-medium text-gray-400 hover:text-white hover:bg-white/[0.05]"
+          >
+            Sign Out
+          </Button>
+          <Button
+            size="default"
+            asChild
+            className="font-medium"
+          >
+            <Link to={getDashboardPath()}>Dashboard</Link>
+          </Button>
+        </div>
+      )
+    }
+
+    return (
+      <div className="flex items-center gap-3">
+        <Button
+          variant="ghost"
+          size="default"
+          asChild
+          className="font-medium text-gray-400 hover:text-white hover:bg-white/[0.05]"
+        >
+          <Link to="/login">Login</Link>
+        </Button>
+        <Button
+          size="default"
+          asChild
+          className="font-medium"
+        >
+          <Link to="/register">Start with AI</Link>
+        </Button>
+      </div>
     )
   }
 
   return (
-    <nav className="bg-black/20 backdrop-blur-xl border-b border-white/10 shadow-lg">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
-          <div className="flex items-center space-x-8">
-            <Link to="/" className="text-xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-              AI Marketplace
-            </Link>
-            
-            <div className="hidden md:flex items-center space-x-6">
-              <Link 
-                to="/marketplace" 
-                className="text-gray-300 hover:text-white transition-all duration-300 hover:bg-white/5 px-3 py-2 rounded-lg backdrop-blur-sm"
+    <header className="sticky top-0 z-50 bg-black/95 backdrop-blur-sm border-b border-white/[0.05]">
+      <div className="relative py-4">
+        <nav className="relative mx-auto max-w-7xl px-8 flex h-16 items-center justify-between text-sm">
+          <Link to="/" className="flex items-center gap-3 text-xl font-display font-semibold text-white hover:opacity-80 transition-opacity">
+            <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-primary text-base font-bold">Q</span>
+            <span className="hidden sm:inline-block">
+              Quantrel
+            </span>
+          </Link>
+
+          <div className="hidden items-center gap-8 md:flex">
+            {primaryLinks.map((link) => (
+              <Link
+                key={link.label}
+                to={link.href}
+                className="text-gray-400 transition duration-300 hover:text-white font-medium"
               >
-                Browse Models
+                {link.label}
               </Link>
-              {user && (
-                <Link 
-                  to={getDashboardPath()} 
-                  className="text-gray-300 hover:text-white transition-all duration-300 hover:bg-white/5 px-3 py-2 rounded-lg backdrop-blur-sm"
-                >
-                  Developer Hub
-                </Link>
-              )}
-            </div>
+            ))}
           </div>
 
-          <div className="flex items-center space-x-4">
-            {user ? (
-              <>
-                <span className="text-sm text-gray-300 bg-white/5 backdrop-blur-sm px-3 py-1 rounded-lg border border-white/10">
-                  {user.displayName || user.email}
-                </span>
-                
-                {role && (
-                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gradient-to-r from-white/20 to-gray-300/20 backdrop-blur-sm text-white border border-white/20">
-                    {role.charAt(0).toUpperCase() + role.slice(1)}
-                  </span>
-                )}
+          <div className="hidden md:flex">{renderAuthSection()}</div>
 
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={handleSignOut}
-                  className="border-white/20 text-gray-300 hover:bg-white/10 hover:text-white backdrop-blur-sm"
+          <button
+            type="button"
+            className="md:hidden inline-flex h-10 w-10 items-center justify-center rounded-lg text-gray-400 hover:text-white transition-colors"
+            onClick={() => setIsMenuOpen((prev) => !prev)}
+            aria-label="Toggle menu"
+          >
+            <svg className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+              {isMenuOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+              )}
+            </svg>
+          </button>
+        </nav>
+      </div>
+
+      {isMenuOpen && (
+        <div className="mx-6 mt-4 rounded-2xl bg-black border border-white/[0.05] p-6 md:hidden">
+          <div className="space-y-6">
+            <div className="grid gap-3">
+              {primaryLinks.map((link) => (
+                <Link
+                  key={link.label}
+                  to={link.href}
+                  className="rounded-lg px-4 py-3 text-base font-medium text-white hover:bg-white/[0.02] transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
                 >
-                  Sign Out
-                </Button>
-              </>
-            ) : (
-              <>
-                <Button variant="ghost" size="sm" asChild className="text-gray-300 hover:text-white hover:bg-white/10 backdrop-blur-sm">
-                  <Link to="/login">Sign In</Link>
-                </Button>
-                <Button size="sm" asChild className="bg-gradient-to-r from-white/20 to-gray-300/20 backdrop-blur-sm border border-white/20 text-white hover:from-white/30 hover:to-gray-300/30">
-                  <Link to="/register">Get Started</Link>
-                </Button>
-              </>
-            )}
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+
+            <div className="pt-4 border-t border-white/[0.05]">{renderAuthSection()}</div>
           </div>
         </div>
-      </div>
-    </nav>
+      )}
+    </header>
   )
 }

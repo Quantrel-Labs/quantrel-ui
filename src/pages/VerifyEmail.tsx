@@ -38,53 +38,59 @@ export default function VerifyEmail() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">Verify Your Email</CardTitle>
-          <p className="text-center text-sm text-gray-600">
-            We've sent a verification email to your inbox. Please check your email and click the verification link.
+    <section className="relative flex min-h-screen items-center justify-center overflow-hidden py-16">
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,_rgba(95,78,255,0.35),_transparent_70%)] blur-3xl" />
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_bottom,_rgba(0,242,254,0.25),_transparent_70%)] blur-3xl" />
+
+      <Card className="w-full max-w-xl border-white/10 bg-white/[0.06]">
+        <CardHeader className="space-y-3 text-center">
+          <div className="mx-auto inline-flex h-16 w-16 items-center justify-center rounded-full border border-white/15 bg-white/[0.08]">
+            <svg className="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l9 5 9-5m-18 0l9 5 9-5m-18 0v8a2 2 0 002 2h14a2 2 0 002-2V8" />
+            </svg>
+          </div>
+          <CardTitle className="text-3xl font-semibold text-white">Verify your email</CardTitle>
+          <p className="text-sm text-white/65">
+            We just sent a verification link to your inbox. Open it to activate your account and unlock the full Quantrel
+            workspace.
           </p>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="text-center">
-            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-              </svg>
+        <CardContent className="space-y-6 text-center">
+          {message && (
+            <div
+              className={`rounded-2xl border p-4 text-sm ${
+                message.includes("Failed")
+                  ? "border-red-400/40 bg-red-500/20 text-red-100"
+                  : "border-emerald-400/40 bg-emerald-500/20 text-emerald-100"
+              }`}
+            >
+              {message}
             </div>
-            {message && (
-              <div className={`mb-4 p-3 text-sm rounded-md ${
-                message.includes("Failed") 
-                  ? "text-red-600 bg-red-50 border border-red-200" 
-                  : "text-green-600 bg-green-50 border border-green-200"
-              }`}>
-                {message}
-              </div>
-            )}
-            <p className="text-sm text-gray-600 mb-6">
-              Didn't receive the email? Check your spam folder or click below to resend.
-            </p>
-            <div className="space-y-3">
-              <Button 
-                onClick={handleResendEmail} 
-                disabled={isResending}
-                variant="outline"
-                className="w-full"
-              >
-                {isResending ? "Sending..." : "Resend Verification Email"}
-              </Button>
-              <Button 
-                onClick={handleSignOut} 
-                variant="ghost"
-                className="w-full"
-              >
-                Sign Out
-              </Button>
-            </div>
+          )}
+
+          <p className="text-sm text-white/70">
+            Didn't receive the email? Check your spam folder or resend below. The link expires in 15 minutes for security.
+          </p>
+
+          <div className="grid gap-3 sm:grid-cols-2">
+            <Button onClick={handleResendEmail} disabled={isResending} className="h-12">
+              {isResending ? "Sending…" : "Resend verification"}
+            </Button>
+            <Button onClick={handleSignOut} variant="outline" className="h-12">
+              Sign out
+            </Button>
+          </div>
+
+          <div className="rounded-3xl border border-white/12 bg-white/[0.04] p-5 text-left text-xs text-white/60">
+            <p className="text-white/70">Troubleshooting tips</p>
+            <ul className="mt-3 space-y-2">
+              <li>• Ensure your inbox allows emails from no-reply@quantrel.ai</li>
+              <li>• Add us to your safe sender list to skip spam filters</li>
+              <li>• Need help? Reach out via the Support menu above</li>
+            </ul>
           </div>
         </CardContent>
       </Card>
-    </div>
+    </section>
   )
 }

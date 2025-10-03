@@ -36,24 +36,24 @@ export default function ModelInfoModal({ isOpen, onClose, product }: ModelInfoMo
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 bg-black/75 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <Card className="w-full max-w-5xl max-h-[90vh] overflow-y-auto bg-gray-900/95 backdrop-blur-xl border border-white/20 shadow-2xl">
-        <CardHeader className="border-b border-white/10 sticky top-0 bg-gray-900/95 backdrop-blur-xl z-10">
+    <div className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <Card className="w-full max-w-5xl max-h-[90vh] overflow-y-auto bg-black border border-white/[0.05]">
+        <CardHeader className="border-b border-white/[0.05] sticky top-0 bg-black backdrop-blur-xl z-10">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="w-16 h-16 bg-gradient-to-r from-white/20 to-gray-300/20 backdrop-blur-sm border border-white/20 rounded-xl flex items-center justify-center text-3xl">
+              <div className="w-14 h-14 bg-white/[0.03] border border-white/[0.05] rounded-xl flex items-center justify-center text-3xl">
                 🤖
               </div>
               <div>
-                <CardTitle className="text-2xl bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                <CardTitle className="text-2xl text-white font-medium">
                   {product.name}
                 </CardTitle>
-                <p className="text-gray-400">Powered by {product.llmApiUsing}</p>
+                <p className="text-gray-500">Powered by {product.llmApiUsing}</p>
                 <div className="flex items-center gap-2 mt-2">
-                  <Badge className="bg-green-500/20 text-green-300 border border-green-500/30 backdrop-blur-sm">
+                  <Badge className="bg-green-500/10 text-green-400 border border-green-500/20">
                     {product.status}
                   </Badge>
-                  <Badge className="bg-blue-500/20 text-blue-300 border border-blue-500/30 backdrop-blur-sm">
+                  <Badge className="bg-blue-500/10 text-blue-400 border border-blue-500/20">
                     {product.category}
                   </Badge>
                 </div>
@@ -63,7 +63,7 @@ export default function ModelInfoModal({ isOpen, onClose, product }: ModelInfoMo
               variant="ghost" 
               size="sm" 
               onClick={onClose}
-              className="text-gray-400 hover:text-white hover:bg-white/10"
+              className="text-gray-500 hover:text-white hover:bg-white/[0.02]"
             >
               ✕
             </Button>
@@ -75,15 +75,15 @@ export default function ModelInfoModal({ isOpen, onClose, product }: ModelInfoMo
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-4">
               <div>
-                <h3 className="text-lg font-semibold text-white mb-2">Model Description</h3>
-                <p className="text-gray-300 leading-relaxed">{product.description}</p>
+                <h3 className="text-lg font-medium text-white mb-2">Model Description</h3>
+                <p className="text-gray-400 leading-relaxed">{product.description}</p>
               </div>
 
               <div>
-                <h3 className="text-lg font-semibold text-white mb-3">Tags & Categories</h3>
+                <h3 className="text-lg font-medium text-white mb-3">Tags & Categories</h3>
                 <div className="flex flex-wrap gap-2">
                   {product.tags?.map((tag, index) => (
-                    <Badge key={index} className="bg-white/10 text-gray-300 border border-white/20 backdrop-blur-sm">
+                    <Badge key={index} className="bg-white/[0.03] text-gray-400 border border-white/[0.05] font-normal">
                       {tag}
                     </Badge>
                   ))}
@@ -93,11 +93,11 @@ export default function ModelInfoModal({ isOpen, onClose, product }: ModelInfoMo
 
             <div className="space-y-4">
               <div>
-                <h3 className="text-lg font-semibold text-white mb-3">Pricing & Limits</h3>
-                <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-4 space-y-3">
+                <h3 className="text-lg font-medium text-white mb-3">Pricing & Limits</h3>
+                <div className="bg-white/[0.02] border border-white/[0.05] rounded-lg p-4 space-y-3">
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-400">Cost per 1K tokens</span>
-                    <span className="font-semibold text-white">${product.price?.toFixed(3) || 'N/A'}</span>
+                    <span className="text-gray-500">Cost per 1K tokens</span>
+                    <span className="font-medium text-white">${product.price?.toFixed(3) || 'N/A'}</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-gray-400">Max tokens per request</span>
@@ -144,32 +144,32 @@ export default function ModelInfoModal({ isOpen, onClose, product }: ModelInfoMo
 
           {/* Technical Details */}
           <div>
-            <h3 className="text-lg font-semibold text-white mb-3">Technical Configuration</h3>
+            <h3 className="text-lg font-medium text-white mb-3">Technical Configuration</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-4">
+              <div className="bg-white/[0.02] border border-white/[0.05] rounded-lg p-4">
                 <h4 className="font-medium text-white mb-2">API Configuration</h4>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-gray-400">API Key</span>
-                    <span className="font-mono text-gray-300">
+                    <span className="text-gray-500">API Key</span>
+                    <span className="font-mono text-gray-400">
                       {product.apiKey ? `${product.apiKey.slice(0, 8)}...` : 'Not configured'}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-400">Allowed Origin</span>
-                    <span className="font-mono text-gray-300 truncate max-w-[150px]">
+                    <span className="text-gray-500">Allowed Origin</span>
+                    <span className="font-mono text-gray-400 truncate max-w-[150px]">
                       {product.allowedOrigin || 'Not configured'}
                     </span>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-4">
+              <div className="bg-white/[0.02] border border-white/[0.05] rounded-lg p-4">
                 <h4 className="font-medium text-white mb-2">Metadata</h4>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-gray-400">Created</span>
-                    <span className="text-gray-300">
+                    <span className="text-gray-500">Created</span>
+                    <span className="text-gray-400">
                       {product.createdAt ? 
                         (product.createdAt instanceof Date ? 
                           product.createdAt.toLocaleDateString() : 
@@ -178,8 +178,8 @@ export default function ModelInfoModal({ isOpen, onClose, product }: ModelInfoMo
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-400">Last Updated</span>
-                    <span className="text-gray-300">
+                    <span className="text-gray-500">Last Updated</span>
+                    <span className="text-gray-400">
                       {product.updatedAt ? 
                         (product.updatedAt instanceof Date ? 
                           product.updatedAt.toLocaleDateString() : 
@@ -188,8 +188,8 @@ export default function ModelInfoModal({ isOpen, onClose, product }: ModelInfoMo
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-400">Model ID</span>
-                    <span className="font-mono text-gray-300">
+                    <span className="text-gray-500">Model ID</span>
+                    <span className="font-mono text-gray-400">
                       {product.id || 'N/A'}
                     </span>
                   </div>
@@ -200,12 +200,12 @@ export default function ModelInfoModal({ isOpen, onClose, product }: ModelInfoMo
 
           {/* API Documentation */}
           <div>
-            <h3 className="text-lg font-semibold text-white mb-3">API Documentation</h3>
-            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-6">
+            <h3 className="text-lg font-medium text-white mb-3">API Documentation</h3>
+            <div className="bg-white/[0.02] border border-white/[0.05] rounded-lg p-6">
               {product.apiDocs ? (
                 <MarkdownPreview content={product.apiDocs} />
               ) : (
-                <p className="text-gray-400 italic">No API documentation available.</p>
+                <p className="text-gray-500 italic">No API documentation available.</p>
               )}
             </div>
           </div>
@@ -213,10 +213,10 @@ export default function ModelInfoModal({ isOpen, onClose, product }: ModelInfoMo
           {/* Model Images */}
           {product.images && product.images.length > 0 && (
             <div>
-              <h3 className="text-lg font-semibold text-white mb-3">Model Screenshots</h3>
+              <h3 className="text-lg font-medium text-white mb-3">Model Screenshots</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {product.images.map((image, index) => (
-                  <div key={index} className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-2">
+                  <div key={index} className="bg-white/[0.02] border border-white/[0.05] rounded-lg p-2">
                     <img 
                       src={image} 
                       alt={`${product.name} screenshot ${index + 1}`}
@@ -229,16 +229,16 @@ export default function ModelInfoModal({ isOpen, onClose, product }: ModelInfoMo
           )}
 
           {/* Action Buttons */}
-          <div className="flex gap-4 pt-6 border-t border-white/10">
+          <div className="flex gap-4 pt-6 border-t border-white/[0.05]">
             <Button 
-              className="flex-1 bg-gradient-to-r from-white/20 to-gray-300/20 backdrop-blur-sm border border-white/20 text-white hover:from-white/30 hover:to-gray-300/30"
+              className="flex-1 bg-white/[0.05] border border-white/[0.05] text-white hover:bg-white/[0.08]"
               onClick={onClose}
             >
               Try This Model
             </Button>
             <Button 
               variant="outline"
-              className="flex-1 border-white/20 text-gray-300 hover:bg-white/10 backdrop-blur-sm"
+              className="flex-1 border-white/[0.05] text-gray-400 hover:bg-white/[0.02]"
               onClick={onClose}
             >
               Add to Favorites

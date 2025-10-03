@@ -59,37 +59,37 @@ export default function ChatInterface({ isOpen, onClose, product }: ChatInterfac
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 bg-black/75 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <Card className="w-full max-w-4xl h-[80vh] bg-gray-900/95 backdrop-blur-xl border border-white/20 shadow-2xl flex flex-col">
-        <CardHeader className="border-b border-white/10 flex-shrink-0">
+    <div className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <Card className="w-full max-w-4xl h-[80vh] bg-black border border-white/[0.05] flex flex-col">
+        <CardHeader className="border-b border-white/[0.05] flex-shrink-0">
           <div className="flex items-center justify-between">
             <div>
               <CardTitle className="text-white flex items-center gap-3">
-                <div className="w-12 h-12 bg-gradient-to-r from-white/20 to-gray-300/20 backdrop-blur-sm border border-white/20 rounded-lg flex items-center justify-center text-2xl">
+                <div className="w-10 h-10 bg-white/[0.03] border border-white/[0.05] rounded-lg flex items-center justify-center text-xl">
                   🤖
                 </div>
                 <div>
-                  <div className="text-lg bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                  <div className="text-base font-medium text-white">
                     {product.name}
                   </div>
-                  <div className="text-sm text-gray-400">
+                  <div className="text-sm font-normal text-gray-500">
                     Powered by {product.llmApiUsing}
                   </div>
                 </div>
               </CardTitle>
             </div>
             <div className="flex items-center gap-2">
-              <Badge className="bg-white/10 text-gray-300 border border-white/20 backdrop-blur-sm">
+              <Badge className="bg-white/[0.03] text-gray-400 border border-white/[0.05] font-normal">
                 {product.tokens.toLocaleString()} tokens
               </Badge>
-              <Badge className="bg-white/10 text-gray-300 border border-white/20 backdrop-blur-sm">
+              <Badge className="bg-white/[0.03] text-gray-400 border border-white/[0.05] font-normal">
                 ${product.price}/1K
               </Badge>
               <Button 
                 variant="ghost" 
                 size="sm" 
                 onClick={onClose}
-                className="text-gray-400 hover:text-white hover:bg-white/10"
+                className="text-gray-500 hover:text-white hover:bg-white/[0.02]"
               >
                 ✕
               </Button>
@@ -104,11 +104,11 @@ export default function ChatInterface({ isOpen, onClose, product }: ChatInterfac
               <div key={index} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div className={`max-w-[80%] rounded-lg p-4 ${
                   msg.role === 'user' 
-                    ? 'bg-gradient-to-r from-white/20 to-gray-300/20 backdrop-blur-sm border border-white/20 text-white ml-12' 
-                    : 'bg-white/5 backdrop-blur-sm border border-white/10 text-gray-300 mr-12'
+                    ? 'bg-white/[0.05] border border-white/[0.08] text-white ml-12' 
+                    : 'bg-white/[0.02] border border-white/[0.05] text-gray-300 mr-12'
                 }`}>
                   <div className="text-sm">{msg.content}</div>
-                  <div className="text-xs text-gray-500 mt-2">
+                  <div className="text-xs text-gray-600 mt-2">
                     {msg.timestamp.toLocaleTimeString()}
                   </div>
                 </div>
@@ -117,14 +117,14 @@ export default function ChatInterface({ isOpen, onClose, product }: ChatInterfac
             
             {isLoading && (
               <div className="flex justify-start">
-                <div className="max-w-[80%] rounded-lg p-4 bg-white/5 backdrop-blur-sm border border-white/10 text-gray-300 mr-12">
+                <div className="max-w-[80%] rounded-lg p-4 bg-white/[0.02] border border-white/[0.05] text-gray-300 mr-12">
                   <div className="flex items-center gap-2">
                     <div className="flex gap-1">
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                      <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"></div>
+                      <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                      <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                     </div>
-                    <span className="text-sm text-gray-400">AI is thinking...</span>
+                    <span className="text-sm text-gray-500">AI is thinking...</span>
                   </div>
                 </div>
               </div>
@@ -132,25 +132,25 @@ export default function ChatInterface({ isOpen, onClose, product }: ChatInterfac
           </div>
 
           {/* Input Area */}
-          <div className="border-t border-white/10 p-4 bg-white/5 backdrop-blur-sm">
+          <div className="border-t border-white/[0.05] p-4 bg-black">
             <div className="flex gap-3">
               <Input
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder={`Send a message to ${product.name}...`}
-                className="flex-1 bg-white/10 backdrop-blur-sm border-white/20 text-white placeholder:text-gray-400 focus:border-white/40"
+                className="flex-1 bg-white/[0.03] border-white/[0.05] text-white placeholder:text-gray-600 focus:border-white/[0.1]"
                 disabled={isLoading}
               />
               <Button 
                 onClick={handleSend}
                 disabled={!message.trim() || isLoading}
-                className="bg-gradient-to-r from-white/20 to-gray-300/20 backdrop-blur-sm border border-white/20 text-white hover:from-white/30 hover:to-gray-300/30 disabled:opacity-50"
+                className="bg-white/[0.05] border border-white/[0.05] text-white hover:bg-white/[0.08] disabled:opacity-50"
               >
                 Send
               </Button>
             </div>
-            <div className="mt-2 text-xs text-gray-500">
+            <div className="mt-2 text-xs text-gray-600">
               This is a demo interface. In production, this would connect to {product.llmApiUsing} using the configured API key.
             </div>
           </div>

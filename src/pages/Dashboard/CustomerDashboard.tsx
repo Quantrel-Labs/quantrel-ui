@@ -4,8 +4,8 @@ import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
 import { useAuth } from "@/hooks/useAuth"
+import { Bot, Code, Eye, Wrench, Rocket, Leaf } from "lucide-react"
 
 export default function CustomerDashboard() {
   const { user } = useAuth()
@@ -25,7 +25,7 @@ export default function CustomerDashboard() {
       cost: 75.00,
       status: "active",
       date: "Dec 15, 2024",
-      image: "🤖"
+      icon: "bot"
     },
     {
       id: "API-C002",
@@ -35,7 +35,7 @@ export default function CustomerDashboard() {
       cost: 24.00, 
       status: "active",
       date: "Dec 12, 2024",
-      image: "�"
+      icon: "code"
     },
     {
       id: "API-C003",
@@ -45,7 +45,7 @@ export default function CustomerDashboard() {
       cost: 12.00,
       status: "paused",
       date: "Dec 10, 2024", 
-      image: "👁️"
+      icon: "eye"
     }
   ])
 
@@ -55,7 +55,7 @@ export default function CustomerDashboard() {
       price: 399.99,
       originalPrice: 499.99,
       store: "Premium Store",
-      image: "💎",
+      icon: "bot",
       discount: 20
     },
     {
@@ -63,7 +63,7 @@ export default function CustomerDashboard() {
       price: 249.99,
       originalPrice: 279.99,
       store: "Tech Hub",
-      image: "🔌",
+      icon: "code",
       discount: 11
     },
     {
@@ -71,7 +71,7 @@ export default function CustomerDashboard() {
       price: 79.99,
       originalPrice: 99.99,
       store: "Accessory World",
-      image: "🛠️",
+      icon: "wrench",
       discount: 20
     }
   ])
@@ -83,7 +83,7 @@ export default function CustomerDashboard() {
       rating: 4.8,
       reviews: 234,
       store: "Future Tech",
-      image: "🚀"
+      icon: "rocket"
     },
     {
       name: "Eco-Friendly Widget",
@@ -91,187 +91,197 @@ export default function CustomerDashboard() {
       rating: 4.6,
       reviews: 156,
       store: "Green Gadgets", 
-      image: "🌱"
+      icon: "leaf"
     }
   ])
+
+  const getIcon = (iconType: string) => {
+    switch (iconType) {
+      case "bot":
+        return <Bot className="w-5 h-5" />
+      case "code":
+        return <Code className="w-5 h-5" />
+      case "eye":
+        return <Eye className="w-5 h-5" />
+      case "wrench":
+        return <Wrench className="w-5 h-5" />
+      case "rocket":
+        return <Rocket className="w-5 h-5" />
+      case "leaf":
+        return <Leaf className="w-5 h-5" />
+      default:
+        return <Bot className="w-5 h-5" />
+    }
+  }
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case "active":
-        return "bg-green-100 text-green-800"
+        return "bg-emerald-500/20 text-emerald-200 border border-emerald-400/40"
       case "paused":
-        return "bg-yellow-100 text-yellow-800"
+        return "bg-amber-500/20 text-amber-200 border border-amber-400/40"
       case "error":
-        return "bg-red-100 text-red-800"
-      case "inactive":
-        return "bg-gray-100 text-gray-800"
+        return "bg-red-500/20 text-red-200 border border-red-400/40"
       default:
-        return "bg-gray-100 text-gray-800"
+        return "bg-white/10 text-white/70 border border-white/20"
     }
   }
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black text-white p-6 space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">Welcome back, {user?.displayName?.split(' ')[0] || "Customer"}! 🤖</h1>
-          <p className="text-gray-300">Your AI models and usage dashboard</p>
+    <section className="min-h-screen bg-black space-y-10 px-6 py-10 text-white lg:px-12">
+      <div className="flex flex-col gap-6 rounded-[32px] border border-white/12 bg-white/[0.04] p-8 shadow-[0_50px_120px_rgba(5,10,45,0.6)] lg:flex-row lg:items-center lg:justify-between">
+        <div className="space-y-3">
+          <p className="text-xs uppercase tracking-[0.35em] text-white/50">Customer dashboard</p>
+          <h1 className="text-4xl font-semibold">
+            Welcome back, {user?.displayName?.split(" ")[0] || "Creator"}
+          </h1>
+          <p className="text-sm text-white/65">
+            Track your favorite models, monitor API usage, and spin up new agent workflows in minutes.
+          </p>
+          <div className="flex flex-wrap gap-3 pt-2">
+            <Button className="rounded-full px-5 text-sm font-semibold">Launch workspace</Button>
+            <Button variant="ghost" className="rounded-full border border-white/15 px-5 text-sm text-white/70 hover:text-white">
+              Browse marketplace
+            </Button>
+          </div>
         </div>
-        <div className="flex gap-2">
-          <Button variant="outline" className="border-white/20 text-gray-300 hover:bg-white/10 backdrop-blur-sm">
-            Monitor Usage
-          </Button>
-          <Button className="bg-gradient-to-r from-white/20 to-gray-300/20 backdrop-blur-sm border border-white/20 text-white hover:from-white/30 hover:to-gray-300/30">
-            Browse AI Models
-          </Button>
+        <div className="grid gap-3 text-xs text-white/55">
+          <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3">
+            <span>Favorite models</span>
+            <span className="text-white/75">{customerStats.savedModels}</span>
+          </div>
+          <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3">
+            <span>API credits</span>
+            <span className="text-white/75">{customerStats.credits.toLocaleString()}</span>
+          </div>
         </div>
       </div>
 
-      {/* Quick Actions */}
-      <div className="bg-gradient-to-r from-white/5 to-gray-300/5 backdrop-blur-xl border border-white/10 rounded-lg p-4 shadow-2xl">
-        <h3 className="font-semibold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent mb-3">🎯 Quick Actions</h3>
-        <div className="flex flex-wrap gap-2">
-          <Button size="sm" variant="outline" className="border-white/20 text-gray-300 hover:bg-white/10 backdrop-blur-sm">
-            Try Favorite Models
-          </Button>
-          <Button size="sm" variant="outline" className="border-white/20 text-gray-300 hover:bg-white/10 backdrop-blur-sm">
-            Monitor APIs
-          </Button>
-          <Button size="sm" variant="outline" className="border-white/20 text-gray-300 hover:bg-white/10 backdrop-blur-sm">
-            View Credits
-          </Button>
-          <Button size="sm" variant="outline" className="border-white/20 text-gray-300 hover:bg-white/10 backdrop-blur-sm">
-            Customer Support
-          </Button>
-        </div>
-      </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="bg-gradient-to-br from-blue-50 to-blue-100">
-          <CardHeader>
-            <CardTitle className="text-sm font-medium flex items-center">
-              � API Calls
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{customerStats.apiCalls.toLocaleString()}</div>
-            <p className="text-xs text-gray-600">This month</p>
-          </CardContent>
-        </Card>
-        
-        <Card className="bg-gradient-to-br from-pink-50 to-pink-100">
-          <CardHeader>
-            <CardTitle className="text-sm font-medium flex items-center">
-              🤖 Saved Models
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{customerStats.savedModels}</div>
-            <p className="text-xs text-gray-600">Favorited AI models</p>
-          </CardContent>
-        </Card>
-        
-        <Card className="bg-gradient-to-br from-purple-50 to-purple-100">
-          <CardHeader>
-            <CardTitle className="text-sm font-medium flex items-center">
-              💎 API Credits
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{customerStats.credits.toLocaleString()}</div>
-            <p className="text-xs text-purple-600">≈ ${(customerStats.credits / 100).toFixed(2)} value</p>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-gradient-to-br from-green-50 to-green-100">
-          <CardHeader>
-            <CardTitle className="text-sm font-medium flex items-center">
-              💰 Total Savings
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">${customerStats.savings}</div>
-            <p className="text-xs text-green-600">This year</p>
-          </CardContent>
-        </Card>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Recent Orders */}
-        <div className="lg:col-span-2">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle className="flex items-center gap-2">
-                � Recent API Usage
-              </CardTitle>
-              <Button variant="outline" size="sm">View All Usage</Button>
+      <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+        {[
+          {
+            label: "API calls",
+            value: customerStats.apiCalls.toLocaleString(),
+            hint: "This month",
+            gradient: "from-[#8a7bff]/40 via-[#5a2cff]/30 to-transparent"
+          },
+          {
+            label: "Saved models",
+            value: customerStats.savedModels,
+            hint: "Favorites",
+            gradient: "from-[#ff3d81]/40 via-[#fb7185]/30 to-transparent"
+          },
+          {
+            label: "Credits",
+            value: customerStats.credits.toLocaleString(),
+            hint: `≈ $${(customerStats.credits / 100).toFixed(2)}`,
+            gradient: "from-[#00f2fe]/40 via-[#4facfe]/30 to-transparent"
+          },
+          {
+            label: "Savings",
+            value: `$${customerStats.savings}`,
+            hint: "Lifetime",
+            gradient: "from-[#fb923c]/40 via-[#f97316]/30 to-transparent"
+          }
+        ].map((stat) => (
+          <Card key={stat.label} className="relative overflow-hidden border-white/12 bg-white/[0.06]">
+            <div className={`absolute inset-0 bg-gradient-to-br ${stat.gradient} opacity-70 blur-2xl`} />
+            <CardHeader className="relative z-10 space-y-2">
+              <p className="text-xs uppercase tracking-[0.3em] text-white/45">{stat.label}</p>
+              <p className="text-3xl font-semibold text-white">{stat.value}</p>
+              <p className="text-xs text-white/55">{stat.hint}</p>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {recentUsage.map((usage) => (
-                  <div key={usage.id} className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                    <div className="text-2xl">{usage.image}</div>
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between">
-                        <p className="font-medium">{usage.model}</p>
-                        <Badge className={getStatusColor(usage.status)}>
-                          {usage.status}
-                        </Badge>
-                      </div>
-                      <p className="text-sm text-gray-600">By {usage.provider}</p>
-                      <p className="text-xs text-gray-500">{usage.date} • {usage.usage.toLocaleString()} calls • ${usage.cost}</p>
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <Button size="sm" variant="outline" className="h-8">
-                        Monitor
-                      </Button>
-                      {usage.status === "active" && (
-                        <Button size="sm" variant="ghost" className="h-8 text-xs">
-                          Configure
-                        </Button>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
           </Card>
-        </div>
+        ))}
+      </div>
 
-        {/* Wishlist */}
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="flex items-center gap-2">
-              ❤️ Wishlist
-            </CardTitle>
-            <Button variant="ghost" size="sm">View All</Button>
+      <div className="grid gap-6 lg:grid-cols-[2fr_1fr]">
+        <Card className="border-white/10 bg-white/[0.06]">
+          <CardHeader className="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
+            <CardTitle className="text-white">Recent API usage</CardTitle>
+            <Button variant="ghost" className="rounded-full border border-white/15 px-4 text-xs font-semibold text-white/70 hover:text-white">
+              View full history
+            </Button>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              {wishlistItems.map((item, index) => (
-                <div key={index} className="p-3 border rounded-lg hover:shadow-md transition-shadow">
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="text-xl">{item.image}</div>
-                    <div className="flex-1">
-                      <p className="font-medium text-sm">{item.name}</p>
-                      <p className="text-xs text-gray-500">by {item.store}</p>
-                    </div>
+            <div className="space-y-3">
+              {recentUsage.map((usage) => (
+                <div
+                  key={usage.id}
+                  className="flex flex-col gap-4 rounded-3xl border border-white/10 bg-white/[0.03] p-4 transition hover:border-white/20 hover:bg-white/[0.06] md:flex-row md:items-center"
+                >
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.05] text-white">
+                    {getIcon(usage.icon)}
                   </div>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <span className="font-semibold">${item.price}</span>
+                  <div className="flex-1 space-y-1">
+                    <div className="flex flex-col gap-1 md:flex-row md:items-center md:justify-between">
+                      <p className="text-base font-semibold text-white/90">{usage.model}</p>
+                      <Badge className={`${getStatusColor(usage.status)} rounded-full px-3 py-1 text-[10px] uppercase tracking-[0.2em]`}> 
+                        {usage.status}
+                      </Badge>
+                    </div>
+                    <p className="text-xs text-white/55">By {usage.provider}</p>
+                    <p className="text-xs text-white/45">
+                      {usage.date} • {usage.usage.toLocaleString()} calls • ${usage.cost}
+                    </p>
+                  </div>
+                  <div className="flex gap-2 md:flex-col">
+                    <Button size="sm" className="rounded-full px-4 text-xs">
+                      Monitor
+                    </Button>
+                    {usage.status === "active" && (
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="rounded-full border border-white/15 px-4 text-xs text-white/70 hover:text-white"
+                      >
+                        Configure
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-white/10 bg-white/[0.06]">
+          <CardHeader className="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
+            <CardTitle className="text-white">Wishlist</CardTitle>
+            <Button variant="ghost" size="sm" className="rounded-full border border-white/15 px-4 text-xs text-white/70 hover:text-white">
+              View all
+            </Button>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {wishlistItems.map((item, index) => (
+                <div
+                  key={index}
+                  className="rounded-3xl border border-white/10 bg-white/[0.03] p-4 transition hover:border-white/20 hover:bg-white/[0.06]"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.05] text-white">
+                      {getIcon(item.icon)}
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm font-semibold text-white/85">{item.name}</p>
+                      <p className="text-xs text-white/45">by {item.store}</p>
+                    </div>
+                    {item.discount && (
+                      <Badge className="rounded-full bg-emerald-500/20 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-emerald-200">
+                        -{item.discount}%
+                      </Badge>
+                    )}
+                  </div>
+                  <div className="mt-3 flex items-center justify-between">
+                    <div className="space-x-2 text-sm">
+                      <span className="font-semibold text-white/85">${item.price}</span>
                       {item.originalPrice && (
-                        <span className="text-xs text-gray-500 line-through ml-1">
-                          ${item.originalPrice}
-                        </span>
-                      )}
-                      {item.discount && (
-                        <Badge className="ml-1 text-xs bg-green-100 text-green-800 border-green-200">
-                          -{item.discount}%
-                        </Badge>
+                        <span className="text-xs text-white/40 line-through">${item.originalPrice}</span>
                       )}
                     </div>
-                    <Button size="sm" className="h-8 px-3">
-                      Add to Cart
+                    <Button size="sm" className="rounded-full px-4 text-xs">
+                      Add to cart
                     </Button>
                   </div>
                 </div>
@@ -281,33 +291,37 @@ export default function CustomerDashboard() {
         </Card>
       </div>
 
-      {/* Recommendations */}
-      <Card>
+      <Card className="border-white/10 bg-white/[0.06]">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            ✨ Recommended for You
-          </CardTitle>
+          <CardTitle className="text-white">Recommended for you</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid gap-4 md:grid-cols-2">
             {recommendedProducts.map((product, index) => (
-              <div key={index} className="flex items-center gap-4 p-4 border rounded-lg hover:shadow-md transition-shadow">
-                <div className="text-3xl">{product.image}</div>
-                <div className="flex-1">
-                  <p className="font-semibold">{product.name}</p>
-                  <p className="text-sm text-gray-600">by {product.store}</p>
-                  <div className="flex items-center gap-2 mt-1">
-                    <div className="flex items-center">
-                      <span className="text-yellow-500">⭐</span>
-                      <span className="text-sm ml-1">{product.rating}</span>
-                    </div>
-                    <span className="text-xs text-gray-500">({product.reviews} reviews)</span>
+              <div
+                key={index}
+                className="flex flex-col gap-4 rounded-3xl border border-white/10 bg-white/[0.03] p-4 shadow-inner transition hover:border-white/20 hover:bg-white/[0.06] md:flex-row md:items-center"
+              >
+                <div className="flex h-16 w-16 items-center justify-center rounded-3xl border border-white/10 bg-white/[0.06] text-white">
+                  <div className="scale-150">
+                    {getIcon(product.icon)}
+                  </div>
+                </div>
+                <div className="flex-1 space-y-2">
+                  <p className="text-base font-semibold text-white/90">{product.name}</p>
+                  <p className="text-sm text-white/55">by {product.store}</p>
+                  <div className="flex items-center gap-2 text-xs text-white/50">
+                    <span className="flex items-center gap-1">
+                      <span className="text-yellow-300">★</span>
+                      {product.rating}
+                    </span>
+                    <span>({product.reviews} reviews)</span>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="font-bold text-lg">${product.price}</p>
-                  <Button size="sm" className="mt-2">
-                    Add to Cart
+                  <p className="text-lg font-semibold text-white/85">${product.price}</p>
+                  <Button size="sm" className="mt-2 rounded-full px-4 text-xs">
+                    Add to cart
                   </Button>
                 </div>
               </div>
@@ -315,6 +329,6 @@ export default function CustomerDashboard() {
           </div>
         </CardContent>
       </Card>
-    </div>
+    </section>
   )
 }

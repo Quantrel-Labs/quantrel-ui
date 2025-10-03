@@ -4,22 +4,23 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20 disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2 border backdrop-blur-sm",
+  "inline-flex items-center justify-center whitespace-nowrap rounded-2xl text-sm font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-blue/40 focus-visible:ring-offset-2 focus-visible:ring-offset-black disabled:pointer-events-none disabled:opacity-50 relative overflow-hidden backdrop-blur-glass border",
   {
     variants: {
       variant: {
-        default: "bg-gradient-to-r from-white/20 to-gray-300/20 text-white hover:from-white/30 hover:to-gray-300/30 border-white/20 hover:scale-105",
-        secondary: "bg-white/10 text-white hover:bg-white/15 border-white/20 hover:scale-105",
-        destructive: "bg-gradient-to-r from-red-500/30 to-red-600/30 text-white hover:from-red-500/40 hover:to-red-600/40 border-red-500/30 hover:scale-105",
-        outline: "bg-transparent hover:bg-white/10 border-white/20 text-white hover:scale-105",
-        ghost: "bg-transparent hover:bg-white/10 border-transparent text-white hover:scale-105",
-        link: "bg-transparent text-white underline-offset-4 hover:underline border-transparent"
+        default: "bg-gradient-primary text-white border-white/10 shadow-[0_8px_32px_rgba(0,153,255,0.2)] hover:shadow-[0_20px_60px_rgba(0,153,255,0.3)] hover:scale-[1.02] hover:border-white/20 before:absolute before:inset-0 before:bg-shimmer before:translate-x-[-100%] hover:before:translate-x-[100%] before:transition-transform before:duration-[600ms] before:ease-out",
+        secondary: "bg-glass-bg text-text-primary border-glass-border shadow-glass-sm hover:bg-glass-bg-light hover:border-glass-border-strong hover:shadow-glass hover:scale-[1.01] hover:translate-y-[-1px]",
+        destructive: "bg-gradient-to-r from-red-500/80 to-red-600/80 text-white border-red-500/40 shadow-[0_8px_32px_rgba(239,68,68,0.2)] hover:shadow-[0_20px_60px_rgba(239,68,68,0.3)] hover:scale-[1.02]",
+        outline: "bg-transparent hover:bg-glass-bg border-glass-border text-text-secondary hover:text-text-primary hover:border-glass-border-strong hover:scale-[1.01] hover:translate-y-[-1px]",
+        ghost: "bg-transparent hover:bg-glass-bg/50 border-transparent text-text-secondary hover:text-text-primary hover:scale-[1.01]",
+        link: "bg-transparent text-text-accent underline-offset-4 hover:underline border-transparent hover:text-accent-blue"
       },
       size: {
-        default: "h-9 px-4 py-2",
-        sm: "h-8 rounded-md px-3",
-        lg: "h-10 rounded-md px-8",
-        icon: "h-9 w-9"
+        default: "h-10 px-6 py-2.5 text-sm",
+        sm: "h-8 px-4 py-2 text-xs rounded-xl",
+        lg: "h-12 px-8 py-3 text-base rounded-3xl",
+        xl: "h-14 px-10 py-4 text-lg rounded-3xl",
+        icon: "h-10 w-10"
       }
     },
     defaultVariants: {

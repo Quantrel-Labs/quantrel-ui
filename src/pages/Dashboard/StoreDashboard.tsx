@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { useAuth } from "@/hooks/useAuth"
 import LoadingSpinner from "@/components/LoadingSpinner"
 import EnhancedProductManagement from "@/components/EnhancedProductManagement"
+import { Bot, BarChart3, Settings } from "lucide-react"
 
 export default function StoreDashboard() {
   const { user } = useAuth()
@@ -68,14 +69,27 @@ export default function StoreDashboard() {
         return "bg-white/5 text-gray-300 border border-white/15 backdrop-blur-sm"
     }
   }
+  const getTabIcon = (id: string) => {
+    switch (id) {
+      case "products":
+        return <Bot className="w-4 h-4" />
+      case "orders":
+        return <BarChart3 className="w-4 h-4" />
+      case "settings":
+        return <Settings className="w-4 h-4" />
+      default:
+        return <Bot className="w-4 h-4" />
+    }
+  }
+
   const tabs = [
-    { id: "products", label: "AI Models", icon: "🤖" },
-    { id: "orders", label: "API Usage", icon: "�" },
-    { id: "settings", label: "Settings", icon: "⚙️" }
+    { id: "products", label: "AI Models" },
+    { id: "orders", label: "API Usage" },
+    { id: "settings", label: "Settings" }
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black text-white p-6 space-y-6">
+    <div className="min-h-screen bg-black text-white p-6 space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">AI Developer Hub</h1>
@@ -111,7 +125,7 @@ export default function StoreDashboard() {
                   : "border-transparent text-gray-400 hover:text-gray-200 hover:border-white/30 hover:bg-white/5 px-4 rounded-t-lg backdrop-blur-sm"
               }`}
             >
-              <span>{tab.icon}</span>
+              {getTabIcon(tab.id)}
               {tab.label}
             </button>
           ))}
