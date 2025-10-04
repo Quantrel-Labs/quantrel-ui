@@ -1,18 +1,15 @@
 // DOCS: Main navigation bar with authentication state
 
 import { useState } from "react"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate, useLocation } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { useAuth } from "@/hooks/useAuth"
-
-const primaryLinks = [
-  { label: "Product", href: "/" },
-  { label: "Marketplace", href: "/marketplace" }
-]
+import { ROLES } from "@/lib/roles"
 
 export default function Navbar() {
   const { user, role, signOut, loading } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const handleSignOut = async () => {
@@ -21,8 +18,43 @@ export default function Navbar() {
   }
 
   const getDashboardPath = () => {
+    if (role === ROLES.CUSTOMER) return "/chat"
+    if (role === ROLES.STORE) return "/seller/dashboard"
+    if (role === ROLES.ADMIN) return "/dashboard/admin"
     return "/dashboard"
   }
+
+  const getNavLinks = () => {
+    if (!user) {
+      return [
+        { label: "Features", href: "/#features" },
+        { label: "Pricing", href: "/#pricing" }
+      ]
+    }
+
+    if (role === ROLES.CUSTOMER) {
+      return [
+        { label: "Chat", href: "/chat" },
+        { label: "Marketplace", href: "/marketplace" },
+        { label: "AI Teams", href: "/ai-teams" },
+        { label: "Billing", href: "/billing" },
+        { label: "Activity", href: "/activity" }
+      ]
+    }
+
+    if (role === ROLES.STORE) {
+      return [
+        { label: "Dashboard", href: "/seller/dashboard" },
+        { label: "Tools", href: "/seller/tools" },
+        { label: "Analytics", href: "/seller/analytics" },
+        { label: "Billing", href: "/billing" }
+      ]
+    }
+
+    return []
+  }
+
+  const navLinks = getNavLinks()
 
   const renderAuthSection = () => {
     if (loading) {
@@ -105,11 +137,15 @@ export default function Navbar() {
           </Link>
 
           <div className="hidden items-center gap-8 md:flex">
-            {primaryLinks.map((link) => (
+            {navLinks.map((link) => (
               <Link
                 key={link.label}
                 to={link.href}
-                className="text-gray-400 transition duration-300 hover:text-white font-medium"
+                className={`transition duration-300 font-medium ${
+                  location.pathname === link.href
+                    ? "text-white"
+                    : "text-gray-400 hover:text-white"
+                }`}
               >
                 {link.label}
               </Link>
@@ -139,11 +175,15 @@ export default function Navbar() {
         <div className="mx-6 mt-4 rounded-2xl bg-black border border-white/[0.05] p-6 md:hidden">
           <div className="space-y-6">
             <div className="grid gap-3">
-              {primaryLinks.map((link) => (
+              {navLinks.map((link) => (
                 <Link
                   key={link.label}
                   to={link.href}
-                  className="rounded-lg px-4 py-3 text-base font-medium text-white hover:bg-white/[0.02] transition-colors"
+                  className={`rounded-lg px-4 py-3 text-base font-medium transition-colors ${
+                    location.pathname === link.href
+                      ? "bg-white/10 text-white"
+                      : "text-gray-400 hover:bg-white/[0.02] hover:text-white"
+                  }`}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {link.label}

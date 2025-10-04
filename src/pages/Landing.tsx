@@ -246,7 +246,7 @@ export default function Landing() {
       </section>
 
       {/* Enhanced Final CTA */}
-      <section className="relative isolate overflow-hidden py-32">
+      {/* <section className="relative isolate overflow-hidden py-32">
         <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_center,_rgba(0,153,255,0.1),_transparent_70%)] blur-3xl" />
         <div className="mx-auto flex max-w-5xl flex-col items-center gap-12 px-6 text-center lg:px-0 animate-fade-in-up">
           <h2 className="font-display text-5xl font-bold leading-tight text-white md:text-6xl lg:text-7xl">
@@ -267,7 +267,7 @@ export default function Landing() {
             </Button>
           </div>
         </div>
-      </section>
+      </section> */}
     </div>
   )
 }

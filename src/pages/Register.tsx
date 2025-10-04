@@ -63,8 +63,8 @@ export default function Register() {
 
   return (
     <section className="relative overflow-hidden py-24 min-h-screen flex items-center">
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,_rgba(139,92,246,0.15),_transparent_70%)] blur-3xl" />
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_bottom,_rgba(236,72,153,0.12),_transparent_70%)] blur-3xl" />
+      <div className="absolute inset-0 -z-10  blur-3xl" />
+      <div className="absolute inset-0 -z-10  blur-3xl" />
 
       <div className="mx-auto grid max-w-7xl gap-20 px-6 md:grid-cols-[1fr_1.2fr] lg:px-12 items-center">
         <div className="space-y-12 animate-fade-in-up">
