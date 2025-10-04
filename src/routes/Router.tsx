@@ -2,7 +2,7 @@
 
 import { createBrowserRouter } from "react-router-dom"
 import App from "@/App"
-import NewLanding from "@/pages/NewLanding"
+import LandingRedirect from "@/pages/LandingRedirect"
 import Login from "@/pages/Login"
 import Register from "@/pages/Register"
 import VerifyEmail from "@/pages/VerifyEmail"
@@ -24,13 +24,16 @@ import Settings from "@/pages/Customer/Settings"
 
 // Seller Pages
 import SellerDashboard from "@/pages/Seller/SellerDashboard"
+import Tools from "@/pages/Seller/Tools"
+import Analytics from "@/pages/Seller/Analytics"
+import SellerBilling from "@/pages/Seller/SellerBilling"
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     children: [
-      { index: true, element: <NewLanding /> },
+      { index: true, element: <LandingRedirect /> },
       { path: "login", element: <Login /> },
       { path: "register", element: <Register /> },
       { path: "verify-email", element: <VerifyEmail /> },
@@ -104,6 +107,36 @@ export const router = createBrowserRouter([
           <ProtectedRoute>
             <RoleRoute allow={[ROLES.STORE]}>
               <SellerDashboard />
+            </RoleRoute>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "seller/tools",
+        element: (
+          <ProtectedRoute>
+            <RoleRoute allow={[ROLES.STORE]}>
+              <Tools />
+            </RoleRoute>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "seller/analytics",
+        element: (
+          <ProtectedRoute>
+            <RoleRoute allow={[ROLES.STORE]}>
+              <Analytics />
+            </RoleRoute>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "seller/billing",
+        element: (
+          <ProtectedRoute>
+            <RoleRoute allow={[ROLES.STORE]}>
+              <SellerBilling />
             </RoleRoute>
           </ProtectedRoute>
         ),

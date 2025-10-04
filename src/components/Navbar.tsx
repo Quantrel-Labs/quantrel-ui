@@ -24,6 +24,14 @@ export default function Navbar() {
     return "/dashboard"
   }
 
+  const getHomePath = () => {
+    if (!user) return "/"
+    if (role === ROLES.CUSTOMER) return "/marketplace"
+    if (role === ROLES.STORE) return "/seller/dashboard"
+    if (role === ROLES.ADMIN) return "/dashboard/admin"
+    return "/dashboard"
+  }
+
   const getNavLinks = () => {
     if (!user) {
       return [
@@ -47,7 +55,7 @@ export default function Navbar() {
         { label: "Dashboard", href: "/seller/dashboard" },
         { label: "Tools", href: "/seller/tools" },
         { label: "Analytics", href: "/seller/analytics" },
-        { label: "Billing", href: "/billing" }
+        { label: "Billing", href: "/seller/billing" }
       ]
     }
 
@@ -115,7 +123,7 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 bg-black/95 backdrop-blur-sm border-b border-white/[0.05]">
       <div className="relative py-4">
         <nav className="relative mx-auto max-w-7xl px-8 flex h-16 items-center justify-between text-sm">
-          <Link to="/" className="flex items-center gap-3 text-xl font-display font-semibold text-white hover:opacity-80 transition-opacity">
+          <Link to={getHomePath()} className="flex items-center gap-3 text-xl font-display font-semibold text-white hover:opacity-80 transition-opacity">
             <div className="relative h-10 w-10 rounded-xl overflow-hidden  flex-shrink-0">
               <img 
                 src="/logo.png" 
