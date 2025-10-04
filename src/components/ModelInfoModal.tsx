@@ -50,10 +50,10 @@ export default function ModelInfoModal({ isOpen, onClose, product }: ModelInfoMo
                 </CardTitle>
                 <p className="text-gray-500">Powered by {product.llmApiUsing}</p>
                 <div className="flex items-center gap-2 mt-2">
-                  <Badge className="bg-green-500/10 text-green-400 border border-green-500/20">
+                  <Badge className="bg-white/5 text-gray-400 border border-white/10">
                     {product.status}
                   </Badge>
-                  <Badge className="bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                  <Badge className="bg-white/5 text-gray-400 border border-white/10">
                     {product.category}
                   </Badge>
                 </div>
@@ -123,7 +123,7 @@ export default function ModelInfoModal({ isOpen, onClose, product }: ModelInfoMo
             <h3 className="text-lg font-semibold text-white mb-3">Creator Information</h3>
             <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-4">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-gradient-to-r from-white/20 to-gray-300/20 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center">
+                <div className="w-12 h-12 bg-white/10 border border-white/20 rounded-full flex items-center justify-center">
                   {product.storeOwnerAvatar ? (
                     <img 
                       src={product.storeOwnerAvatar} 
@@ -131,7 +131,7 @@ export default function ModelInfoModal({ isOpen, onClose, product }: ModelInfoMo
                       className="w-full h-full rounded-full object-cover"
                     />
                   ) : (
-                    <div className="text-lg">👤</div>
+                    <div className="text-lg text-gray-400">?</div>
                   )}
                 </div>
                 <div>

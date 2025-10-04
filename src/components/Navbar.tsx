@@ -45,14 +45,13 @@ export default function Navbar() {
             variant="ghost"
             size="default"
             onClick={handleSignOut}
-            className="font-medium text-gray-400 hover:text-white hover:bg-white/[0.05]"
+            className="font-medium text-white"
           >
             Sign Out
           </Button>
           <Button
             size="default"
             asChild
-            className="font-medium"
           >
             <Link to={getDashboardPath()}>Dashboard</Link>
           </Button>
@@ -66,16 +65,15 @@ export default function Navbar() {
           variant="ghost"
           size="default"
           asChild
-          className="font-medium text-gray-400 hover:text-white hover:bg-white/[0.05]"
+          className="font-medium text-white"
         >
           <Link to="/login">Login</Link>
         </Button>
         <Button
           size="default"
           asChild
-          className="font-medium"
         >
-          <Link to="/register">Start with AI</Link>
+          <Link to="/register">Sign up</Link>
         </Button>
       </div>
     )
@@ -86,7 +84,21 @@ export default function Navbar() {
       <div className="relative py-4">
         <nav className="relative mx-auto max-w-7xl px-8 flex h-16 items-center justify-between text-sm">
           <Link to="/" className="flex items-center gap-3 text-xl font-display font-semibold text-white hover:opacity-80 transition-opacity">
-            <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-primary text-base font-bold">Q</span>
+            <div className="relative h-10 w-10 rounded-xl overflow-hidden  flex-shrink-0">
+              <img 
+                src="/logo.png" 
+                alt="Quantrel Logo" 
+                className="h-full w-full object-cover"
+                onError={(e) => {
+                  // Fallback to gradient with Q if image fails to load
+                  e.currentTarget.style.display = 'none'
+                  const parent = e.currentTarget.parentElement
+                  if (parent) {
+                    parent.innerHTML = '<span class="flex items-center justify-center h-full w-full text-base font-bold text-white">Q</span>'
+                  }
+                }}
+              />
+            </div>
             <span className="hidden sm:inline-block">
               Quantrel
             </span>

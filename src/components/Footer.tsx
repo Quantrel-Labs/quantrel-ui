@@ -30,12 +30,12 @@ const footerLinks = {
 
 const LinkColumn = ({ title, items }: { title: string; items: { label: string; href: string }[] }) => (
   <div>
-    <h4 className="mb-4 text-xs font-semibold uppercase tracking-[0.3em] text-white/50">{title}</h4>
-    <ul className="space-y-3 text-sm text-white/70">
+    <h4 className="mb-4 text-xs font-semibold uppercase tracking-[0.3em] text-gray-500">{title}</h4>
+    <ul className="space-y-3 text-sm text-gray-400">
       {items.map((item) => {
         const isExternal = item.href.startsWith("http")
         const linkClass = cn(
-          "group relative inline-flex items-center gap-2 text-white/70 transition-all duration-300 hover:text-white/95"
+          "inline-flex items-center text-gray-400 transition-colors hover:text-white"
         )
 
         return (
@@ -43,12 +43,10 @@ const LinkColumn = ({ title, items }: { title: string; items: { label: string; h
             {isExternal ? (
               <a href={item.href} className={linkClass} target="_blank" rel="noreferrer">
                 <span>{item.label}</span>
-                <span className="inline-flex h-1 w-1 rounded-full bg-white/30 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
               </a>
             ) : (
               <Link to={item.href} className={linkClass}>
                 <span>{item.label}</span>
-                <span className="inline-flex h-1 w-1 rounded-full bg-white/30 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
               </Link>
             )}
           </li>
@@ -62,32 +60,31 @@ export default function Footer({ className }: { className?: string }) {
   return (
     <footer
       className={cn(
-        "relative mt-20 border-t border-white/10 bg-transparent/40 backdrop-blur-2xl",
-        "before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_top,_rgba(110,94,255,0.2),_transparent_65%)] before:opacity-60 before:blur-3xl before:content-['']",
+        "relative mt-20 border-t border-white/10 bg-black",
         className
       )}
     >
       <div className="relative mx-auto grid max-w-7xl grid-cols-1 gap-16 px-6 py-16 md:grid-cols-5 lg:px-12">
         <div className="md:col-span-2">
           <Link to="/" className="relative inline-flex items-center text-2xl font-semibold">
-            <span className="bg-gradient-to-r from-white via-white/80 to-white/60 bg-clip-text text-transparent">
+            <span className="text-white">
               Quantrel
             </span>
           </Link>
-          <p className="mt-4 max-w-sm text-sm text-white/60">
+          <p className="mt-4 max-w-sm text-sm text-gray-400">
             The next-generation AI marketplace for creators, builders, and teams. Ship faster with curated tools,
             glassmorphic dashboards, and a cinematic experience across every page.
           </p>
-          <div className="mt-8 flex items-center gap-4 text-xs text-white/40">
+          <div className="mt-8 flex items-center gap-4 text-xs text-gray-500">
             <span>© {new Date().getFullYear()} Quantrel</span>
-            <span className="inline-block h-1 w-1 rounded-full bg-white/30" />
-            <Link to="/legal" className="hover:text-white/70">
+            <span className="inline-block h-1 w-1 rounded-full bg-gray-600" />
+            <Link to="/legal" className="hover:text-gray-300 transition-colors">
               Legal
             </Link>
-            <Link to="/privacy" className="hover:text-white/70">
+            <Link to="/privacy" className="hover:text-gray-300 transition-colors">
               Privacy
             </Link>
-            <Link to="/terms" className="hover:text-white/70">
+            <Link to="/terms" className="hover:text-gray-300 transition-colors">
               Terms
             </Link>
           </div>

@@ -61,7 +61,7 @@ export default function VerifyEmail() {
               className={`rounded-2xl border p-4 text-sm ${
                 message.includes("Failed")
                   ? "border-red-400/40 bg-red-500/20 text-red-100"
-                  : "border-emerald-400/40 bg-emerald-500/20 text-emerald-100"
+                  : "border-white/30 bg-white/10 text-white"
               }`}
             >
               {message}
@@ -76,7 +76,7 @@ export default function VerifyEmail() {
             <Button onClick={handleResendEmail} disabled={isResending} className="h-12">
               {isResending ? "Sending…" : "Resend verification"}
             </Button>
-            <Button onClick={handleSignOut} variant="outline" className="h-12">
+            <Button onClick={handleSignOut} variant="secondary" className="h-12">
               Sign out
             </Button>
           </div>

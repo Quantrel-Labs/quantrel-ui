@@ -117,9 +117,9 @@ export default function CustomerDashboard() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "active":
-        return "bg-emerald-500/20 text-emerald-200 border border-emerald-400/40"
+        return "bg-white/20 text-white border border-white/30"
       case "paused":
-        return "bg-amber-500/20 text-amber-200 border border-amber-400/40"
+        return "bg-white/10 text-gray-400 border border-white/20"
       case "error":
         return "bg-red-500/20 text-red-200 border border-red-400/40"
       default:
@@ -162,41 +162,36 @@ export default function CustomerDashboard() {
           {
             label: "API calls",
             value: customerStats.apiCalls.toLocaleString(),
-            hint: "This month",
-            gradient: "from-[#8a7bff]/40 via-[#5a2cff]/30 to-transparent"
+            hint: "This month"
           },
           {
             label: "Saved models",
             value: customerStats.savedModels,
-            hint: "Favorites",
-            gradient: "from-[#ff3d81]/40 via-[#fb7185]/30 to-transparent"
+            hint: "Favorites"
           },
           {
             label: "Credits",
             value: customerStats.credits.toLocaleString(),
-            hint: `≈ $${(customerStats.credits / 100).toFixed(2)}`,
-            gradient: "from-[#00f2fe]/40 via-[#4facfe]/30 to-transparent"
+            hint: `≈ $${(customerStats.credits / 100).toFixed(2)}`
           },
           {
             label: "Savings",
             value: `$${customerStats.savings}`,
-            hint: "Lifetime",
-            gradient: "from-[#fb923c]/40 via-[#f97316]/30 to-transparent"
+            hint: "Lifetime"
           }
         ].map((stat) => (
-          <Card key={stat.label} className="relative overflow-hidden border-white/12 bg-white/[0.06]">
-            <div className={`absolute inset-0 bg-gradient-to-br ${stat.gradient} opacity-70 blur-2xl`} />
+          <Card key={stat.label} className="relative overflow-hidden border-white/10 bg-white/5">
             <CardHeader className="relative z-10 space-y-2">
-              <p className="text-xs uppercase tracking-[0.3em] text-white/45">{stat.label}</p>
+              <p className="text-xs uppercase tracking-[0.3em] text-gray-500">{stat.label}</p>
               <p className="text-3xl font-semibold text-white">{stat.value}</p>
-              <p className="text-xs text-white/55">{stat.hint}</p>
+              <p className="text-xs text-gray-400">{stat.hint}</p>
             </CardHeader>
           </Card>
         ))}
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[2fr_1fr]">
-        <Card className="border-white/10 bg-white/[0.06]">
+        <Card className="border-white/10 bg-white/5">
           <CardHeader className="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
             <CardTitle className="text-white">Recent API usage</CardTitle>
             <Button variant="ghost" className="rounded-full border border-white/15 px-4 text-xs font-semibold text-white/70 hover:text-white">
@@ -268,7 +263,7 @@ export default function CustomerDashboard() {
                       <p className="text-xs text-white/45">by {item.store}</p>
                     </div>
                     {item.discount && (
-                      <Badge className="rounded-full bg-emerald-500/20 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-emerald-200">
+                      <Badge className="rounded-full bg-white/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/70">
                         -{item.discount}%
                       </Badge>
                     )}

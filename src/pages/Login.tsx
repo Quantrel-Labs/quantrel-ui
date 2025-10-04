@@ -53,46 +53,45 @@ export default function Login() {
 
       <div className="mx-auto grid max-w-7xl gap-20 px-6 md:grid-cols-[1.2fr_1fr] lg:px-12 items-center">
         <div className="space-y-12 animate-fade-in-up">
-          <div className="glass inline-flex items-center gap-3 rounded-3xl px-6 py-3 text-sm font-bold uppercase tracking-[0.2em] text-text-muted">
-            <div className="h-2 w-2 rounded-full bg-gradient-primary animate-glow"></div>
+          <div className="inline-flex items-center gap-3 bg-white/5 border border-white/10 rounded-lg px-6 py-3 text-sm font-bold uppercase tracking-[0.2em] text-gray-400">
             Welcome back
           </div>
           
-          <h1 className="font-display text-5xl font-bold leading-tight text-text-primary md:text-6xl lg:text-7xl">
+          <h1 className="font-display text-5xl font-bold leading-tight text-white md:text-6xl lg:text-7xl">
             Unlock your
             <br />
-            <span className="gradient-text-primary">AI marketplace</span>
+            <span className="text-white">AI marketplace</span>
           </h1>
           
-          <p className="text-xl text-text-secondary leading-relaxed max-w-2xl">
+          <p className="text-xl text-gray-400 leading-relaxed max-w-2xl">
             Sign in to orchestrate product launches, monitor credit flows, and manage agents from a dashboard that feels as
             polished as your brand.
           </p>
           
           <div className="grid gap-6 sm:grid-cols-2">
             {["Realtime dashboards", "AI-assisted automations", "Role-aware permissions", "Glassmorphic UI kit"].map((item, index) => (
-              <div key={item} className="glass-card p-6 animate-fade-in-scale hover:scale-[1.02] transition-transform" style={{ animationDelay: `${index * 0.1}s` }}>
-                <span className="font-bold text-text-primary">{item}</span>
+              <div key={item} className="bg-white/5 border border-white/10 p-6 rounded-lg animate-fade-in-scale hover:bg-white/10 transition-colors" style={{ animationDelay: `${index * 0.1}s` }}>
+                <span className="font-bold text-white">{item}</span>
               </div>
             ))}
           </div>
         </div>
 
-        <Card className="relative w-full max-w-lg justify-self-end animate-fade-in-scale" style={{ animationDelay: '0.2s' }}>
+        <Card className="relative w-full max-w-lg justify-self-end animate-fade-in-scale bg-black border border-white/10" style={{ animationDelay: '0.2s' }}>
           <CardHeader className="space-y-6">
-            <CardTitle className="font-display text-4xl font-bold">Sign in</CardTitle>
-            <p className="text-lg text-text-secondary">Continue to your personalized dashboard and AI toolkit.</p>
+            <CardTitle className="font-display text-4xl font-bold text-white">Sign in</CardTitle>
+            <p className="text-lg text-gray-400">Continue to your personalized dashboard and AI toolkit.</p>
           </CardHeader>
           <CardContent className="space-y-8">
             {error && (
-              <div className="glass-card border-red-400/30 bg-red-500/10 p-6 animate-fade-in-scale">
+              <div className="bg-red-500/10 border border-red-400/30 p-6 rounded-lg animate-fade-in-scale">
                 <p className="text-red-200 font-medium">{error}</p>
               </div>
             )}
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-3">
-                <label htmlFor="email" className="text-base font-bold text-text-primary">
+                <label htmlFor="email" className="text-base font-bold text-white">
                   Email
                 </label>
                 <Input
@@ -107,7 +106,7 @@ export default function Login() {
               </div>
               
               <div className="space-y-3">
-                <label htmlFor="password" className="text-base font-bold text-text-primary">
+                <label htmlFor="password" className="text-base font-bold text-white">
                   Password
                 </label>
                 <Input
@@ -122,19 +121,19 @@ export default function Login() {
               </div>
 
               <div className="flex items-center justify-between text-sm">
-                <label className="inline-flex items-center gap-3 text-text-secondary hover:text-text-primary transition-colors cursor-pointer">
-                  <input type="checkbox" className="glass h-5 w-5 rounded-lg border-glass-border-strong" />
+                <label className="inline-flex items-center gap-3 text-gray-400 hover:text-white transition-colors cursor-pointer">
+                  <input type="checkbox" className="h-5 w-5 rounded-lg bg-white/5 border border-white/10" />
                   <span className="font-medium">Remember me</span>
                 </label>
-                <Link to="/forgot-password" className="text-text-accent hover:text-accent-blue font-medium transition-colors">
+                <Link to="/forgot-password" className="text-gray-400 hover:text-white font-medium transition-colors">
                   Forgot password?
                 </Link>
               </div>
 
-              <Button type="submit" size="xl" className="w-full font-bold" disabled={isLoading}>
+              <Button type="submit" size="xl" className="w-full" disabled={isLoading}>
                 {isLoading ? (
                   <div className="flex items-center gap-3">
-                    <span className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                    <span className="h-5 w-5 animate-spin rounded-full border-2 border-black/30 border-t-black" />
                     <span>Signing in…</span>
                   </div>
                 ) : (
@@ -145,23 +144,23 @@ export default function Login() {
 
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t border-glass-border" />
+                <span className="w-full border-t border-white/10" />
               </div>
               <div className="relative flex justify-center">
-                <span className="glass px-4 py-2 text-sm font-bold uppercase tracking-[0.2em] text-text-muted">Or</span>
+                <span className="bg-black px-4 py-2 text-sm font-bold uppercase tracking-[0.2em] text-gray-500">Or</span>
               </div>
             </div>
 
             <Button
               variant="secondary"
               size="xl"
-              className="w-full font-bold"
+              className="w-full"
               onClick={handleGoogleSignIn}
               disabled={isGoogleLoading}
             >
               {isGoogleLoading ? (
                 <div className="flex items-center gap-3">
-                  <span className="h-5 w-5 animate-spin rounded-full border-2 border-text-secondary/30 border-t-text-secondary" />
+                  <span className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
                   <span>Connecting…</span>
                 </div>
               ) : (
@@ -178,8 +177,8 @@ export default function Login() {
             </Button>
 
             <div className="text-center text-lg">
-              <span className="text-text-secondary">New to Quantrel?</span>{' '}
-              <Link to="/register" className="text-text-accent hover:text-accent-blue font-bold transition-colors">
+              <span className="text-gray-400">New to Quantrel?</span>{' '}
+              <Link to="/register" className="text-white hover:text-gray-300 font-bold transition-colors">
                 Create an account
               </Link>
             </div>

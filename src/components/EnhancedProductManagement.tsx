@@ -203,13 +203,13 @@ function ProductModal({ isOpen, onClose, onSave, editProduct }: ProductModalProp
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <Card className="w-full max-w-4xl max-h-[90vh] overflow-y-auto card-glass animate-fade-in-up">
-        <CardHeader className="border-b border-white/10 bg-gradient-to-r from-white/5 to-transparent">
+      <Card className="w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-black border border-white/10 animate-fade-in-up">
+        <CardHeader className="border-b border-white/10 bg-white/5">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-xl font-bold gradient-text">
+            <CardTitle className="text-xl font-bold text-white">
               {editProduct ? "Edit AI Model" : "Publish New AI Model"}
             </CardTitle>
-            <Button variant="ghost" size="sm" onClick={onClose} className="text-white/60 hover:text-white hover:bg-white/10 rounded-full w-8 h-8 p-0 transition-all duration-200">
+            <Button variant="ghost" size="sm" onClick={onClose} className="text-white/60 hover:text-white rounded-full w-8 h-8 p-0">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
@@ -220,10 +220,10 @@ function ProductModal({ isOpen, onClose, onSave, editProduct }: ProductModalProp
           <form onSubmit={handleSubmit} className="space-y-8">
             {/* Basic Information */}
             <div className="space-y-2">
-              <h3 className="text-lg font-semibold gradient-text mb-4">Basic Information</h3>
+              <h3 className="text-lg font-semibold text-white mb-4">Basic Information</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label htmlFor="name" className="block text-sm font-medium text-white/90">
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-300">
                     AI Model Name *
                   </label>
                   <Input
@@ -231,13 +231,13 @@ function ProductModal({ isOpen, onClose, onSave, editProduct }: ProductModalProp
                     value={formData.name}
                     onChange={(e) => handleInputChange("name", e.target.value)}
                     placeholder="e.g., GPT-4 Vision Pro"
-                    className={`glass-input text-white placeholder:text-white/50 border-0 h-12 ${errors.name ? "ring-2 ring-red-400" : ""} transition-all duration-300`}
+                    className={errors.name ? "border-red-400" : ""}
                   />
                   {errors.name && <p className="text-red-300 text-sm animate-fade-in-up">{errors.name}</p>}
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="llmApiUsing" className="block text-sm font-medium text-white/90">
+                  <label htmlFor="llmApiUsing" className="block text-sm font-medium text-gray-300">
                     LLM/API Provider *
                   </label>
                   <Input
@@ -245,7 +245,7 @@ function ProductModal({ isOpen, onClose, onSave, editProduct }: ProductModalProp
                     value={formData.llmApiUsing}
                     onChange={(e) => handleInputChange("llmApiUsing", e.target.value)}
                     placeholder="e.g., OpenAI GPT-4"
-                    className={`glass-input text-white placeholder:text-white/50 border-0 h-12 ${errors.llmApiUsing ? "ring-2 ring-red-400" : ""} transition-all duration-300`}
+                    className={errors.llmApiUsing ? "border-red-400" : ""}
                   />
                   {errors.llmApiUsing && <p className="text-red-300 text-sm animate-fade-in-up">{errors.llmApiUsing}</p>}
                 </div>
@@ -254,9 +254,9 @@ function ProductModal({ isOpen, onClose, onSave, editProduct }: ProductModalProp
 
             {/* Description */}
             <div className="space-y-2">
-              <h3 className="text-lg font-semibold gradient-text mb-4">Model Description</h3>
+              <h3 className="text-lg font-semibold text-white mb-4">Model Description</h3>
               <div className="space-y-2">
-                <label htmlFor="description" className="block text-sm font-medium text-white/90">
+                <label htmlFor="description" className="block text-sm font-medium text-gray-300">
                   Detailed Description *
                 </label>
                 <textarea
@@ -265,9 +265,9 @@ function ProductModal({ isOpen, onClose, onSave, editProduct }: ProductModalProp
                   onChange={(e) => handleInputChange("description", e.target.value)}
                   placeholder="Describe capabilities, use cases, performance metrics, and key features..."
                   rows={4}
-                  className={`w-full px-4 py-3 glass-input text-white placeholder:text-white/50 border-0 rounded-xl resize-none focus:ring-2 focus:ring-gradient-from-primary/50 ${
-                    errors.description ? "ring-2 ring-red-400" : ""
-                  } transition-all duration-300`}
+                  className={`w-full px-4 py-3 rounded-lg border bg-white/5 text-white placeholder:text-gray-500 resize-none focus:outline-none focus:border-white/30 focus:bg-white/10 ${
+                    errors.description ? "border-red-400" : "border-white/10"
+                  }`}
                 />
                 {errors.description && <p className="text-red-300 text-sm animate-fade-in-up">{errors.description}</p>}
               </div>
@@ -275,10 +275,10 @@ function ProductModal({ isOpen, onClose, onSave, editProduct }: ProductModalProp
 
             {/* Pricing and Technical Specs */}
             <div className="space-y-2">
-              <h3 className="text-lg font-semibold gradient-text mb-4">Pricing & Technical Specs</h3>
+              <h3 className="text-lg font-semibold text-white mb-4">Pricing & Technical Specs</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="space-y-2">
-                  <label htmlFor="price" className="block text-sm font-medium text-white/90">
+                  <label htmlFor="price" className="block text-sm font-medium text-gray-300">
                     Cost per 1K Tokens ($) *
                   </label>
                   <Input
@@ -289,13 +289,13 @@ function ProductModal({ isOpen, onClose, onSave, editProduct }: ProductModalProp
                     value={formData.price}
                     onChange={(e) => handleInputChange("price", e.target.value)}
                     placeholder="0.002"
-                    className={`glass-input text-white placeholder:text-white/50 border-0 h-12 ${errors.price ? "ring-2 ring-red-400" : ""} transition-all duration-300`}
+                    className={errors.price ? "border-red-400" : ""}
                   />
                   {errors.price && <p className="text-red-300 text-sm animate-fade-in-up">{errors.price}</p>}
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="limit" className="block text-sm font-medium text-white/90">
+                  <label htmlFor="limit" className="block text-sm font-medium text-gray-300">
                     Monthly Usage Limit *
                   </label>
                   <Input
@@ -305,13 +305,13 @@ function ProductModal({ isOpen, onClose, onSave, editProduct }: ProductModalProp
                     value={formData.limit}
                     onChange={(e) => handleInputChange("limit", e.target.value)}
                     placeholder="1,000,000"
-                    className={`glass-input text-white placeholder:text-white/50 border-0 h-12 ${errors.limit ? "ring-2 ring-red-400" : ""} transition-all duration-300`}
+                    className={errors.limit ? "border-red-400" : ""}
                   />
                   {errors.limit && <p className="text-red-300 text-sm animate-fade-in-up">{errors.limit}</p>}
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="tokens" className="block text-sm font-medium text-white/90">
+                  <label htmlFor="tokens" className="block text-sm font-medium text-gray-300">
                     Max Tokens per Request *
                   </label>
                   <Input
@@ -321,7 +321,7 @@ function ProductModal({ isOpen, onClose, onSave, editProduct }: ProductModalProp
                     value={formData.tokens}
                     onChange={(e) => handleInputChange("tokens", e.target.value)}
                     placeholder="4,096"
-                    className={`glass-input text-white placeholder:text-white/50 border-0 h-12 ${errors.tokens ? "ring-2 ring-red-400" : ""} transition-all duration-300`}
+                    className={errors.tokens ? "border-red-400" : ""}
                   />
                   {errors.tokens && <p className="text-red-300 text-sm animate-fade-in-up">{errors.tokens}</p>}
                 </div>
@@ -330,42 +330,42 @@ function ProductModal({ isOpen, onClose, onSave, editProduct }: ProductModalProp
 
             {/* Category and Configuration */}
             <div className="space-y-2">
-              <h3 className="text-lg font-semibold gradient-text mb-4">Model Configuration</h3>
+              <h3 className="text-lg font-semibold text-white mb-4">Model Configuration</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label htmlFor="category" className="block text-sm font-medium text-white/90">
+                  <label htmlFor="category" className="block text-sm font-medium text-gray-300">
                     AI Model Type *
                   </label>
                   <select
                     id="category"
                     value={formData.category}
                     onChange={(e) => handleInputChange("category", e.target.value)}
-                    className={`w-full h-12 px-4 glass-input text-white border-0 rounded-xl focus:ring-2 focus:ring-gradient-from-primary/50 ${
-                      errors.category ? "ring-2 ring-red-400" : ""
-                    } transition-all duration-300`}
+                    className={`w-full h-11 px-4 rounded-lg border bg-white/5 text-white focus:outline-none focus:border-white/30 focus:bg-white/10 ${
+                      errors.category ? "border-red-400" : "border-white/10"
+                    }`}
                   >
-                    <option value="" className="bg-dark-800 text-white">Select AI model type</option>
+                    <option value="" className="bg-black text-white">Select AI model type</option>
                     {categories.map(cat => (
-                      <option key={cat} value={cat} className="bg-dark-800 text-white">{cat}</option>
+                      <option key={cat} value={cat} className="bg-black text-white">{cat}</option>
                     ))}
                   </select>
                   {errors.category && <p className="text-red-300 text-sm animate-fade-in-up">{errors.category}</p>}
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="status" className="block text-sm font-medium text-white/90">
+                  <label htmlFor="status" className="block text-sm font-medium text-gray-300">
                     Availability Status
                   </label>
                   <select
                     id="status"
                     value={formData.status}
                     onChange={(e) => handleInputChange("status", e.target.value as "active" | "inactive" | "maintenance" | "deprecated")}
-                    className="w-full h-12 px-4 glass-input text-white border-0 rounded-xl focus:ring-2 focus:ring-gradient-from-primary/50 transition-all duration-300"
+                    className="w-full h-11 px-4 rounded-lg border border-white/10 bg-white/5 text-white focus:outline-none focus:border-white/30 focus:bg-white/10"
                   >
-                    <option value="active" className="bg-dark-800 text-white">🟢 Active & Available</option>
-                    <option value="inactive" className="bg-dark-800 text-white">🔴 Inactive</option>
-                    <option value="maintenance" className="bg-dark-800 text-white">🟡 Under Maintenance</option>
-                    <option value="deprecated" className="bg-dark-800 text-white">⚠️ Deprecated</option>
+                    <option value="active" className="bg-black text-white">Active & Available</option>
+                    <option value="inactive" className="bg-black text-white">Inactive</option>
+                    <option value="maintenance" className="bg-black text-white">Under Maintenance</option>
+                    <option value="deprecated" className="bg-black text-white">Deprecated</option>
                   </select>
                 </div>
               </div>
@@ -373,10 +373,10 @@ function ProductModal({ isOpen, onClose, onSave, editProduct }: ProductModalProp
 
             {/* API Configuration */}
             <div className="space-y-2">
-              <h3 className="text-lg font-semibold gradient-text mb-4">API Configuration</h3>
+              <h3 className="text-lg font-semibold text-white mb-4">API Configuration</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label htmlFor="apiKey" className="block text-sm font-medium text-white/90">
+                  <label htmlFor="apiKey" className="block text-sm font-medium text-gray-300">
                     API Key *
                   </label>
                   <Input
@@ -384,13 +384,13 @@ function ProductModal({ isOpen, onClose, onSave, editProduct }: ProductModalProp
                     value={formData.apiKey}
                     onChange={(e) => handleInputChange("apiKey", e.target.value)}
                     placeholder="sk-proj-abc123xyz789..."
-                    className={`glass-input text-white placeholder:text-white/50 border-0 h-12 ${errors.apiKey ? "ring-2 ring-red-400" : ""} transition-all duration-300`}
+                    className={errors.apiKey ? "border-red-400" : ""}
                   />
                   {errors.apiKey && <p className="text-red-300 text-sm animate-fade-in-up">{errors.apiKey}</p>}
                 </div>
                 
                 <div className="space-y-2">
-                  <label htmlFor="allowedOrigin" className="block text-sm font-medium text-white/90">
+                  <label htmlFor="allowedOrigin" className="block text-sm font-medium text-gray-300">
                     Allowed Origin *
                   </label>
                   <Input
@@ -398,7 +398,7 @@ function ProductModal({ isOpen, onClose, onSave, editProduct }: ProductModalProp
                     value={formData.allowedOrigin}
                     onChange={(e) => handleInputChange("allowedOrigin", e.target.value)}
                     placeholder="https://yourdomain.com"
-                    className={`glass-input text-white placeholder:text-white/50 border-0 h-12 ${errors.allowedOrigin ? "ring-2 ring-red-400" : ""} transition-all duration-300`}
+                    className={errors.allowedOrigin ? "border-red-400" : ""}
                   />
                   {errors.allowedOrigin && <p className="text-red-300 text-sm animate-fade-in-up">{errors.allowedOrigin}</p>}
                 </div>
@@ -407,20 +407,20 @@ function ProductModal({ isOpen, onClose, onSave, editProduct }: ProductModalProp
 
             {/* Tags */}
             <div className="space-y-2">
-              <h3 className="text-lg font-semibold gradient-text mb-4">Tags & Keywords</h3>
+              <h3 className="text-lg font-semibold text-white mb-4">Tags & Keywords</h3>
               <div className="space-y-4">
                 <div className="flex gap-3">
                   <Input
                     value={tagInput}
                     onChange={(e) => setTagInput(e.target.value)}
                     placeholder="Add tags (e.g., natural-language, vision, code-gen)"
-                    className="glass-input text-white placeholder:text-white/50 border-0 h-12 flex-1 transition-all duration-300"
+                    className="flex-1"
                     onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
                   />
                   <Button 
                     type="button" 
-                    onClick={addTag} 
-                    className="btn-gradient h-12 px-6 font-medium rounded-xl"
+                    onClick={addTag}
+                    variant="secondary"
                   >
                     Add Tag
                   </Button>
@@ -429,7 +429,7 @@ function ProductModal({ isOpen, onClose, onSave, editProduct }: ProductModalProp
                   {formData.tags.map((tag, index) => (
                     <Badge 
                       key={index} 
-                      className="bg-gradient-primary text-white cursor-pointer hover:bg-gradient-accent px-3 py-1 rounded-full text-sm font-medium transition-all duration-200 hover:scale-105"
+                      className="bg-white/10 text-white border border-white/20 cursor-pointer hover:bg-white/20 px-3 py-1 rounded-lg text-sm font-medium"
                       onClick={() => removeTag(tag)}
                     >
                       {tag} <span className="ml-1 text-white/80">×</span>
@@ -442,20 +442,19 @@ function ProductModal({ isOpen, onClose, onSave, editProduct }: ProductModalProp
             {/* API Documentation */}
             <div className="space-y-2">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold gradient-text">API Documentation</h3>
+                <h3 className="text-lg font-semibold text-white">API Documentation</h3>
                 <Button
                   type="button"
-                  variant="outline"
+                  variant="secondary"
                   size="sm"
                   onClick={() => setShowPreview(!showPreview)}
-                  className="glass-input border-0 text-white/80 hover:text-white hover:glass px-4 py-2 rounded-lg transition-all duration-200"
                 >
-                  {showPreview ? "📝 Edit" : "👀 Preview"}
+                  {showPreview ? "Edit" : "Preview"}
                 </Button>
               </div>
               
               {showPreview ? (
-                <div className="card-glass p-6 min-h-[200px] rounded-xl">
+                <div className="bg-white/5 border border-white/10 p-6 min-h-[200px] rounded-lg">
                   <MarkdownPreview content={formData.apiDocs} />
                 </div>
               ) : (
@@ -490,9 +489,9 @@ POST /api/v1/generate
 }
 \`\`\``}
                   rows={12}
-                  className={`w-full px-4 py-3 glass-input text-white placeholder:text-white/50 border-0 rounded-xl font-mono text-sm resize-none focus:ring-2 focus:ring-gradient-from-primary/50 ${
-                    errors.apiDocs ? "ring-2 ring-red-400" : ""
-                  } transition-all duration-300`}
+                  className={`w-full px-4 py-3 rounded-lg border bg-white/5 text-white placeholder:text-gray-500 font-mono text-sm resize-none focus:outline-none focus:border-white/30 focus:bg-white/10 ${
+                    errors.apiDocs ? "border-red-400" : "border-white/10"
+                  }`}
                 />
               )}
               {errors.apiDocs && <p className="text-red-300 text-sm animate-fade-in-up">{errors.apiDocs}</p>}
@@ -500,12 +499,12 @@ POST /api/v1/generate
 
             {/* Image Upload */}
             <div className="space-y-2">
-              <h3 className="text-lg font-semibold gradient-text mb-4">Visual Assets</h3>
+              <h3 className="text-lg font-semibold text-white mb-4">Visual Assets</h3>
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-white/90">
+                <label className="block text-sm font-medium text-gray-300">
                   Model Screenshots & Demos
                 </label>
-                <div className="glass p-4 rounded-xl">
+                <div className="bg-white/5 border border-white/10 p-4 rounded-lg">
                   <ImageUpload
                     images={formData.imageFiles}
                     onImagesChange={(images) => setFormData(prev => ({ ...prev, imageFiles: images }))}
@@ -519,24 +518,24 @@ POST /api/v1/generate
             <div className="flex gap-4 pt-8 border-t border-white/10">
               <Button 
                 type="button" 
-                variant="outline" 
+                variant="secondary" 
                 onClick={onClose} 
-                className="flex-1 glass-input border-0 text-white/80 hover:text-white hover:glass h-12 rounded-xl font-medium transition-all duration-300"
+                className="flex-1 h-12"
               >
                 Cancel
               </Button>
               <Button 
                 type="submit" 
                 disabled={isSubmitting} 
-                className="flex-1 btn-gradient h-12 rounded-xl font-semibold transition-all duration-300 disabled:opacity-50"
+                className="flex-1 h-12"
               >
                 {isSubmitting ? (
                   <div className="flex items-center space-x-2">
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-black"></div>
                     <span>{editProduct ? "Updating..." : "Publishing..."}</span>
                   </div>
                 ) : (
-                  <span>{editProduct ? "Update Model" : "🚀 Publish Model"}</span>
+                  <span>{editProduct ? "Update Model" : "Publish Model"}</span>
                 )}
               </Button>
             </div>
@@ -767,9 +766,9 @@ export default function EnhancedProductManagement() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64 bg-gray-900">
+      <div className="flex items-center justify-center h-64 bg-black">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-400"></div>
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-white/30"></div>
           <p className="mt-4 text-gray-400">Loading AI models...</p>
         </div>
       </div>
@@ -781,52 +780,48 @@ export default function EnhancedProductManagement() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 p-8">
         <div className="space-y-2">
-          <h2 className="text-4xl font-bold gradient-text">AI Model Hub</h2>
-          <p className="text-white/70 text-lg">Manage and monetize your AI models and agents</p>
+          <h2 className="text-4xl font-bold text-white">AI Model Hub</h2>
+          <p className="text-gray-400 text-lg">Manage and monetize your AI models and agents</p>
         </div>
         <Button 
-          onClick={() => setShowAddModal(true)} 
-          className="btn-gradient h-12 px-8 rounded-xl font-semibold transition-all duration-300 hover:scale-105"
+          onClick={() => setShowAddModal(true)}
         >
-          <span className="flex items-center space-x-2">
-            <span>🚀</span>
-            <span>Publish New Model</span>
-          </span>
+          Publish New Model
         </Button>
       </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 px-8">
-        <Card className="card-glass animate-fade-in-up">
+        <Card className="bg-white/5 border border-white/10 animate-fade-in-up">
           <CardContent className="p-6 text-center">
-            <div className="text-3xl font-bold gradient-text">{products.length}</div>
-            <p className="text-white/70 font-medium">Total Models</p>
+            <div className="text-3xl font-bold text-white">{products.length}</div>
+            <p className="text-gray-400 font-medium">Total Models</p>
           </CardContent>
         </Card>
-        <Card className="card-glass animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+        <Card className="bg-white/5 border border-white/10 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
           <CardContent className="p-6 text-center">
-            <div className="text-3xl font-bold text-green-400">{activeProducts}</div>
-            <p className="text-white/70 font-medium">Active Models</p>
+            <div className="text-3xl font-bold text-white">{activeProducts}</div>
+            <p className="text-gray-400 font-medium">Active Models</p>
           </CardContent>
         </Card>
-        <Card className="card-glass animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+        <Card className="bg-white/5 border border-white/10 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
           <CardContent className="p-6 text-center">
-            <div className="text-3xl font-bold gradient-text-accent">${totalValue.toLocaleString()}</div>
-            <p className="text-white/70 font-medium">Revenue Potential</p>
+            <div className="text-3xl font-bold text-white">${totalValue.toLocaleString()}</div>
+            <p className="text-gray-400 font-medium">Revenue Potential</p>
           </CardContent>
         </Card>
-        <Card className="card-glass animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+        <Card className="bg-white/5 border border-white/10 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
           <CardContent className="p-6 text-center">
-            <div className="text-3xl font-bold text-orange-400">{lowLimitProducts}</div>
-            <p className="text-white/70 font-medium">Attention Needed</p>
+            <div className="text-3xl font-bold text-white">{lowLimitProducts}</div>
+            <p className="text-gray-400 font-medium">Attention Needed</p>
           </CardContent>
         </Card>
       </div>
 
       {/* Products Table */}
-      <Card className="card-glass mx-8 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
-        <CardHeader className="border-b border-white/10 bg-gradient-to-r from-white/5 to-transparent">
-          <CardTitle className="text-xl font-bold gradient-text">Your AI Model Portfolio</CardTitle>
+      <Card className="bg-white/5 border border-white/10 mx-8 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+        <CardHeader className="border-b border-white/10 bg-white/5">
+          <CardTitle className="text-xl font-bold text-white">Your AI Model Portfolio</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="overflow-x-auto">
@@ -871,11 +866,11 @@ export default function EnhancedProductManagement() {
                       </div>
                     </td>
                     <td className="py-3 px-2">
-                      <Badge className="bg-blue-900 text-blue-300 border-blue-700">{product.category}</Badge>
+                      <Badge className="bg-white/5 text-gray-400 border-white/10">{product.category}</Badge>
                     </td>
-                    <td className="py-3 px-2 font-medium text-green-400">${product.price.toFixed(3)}</td>
+                    <td className="py-3 px-2 font-medium text-white">${product.price.toFixed(3)}</td>
                     <td className="py-3 px-2">
-                      <span className={product.limit <= 50000 ? "text-orange-400 font-medium" : "text-gray-300"}>
+                      <span className={product.limit <= 50000 ? "text-gray-400 font-medium" : "text-gray-300"}>
                         {product.limit.toLocaleString()}
                       </span>
                     </td>

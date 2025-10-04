@@ -92,20 +92,18 @@ export default function StoreDashboard() {
     <div className="min-h-screen bg-black text-white p-6 space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">AI Developer Hub</h1>
+          <h1 className="text-3xl font-bold text-white">AI Developer Hub</h1>
           <p className="text-gray-400">Welcome back, {user?.displayName || "AI Developer"}!</p>
         </div>
         <div className="flex gap-2">
           <Button 
-            variant="outline"
+            variant="secondary"
             onClick={() => setActiveTab("products")}
-            className="border-white/20 text-gray-300 hover:bg-white/10 backdrop-blur-sm"
           >
             Manage AI Models
           </Button>
           <Button 
             onClick={() => setActiveTab("products")}
-            className="bg-gradient-to-r from-white/20 to-gray-300/20 backdrop-blur-sm border border-white/20 text-white hover:from-white/30 hover:to-gray-300/30"
           >
             Publish New Model
           </Button>
@@ -139,7 +137,7 @@ export default function StoreDashboard() {
         <div className="space-y-6">
           <Card className="hover:bg-white/10 transition-all duration-300">
             <CardHeader>
-              <CardTitle className="bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">Order Management</CardTitle>
+              <CardTitle className="text-white">Order Management</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-gray-400">Order management features coming soon...</p>
@@ -153,7 +151,7 @@ export default function StoreDashboard() {
         <div className="space-y-6">
           <Card className="hover:bg-white/10 transition-all duration-300">
             <CardHeader>
-              <CardTitle className="bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">Store Settings</CardTitle>
+              <CardTitle className="text-white">Store Settings</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-gray-400">Store configuration features coming soon...</p>

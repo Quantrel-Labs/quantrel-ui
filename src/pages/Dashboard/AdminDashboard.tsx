@@ -59,29 +59,25 @@ export default function AdminDashboard() {
       label: "Total Users",
       value: users.length,
       delta: "+12%",
-      description: "month over month",
-      gradient: "from-[#8a7bff]/40 via-[#5a2cff]/30 to-transparent"
+      description: "month over month"
     },
     {
       label: "Store Owners",
       value: users.filter((user) => user.role === ROLES.STORE).length,
       delta: "+8%",
-      description: "growing creator network",
-      gradient: "from-[#00f2fe]/40 via-[#4facfe]/30 to-transparent"
+      description: "growing creator network"
     },
     {
       label: "Customers",
       value: users.filter((user) => user.role === ROLES.CUSTOMER).length,
       delta: "+15%",
-      description: "active buyers this month",
-      gradient: "from-[#ff3d81]/40 via-[#fb7185]/30 to-transparent"
+      description: "active buyers this month"
     },
     {
       label: "Admin Seats",
       value: users.filter((user) => user.role === ROLES.ADMIN).length,
       delta: "",
-      description: "core operators",
-      gradient: "from-[#f97316]/40 via-[#fb923c]/25 to-transparent"
+      description: "core operators"
     }
   ]
 
@@ -101,13 +97,12 @@ export default function AdminDashboard() {
 
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
         {stats.map((stat) => (
-          <Card key={stat.label} className="relative overflow-hidden border-white/10 bg-white/[0.06]">
-            <div className={`absolute inset-0 bg-gradient-to-br ${stat.gradient} opacity-70 blur-2xl`} />
+          <Card key={stat.label} className="relative overflow-hidden border-white/10 bg-white/5">
             <CardHeader className="relative z-10 space-y-2">
-              <p className="text-xs uppercase tracking-[0.35em] text-white/45">{stat.label}</p>
+              <p className="text-xs uppercase tracking-[0.35em] text-gray-500">{stat.label}</p>
               <p className="text-3xl font-semibold text-white">{stat.value}</p>
-              <div className="flex items-center gap-2 text-xs text-white/55">
-                {stat.delta && <span className="text-emerald-300">{stat.delta}</span>}
+              <div className="flex items-center gap-2 text-xs text-gray-400">
+                {stat.delta && <span className="text-white">{stat.delta}</span>}
                 <span>{stat.description}</span>
               </div>
             </CardHeader>
@@ -116,7 +111,7 @@ export default function AdminDashboard() {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <Card className="border-white/10 bg-white/[0.06]">
+        <Card className="border-white/10 bg-white/5">
           <CardHeader className="space-y-2">
             <CardTitle className="text-white">Promote user to admin</CardTitle>
             <p className="text-xs text-white/60">Elevate a trusted creator or team member to help you manage operations.</p>
@@ -126,7 +121,7 @@ export default function AdminDashboard() {
               <div
                 className={`rounded-2xl border p-3 text-sm ${
                   message.includes("success")
-                    ? "border-emerald-400/40 bg-emerald-500/15 text-emerald-100"
+                    ? "border-white/30 bg-white/10 text-white"
                     : "border-red-400/40 bg-red-500/20 text-red-100"
                 }`}
               >

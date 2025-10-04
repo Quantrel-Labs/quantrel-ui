@@ -6,7 +6,7 @@ const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElemen
     <div
       ref={ref}
       className={cn(
-        "glass-card group cursor-default",
+        "bg-white/5 border border-white/10 rounded-lg",
         className
       )}
       {...props}
@@ -20,11 +20,11 @@ const CardHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement
 )
 
 const CardTitle = ({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
-  <h3 className={cn("text-2xl font-display font-semibold leading-tight tracking-tight text-text-primary", className)} {...props} />
+  <h3 className={cn("text-2xl font-display font-semibold leading-tight tracking-tight text-white", className)} {...props} />
 )
 
 const CardDescription = ({ className, ...props }: React.HTMLAttributes<HTMLParagraphElement>) => (
-  <p className={cn("text-base text-text-secondary leading-relaxed", className)} {...props} />
+  <p className={cn("text-base text-gray-400 leading-relaxed", className)} {...props} />
 )
 
 const CardContent = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (

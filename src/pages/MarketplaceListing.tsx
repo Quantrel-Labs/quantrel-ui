@@ -276,17 +276,8 @@ export default function MarketplaceListing({ showCreatorInfo = true }: Marketpla
   }
 
   const getCategoryColor = (category: string) => {
-    const colors: { [key: string]: string } = {
-      "Language Models": "bg-orange-500",
-      "Code Generation": "bg-yellow-500",
-      "Image Generation": "bg-purple-500",
-      "Data Analysis": "bg-blue-500",
-      "Content Writing": "bg-green-500",
-      "Audio Processing": "bg-pink-500",
-      "Vision Models": "bg-cyan-500",
-      "Translation": "bg-indigo-500",
-    }
-    return colors[category] || "bg-gray-500"
+    // Simplified to monochrome - all categories use same minimal gray
+    return "bg-white/10"
   }
 
   return (

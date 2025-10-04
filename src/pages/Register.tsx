@@ -68,20 +68,19 @@ export default function Register() {
 
       <div className="mx-auto grid max-w-7xl gap-20 px-6 md:grid-cols-[1fr_1.2fr] lg:px-12 items-center">
         <div className="space-y-12 animate-fade-in-up">
-          <div className="glass inline-flex items-center gap-3 rounded-3xl px-6 py-3 text-sm font-bold uppercase tracking-[0.2em] text-text-muted">
-            <div className="h-2 w-2 rounded-full bg-gradient-primary animate-glow"></div>
+          <div className="inline-flex items-center gap-3 bg-white/5 border border-white/10 rounded-lg px-6 py-3 text-sm font-bold uppercase tracking-[0.2em] text-gray-400">
             Join Quantrel
           </div>
           
-          <h1 className="font-display text-5xl font-bold leading-tight text-text-primary md:text-6xl lg:text-7xl">
+          <h1 className="font-display text-5xl font-bold leading-tight text-white md:text-6xl lg:text-7xl">
             Build cinematic
             <br />
-            <span className="gradient-text-primary">AI experiences</span>
+            <span className="text-white">AI experiences</span>
             <br />
             without touching code
           </h1>
           
-          <p className="text-xl text-text-secondary leading-relaxed max-w-2xl">
+          <p className="text-xl text-gray-400 leading-relaxed max-w-2xl">
             Quantrel pairs cutting-edge AI with production-ready components, so you can generate dashboards, marketplaces, and
             immersive storefronts in minutes.
           </p>
@@ -89,29 +88,29 @@ export default function Register() {
           <div className="grid gap-6 sm:grid-cols-2">
             {["Role-based dashboards", "Realtime analytics", "AI-assisted workflows", "Launch-ready publishing"].map(
               (item, index) => (
-                <div key={item} className="glass-card p-6 animate-fade-in-scale hover:scale-[1.02] transition-transform" style={{ animationDelay: `${index * 0.1}s` }}>
-                  <span className="font-bold text-text-primary">{item}</span>
+                <div key={item} className="bg-white/5 border border-white/10 p-6 rounded-lg animate-fade-in-scale hover:bg-white/10 transition-colors" style={{ animationDelay: `${index * 0.1}s` }}>
+                  <span className="font-bold text-white">{item}</span>
                 </div>
               )
             )}
           </div>
         </div>
 
-        <Card className="relative w-full max-w-2xl justify-self-end animate-fade-in-scale" style={{ animationDelay: '0.2s' }}>
+        <Card className="relative w-full max-w-2xl justify-self-end animate-fade-in-scale bg-black border border-white/10" style={{ animationDelay: '0.2s' }}>
           <CardHeader className="space-y-6">
             <CardTitle className="font-display text-4xl font-bold">Create your account</CardTitle>
-            <p className="text-lg text-text-secondary">Pick your role, invite your team, and start shipping with AI.</p>
+            <p className="text-lg text-gray-400">Pick your role, invite your team, and start shipping with AI.</p>
           </CardHeader>
           <CardContent className="space-y-8">
             {error && (
-              <div className="glass-card border-red-400/30 bg-red-500/10 p-6 animate-fade-in-scale">
+              <div className="bg-red-500/10 border border-red-400/30 p-6 rounded-lg animate-fade-in-scale">
                 <p className="text-red-200 font-medium">{error}</p>
               </div>
             )}
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-3">
-                <label htmlFor="displayName" className="text-base font-bold text-text-primary">
+                <label htmlFor="displayName" className="text-base font-bold text-white">
                   Full name
                 </label>
                 <Input
@@ -126,7 +125,7 @@ export default function Register() {
               </div>
 
               <div className="space-y-3">
-                <label htmlFor="email" className="text-base font-bold text-text-primary">
+                <label htmlFor="email" className="text-base font-bold text-white">
                   Work email
                 </label>
                 <Input
@@ -208,16 +207,16 @@ export default function Register() {
               <div className="grid gap-1 text-xs text-white/55">
                 <p>Password must contain:</p>
                 <ul className="grid gap-1 text-white/45">
-                  <li className={password.length >= 6 ? "text-emerald-300" : ""}>At least 6 characters</li>
-                  <li className={/[A-Z]/.test(password) ? "text-emerald-300" : ""}>One uppercase letter</li>
-                  <li className={/\d/.test(password) ? "text-emerald-300" : ""}>One number</li>
+                  <li className={password.length >= 6 ? "text-white" : ""}>At least 6 characters</li>
+                  <li className={/[A-Z]/.test(password) ? "text-white" : ""}>One uppercase letter</li>
+                  <li className={/\d/.test(password) ? "text-white" : ""}>One number</li>
                 </ul>
               </div>
 
-              <Button type="submit" className="h-12 text-base font-semibold" disabled={isLoading || password !== confirmPassword}>
+              <Button type="submit" className="h-12 text-base" disabled={isLoading || password !== confirmPassword}>
                 {isLoading ? (
                   <div className="flex items-center gap-2">
-                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
+                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-black/40 border-t-black" />
                     <span>Creating account…</span>
                   </div>
                 ) : (
