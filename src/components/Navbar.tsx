@@ -124,9 +124,9 @@ export default function Navbar() {
       <div className="relative py-4">
         <nav className="relative mx-auto max-w-7xl px-8 flex h-16 items-center justify-between text-sm">
           <Link to={getHomePath()} className="flex items-center gap-3 text-xl font-display font-semibold text-white hover:opacity-80 transition-opacity">
-            <div className="relative h-10 w-10 rounded-xl overflow-hidden  flex-shrink-0">
+            <div className="relative h-8 w-8 rounded-xl overflow-hidden  flex-shrink-0">
               <img 
-                src="/logo.png" 
+                src="/logo_dark_theme.png" 
                 alt="Quantrel Logo" 
                 className="h-full w-full object-cover"
                 onError={(e) => {

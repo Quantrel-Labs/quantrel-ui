@@ -101,9 +101,6 @@ export default function Footer({ className }: { className?: string }) {
       <div className="border-t border-white/10">
         <div className="mx-auto max-w-7xl px-6 py-6 lg:px-12">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-gray-500">
-              Built with ❤️ for the AI community
-            </p>
             <div className="flex items-center gap-4">
               <a
                 href="https://github.com"
