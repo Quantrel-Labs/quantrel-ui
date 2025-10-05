@@ -11,6 +11,8 @@ export default function App() {
   
   // Hide navbar and footer on login/register pages
   const isAuthPage = ['/login', '/register'].includes(location.pathname)
+  // Hide navbar and footer on chat page
+  const isChatPage = location.pathname === '/chat'
   
   return (
     <AuthProvider>
@@ -29,11 +31,11 @@ export default function App() {
           
           {/* Content layer */}
           <div className="relative z-10 flex min-h-screen flex-col">
-            {!isAuthPage && <Navbar />}
-            <main className="flex-1">
+            {!isAuthPage && !isChatPage && <Navbar />}
+            <main className={isChatPage ? 'h-screen overflow-hidden' : 'flex-1'}>
               <Outlet />
             </main>
-            {!isAuthPage && <Footer />}
+            {!isAuthPage && !isChatPage && <Footer />}
             <ToastContainer />
           </div>
         </div>

@@ -1,362 +1,419 @@
 import { useState } from "react"
-import { Button } from "@/components/ui/button"
+import { useNavigate } from "react-router-dom"
 import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import { 
-  Search, 
-  Star, 
-  Filter
-} from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Search, Star, SlidersHorizontal, X, MessageSquare, Plug, ExternalLink, Code, Zap, BookOpen } from "lucide-react"
 
-interface Agent {
+interface Plugin {
   id: string
   name: string
   description: string
-  provider: string
+  logo: string
+  developer: string
   rating: number
   reviews: number
-  priceModel: string
-  price: string
-  category: string
-  logo: string
-  trending?: boolean
-  installed?: boolean
+  fullDescription?: string
+  capabilities?: string[]
+  pricing?: string
 }
 
 export default function Marketplace() {
+  const navigate = useNavigate()
   const [searchQuery, setSearchQuery] = useState("")
-  const [selectedCategory, setSelectedCategory] = useState("All")
+  const [showFilters, setShowFilters] = useState(false)
+  const [selectedPlugin, setSelectedPlugin] = useState<Plugin | null>(null)
 
-  const categories = ["All", "Text Generation", "Image Analysis", "Code Assistance", "Data Analysis", "Translation"]
-
-  const [agents] = useState<Agent[]>([
+  const [plugins] = useState<Plugin[]>([
     {
       id: "1",
       name: "GPT-4 Turbo",
-      description: "Most advanced language model for reasoning",
-      provider: "OpenAI",
+      description: "Advanced language model",
+      logo: "/logos/chatgpt.png",
+      developer: "OpenAI",
       rating: 4.9,
       reviews: 2341,
-      priceModel: "Pay per use",
-      price: "$0.01 per 1K tokens",
-      category: "Text Generation",
-      logo: "/logos/chatgpt.svg",
-      trending: true,
-      installed: true
+      fullDescription: "GPT-4 Turbo is OpenAI's most advanced language model, offering enhanced reasoning, coding, and creative capabilities. Perfect for complex tasks requiring deep understanding and nuanced responses.",
+      capabilities: ["Text generation", "Code assistance", "Analysis", "Creative writing"],
+      pricing: "$0.01 per 1K tokens"
     },
     {
       id: "2",
       name: "Claude 3 Opus",
-      description: "Powerful AI for content creation",
-      provider: "Anthropic",
+      description: "Powerful AI assistant",
+      logo: "/logos/claude.png",
+      developer: "Anthropic",
       rating: 4.8,
       reviews: 1872,
-      priceModel: "Pay per use",
-      price: "$0.015 per 1K tokens",
-      category: "Text Generation",
-      logo: "/logos/anthropic.svg",
-      trending: true
+      fullDescription: "Claude 3 Opus excels at complex reasoning, coding, and creative tasks. Built with safety in mind, it provides helpful, harmless, and honest responses.",
+      capabilities: ["Long-form content", "Code generation", "Research", "Analysis"],
+      pricing: "$0.015 per 1K tokens"
     },
     {
       id: "3",
-      name: "DALL-E 3",
-      description: "Create stunning images from text",
-      provider: "OpenAI",
+      name: "Gemini Pro",
+      description: "Multimodal AI model",
+      logo: "/logos/gemini.png",
+      developer: "Google",
       rating: 4.7,
       reviews: 3421,
-      priceModel: "Per image",
-      price: "$0.04 per image",
-      category: "Image Analysis",
-      logo: "/logos/openai.png",
-      installed: true
+      fullDescription: "Gemini Pro by Google combines text, image, and video understanding in a single model. Ideal for multimodal tasks and comprehensive analysis.",
+      capabilities: ["Multimodal understanding", "Image analysis", "Video processing", "Text generation"],
+      pricing: "$0.002 per 1K tokens"
     },
     {
       id: "4",
       name: "Grok AI",
-      description: "AI assistant with real-time knowledge",
-      provider: "xAI",
-      rating: 4.8,
-      reviews: 5234,
-      priceModel: "Subscription",
-      price: "$10/month",
-      category: "Text Generation",
+      description: "Real-time knowledge AI",
       logo: "/logos/grok.png",
-      trending: true
+      developer: "xAI",
+      rating: 4.8,
+      reviews: 1234,
+      fullDescription: "Grok AI provides real-time knowledge and witty responses. Trained on current data, it offers up-to-date information and engaging conversations.",
+      capabilities: ["Real-time data", "Conversational AI", "Current events", "Web search"],
+      pricing: "$10/month"
     },
     {
       id: "5",
-      name: "Gemini Pro",
-      description: "Understand images, videos, and text",
-      provider: "Google",
-      rating: 4.6,
-      reviews: 1234,
-      priceModel: "Pay per use",
-      price: "$0.002 per 1K tokens",
-      category: "Image Analysis",
-      logo: "/logos/gemini.svg"
+      name: "Perplexity AI",
+      description: "AI search assistant",
+      logo: "/logos/perplexity.png",
+      developer: "Perplexity",
+      rating: 4.7,
+      reviews: 892,
+      fullDescription: "Perplexity AI combines search engine capabilities with conversational AI, providing accurate answers with source citations.",
+      capabilities: ["Web search", "Source citations", "Research", "Fact-checking"],
+      pricing: "$20/month"
     },
     {
       id: "6",
-      name: "Perplexity AI",
-      description: "AI-powered search and research assistant",
-      provider: "Perplexity",
-      rating: 4.7,
-      reviews: 892,
-      priceModel: "Subscription",
-      price: "$20/month",
-      category: "Text Generation",
-      logo: "/logos/perplexity.png"
+      name: "ChatGPT Plus",
+      description: "Enhanced conversational AI",
+      logo: "/logos/chatgpt.png",
+      developer: "OpenAI",
+      rating: 4.8,
+      reviews: 1567,
+      fullDescription: "ChatGPT Plus offers priority access to the latest models, faster response times, and exclusive features including plugins and browsing.",
+      capabilities: ["Conversational AI", "Plugins", "Web browsing", "Advanced reasoning"],
+      pricing: "$20/month"
     },
     {
       id: "7",
-      name: "ChatGPT Plus",
-      description: "Enhanced conversational AI with plugins",
-      provider: "OpenAI",
-      rating: 4.8,
-      reviews: 1567,
-      priceModel: "Subscription",
-      price: "$20/month",
-      category: "Text Generation",
-      logo: "/logos/chatgpt.png"
+      name: "Claude Pro",
+      description: "Advanced AI for tasks",
+      logo: "/logos/claude.png",
+      developer: "Anthropic",
+      rating: 4.6,
+      reviews: 2890,
+      fullDescription: "Claude Pro provides priority access, higher usage limits, and early access to new features. Ideal for professionals requiring extensive AI assistance.",
+      capabilities: ["Extended context", "Priority access", "Advanced analysis", "Code generation"],
+      pricing: "$20/month"
     },
     {
       id: "8",
-      name: "Claude Pro",
-      description: "Advanced AI for complex tasks",
-      provider: "Anthropic",
-      rating: 4.6,
-      reviews: 2890,
-      priceModel: "Subscription",
-      price: "$20/month",
-      category: "Text Generation",
-      logo: "/logos/claude.png"
+      name: "Gemini Advanced",
+      description: "Google's capable AI",
+      logo: "/logos/gemini.png",
+      developer: "Google",
+      rating: 4.9,
+      reviews: 3421,
+      fullDescription: "Gemini Advanced is Google's most capable AI model, offering superior reasoning, coding, and creative capabilities with extended context windows.",
+      capabilities: ["Extended reasoning", "Multimodal", "Google integration", "Advanced coding"],
+      pricing: "$19.99/month"
     },
     {
       id: "9",
-      name: "Gemini Advanced",
-      description: "Google's most capable AI model",
-      provider: "Google",
-      rating: 4.9,
-      reviews: 3421,
-      priceModel: "Subscription",
-      price: "$19.99/month",
-      category: "Text Generation",
-      logo: "/logos/gemini.png",
-      installed: true
+      name: "GPT-4 Vision",
+      description: "Image understanding AI",
+      logo: "/logos/chatgpt.png",
+      developer: "OpenAI",
+      rating: 4.5,
+      reviews: 678,
+      fullDescription: "GPT-4 Vision combines language understanding with visual analysis, enabling comprehensive image interpretation and description.",
+      capabilities: ["Image analysis", "Visual reasoning", "OCR", "Chart interpretation"],
+      pricing: "$0.01 per request"
     },
     {
       id: "10",
-      name: "GPT-4 Vision",
-      description: "AI that understands images and text",
-      provider: "OpenAI",
-      rating: 4.5,
-      reviews: 678,
-      priceModel: "Pay per use",
-      price: "$0.01 per request",
-      category: "Image Analysis",
-      logo: "/logos/openai.png"
+      name: "Claude Instant",
+      description: "Fast AI assistant",
+      logo: "/logos/claude.png",
+      developer: "Anthropic",
+      rating: 4.7,
+      reviews: 1234,
+      fullDescription: "Claude Instant offers fast responses for time-sensitive tasks while maintaining high quality and safety standards.",
+      capabilities: ["Fast responses", "Efficient processing", "Cost-effective", "Safe outputs"],
+      pricing: "$0.008 per 1K tokens"
     },
     {
       id: "11",
-      name: "Claude Instant",
-      description: "Fast and efficient AI assistant",
-      provider: "Anthropic",
-      rating: 4.7,
-      reviews: 1234,
-      priceModel: "Pay per use",
-      price: "$0.008 per 1K tokens",
-      category: "Text Generation",
-      logo: "/logos/anthropic.svg"
+      name: "Grok Vision",
+      description: "Multimodal AI",
+      logo: "/logos/grok.png",
+      developer: "xAI",
+      rating: 4.6,
+      reviews: 890,
+      fullDescription: "Grok Vision extends Grok's capabilities with image understanding, enabling visual analysis alongside conversational AI.",
+      capabilities: ["Image understanding", "Real-time data", "Visual reasoning", "Multimodal chat"],
+      pricing: "$15/month"
     },
     {
       id: "12",
-      name: "Grok Vision",
-      description: "Multimodal AI with image understanding",
-      provider: "xAI",
-      rating: 4.6,
-      reviews: 890,
-      priceModel: "Subscription",
-      price: "$15/month",
-      category: "Image Analysis",
-      logo: "/logos/grok.png"
+      name: "Gemini Ultra",
+      description: "Most powerful model",
+      logo: "/logos/gemini.png",
+      developer: "Google",
+      rating: 4.8,
+      reviews: 2156,
+      fullDescription: "Gemini Ultra represents Google's most powerful AI model, designed for highly complex tasks requiring advanced reasoning and multimodal understanding.",
+      capabilities: ["Ultra-long context", "Complex reasoning", "Multimodal mastery", "Enterprise-grade"],
+      pricing: "$29.99/month"
     }
   ])
 
-  const filteredAgents = agents.filter(agent => {
-    const matchesSearch = agent.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         agent.description.toLowerCase().includes(searchQuery.toLowerCase())
-    const matchesCategory = selectedCategory === "All" || agent.category === selectedCategory
-    return matchesSearch && matchesCategory
+  const filteredPlugins = plugins.filter(plugin => {
+    const matchesSearch = plugin.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         plugin.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         plugin.developer.toLowerCase().includes(searchQuery.toLowerCase())
+    return matchesSearch
   })
+
+  const handlePluginClick = (plugin: Plugin) => {
+    setSelectedPlugin(plugin)
+  }
+
+  const handleStartChat = () => {
+    if (selectedPlugin) {
+      // Navigate to chat page with selected plugin
+      navigate('/dashboard/chat', { state: { selectedModel: selectedPlugin.name } })
+    }
+  }
 
   return (
     <div className="min-h-screen bg-black">
-      {/* Header */}
-      <div className="border-b border-white/[0.08] bg-black">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 py-10">
-          <div className="space-y-8">
-            <div>
-              <h1 className="text-4xl md:text-5xl font-bold text-white mb-3">
-                AI Marketplace
-              </h1>
-              <p className="text-lg text-gray-400">
-                Discover and integrate powerful AI tools into your workflow
-              </p>
-            </div>
-
+      {/* Minimal Header with Search */}
+      <div className="border-b border-white/[0.06]">
+        <div className="max-w-7xl mx-auto px-8 py-6">
+          <div className="flex items-center gap-3">
             {/* Search Bar */}
-            <div className="flex gap-4">
-              <div className="flex-1 relative">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
-                <Input
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search AI tools..."
-                  className="w-full h-12 pl-12 rounded-xl bg-[#1a1a1a] border-white/[0.08] text-white placeholder:text-gray-500 text-base focus:border-white/20"
-                />
-              </div>
-              <Button
-                variant="outline"
-                className="h-12 px-6 rounded-xl border-white/[0.08] hover:bg-[#1a1a1a] hover:border-white/20"
-              >
-                <Filter className="w-5 h-5 mr-2" />
-                Filters
-              </Button>
+            <div className="flex-1 relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+              <Input
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search plugins..."
+                className="w-full h-9 pl-9 pr-3 rounded-lg bg-[#0a0a0a] border-white/[0.06] text-white text-sm placeholder:text-gray-600 focus:border-white/[0.12]"
+              />
             </div>
-
-            {/* Category Tabs */}
-            <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
-              {categories.map((category) => (
-                <button
-                  key={category}
-                  onClick={() => setSelectedCategory(category)}
-                  className={`px-5 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap transition-all ${
-                    selectedCategory === category
-                      ? "bg-blue-600 text-white shadow-lg shadow-blue-600/20"
-                      : "bg-[#1a1a1a] text-gray-400 hover:bg-[#1f1f1f] hover:text-white border border-white/[0.08]"
-                  }`}
-                >
-                  {category}
-                </button>
-              ))}
-            </div>
+            {/* Filters Button */}
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className="flex items-center gap-2 h-9 px-3 rounded-lg bg-[#0a0a0a] border border-white/[0.06] hover:bg-[#141414] transition-colors"
+            >
+              <SlidersHorizontal className="w-4 h-4 text-gray-400" />
+              <span className="text-sm text-gray-400">Filters</span>
+            </button>
           </div>
         </div>
       </div>
 
-      {/* Marketplace Grid - Plugin Gallery Style */}
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredAgents.map((agent) => {
-            return (
-              <div
-                key={agent.id}
-                className="group relative p-6 rounded-xl bg-[#1a1a1a] border border-white/[0.08] hover:bg-[#1f1f1f] hover:border-white/20 transition-all cursor-pointer"
-              >
-                {/* Header with Logo and Badge */}
-                <div className="flex items-start gap-4 mb-4">
-                  {/* Logo */}
-                  <div className="flex-shrink-0 w-14 h-14 rounded-xl bg-white/10 border border-white/[0.08] flex items-center justify-center p-2.5 overflow-hidden">
-                    <img 
-                      src={agent.logo} 
-                      alt={agent.name}
-                      className="w-full h-full object-contain"
-                      onError={(e) => {
-                        // Fallback to placeholder if image fails to load
-                        e.currentTarget.style.display = 'none'
-                        const parent = e.currentTarget.parentElement
-                        if (parent) {
-                          parent.innerHTML = '<div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-500"></div>'
-                        }
-                      }}
-                    />
-                  </div>
-
-                  {/* Title and Badge */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-start justify-between gap-2 mb-2">
-                      <h3 className="text-lg font-semibold text-white leading-tight">
-                        {agent.name}
-                      </h3>
-                      {agent.installed && (
-                        <Badge className="bg-green-600/20 text-green-400 border-0 text-xs px-2.5 py-0.5 h-6 flex-shrink-0 font-medium">
-                          Installed
-                        </Badge>
-                      )}
-                      {agent.trending && !agent.installed && (
-                        <Badge className="bg-orange-600/20 text-orange-400 border-0 text-xs px-2.5 py-0.5 h-6 flex-shrink-0 font-medium">
-                          Trending
-                        </Badge>
-                      )}
-                    </div>
-                  </div>
+      {/* Minimal Grid */}
+      <div className="max-w-7xl mx-auto px-8 py-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {filteredPlugins.map((plugin) => (
+            <div
+              key={plugin.id}
+              onClick={() => handlePluginClick(plugin)}
+              className="group relative p-4 rounded-xl bg-[#000] hover:bg-[#141414] transition-all cursor-pointer"
+            >
+              {/* Logo and Content */}
+              <div className="flex items-start gap-3 mb-3">
+                {/* Logo */}
+                <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-[#000] border border-white/[0.06] flex items-center justify-center p-1.5 overflow-hidden">
+                  <img 
+                    src={plugin.logo} 
+                    alt={plugin.name}
+                    className="w-full h-full object-contain"
+                  />
                 </div>
 
-                {/* Description */}
-                <p className="text-[15px] text-gray-400 leading-relaxed mb-4 min-h-[2.5rem]">
-                  {agent.description}
-                </p>
-                
-                {/* Footer with Rating and Action */}
-                <div className="flex items-center justify-between pt-3 border-t border-white/[0.05]">
-                  <div className="flex items-center gap-3">
-                    <div className="flex items-center gap-1.5">
-                      <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                      <span className="text-sm font-medium text-white">{agent.rating}</span>
-                    </div>
-                    <span className="text-gray-600">•</span>
-                    <span className="text-sm text-gray-500">{agent.reviews.toLocaleString()} reviews</span>
-                  </div>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    className="h-8 px-4 text-sm font-medium text-blue-400 hover:text-blue-300 hover:bg-blue-500/10 rounded-lg"
-                  >
-                    {agent.installed ? 'Configure' : 'Install'}
-                  </Button>
+                {/* Text */}
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-sm font-medium text-white mb-0.5 truncate">
+                    {plugin.name}
+                  </h3>
+                  <p className="text-xs text-gray-500 line-clamp-1">
+                    {plugin.description}
+                  </p>
                 </div>
               </div>
-            )
-          })}
+
+              {/* Developer and Rating */}
+              <div className="flex items-center justify-between text-xs pt-2 border-t border-white/[0.04]">
+                <span className="text-gray-600 truncate">{plugin.developer}</span>
+                <div className="flex items-center gap-1 flex-shrink-0">
+                  <Star className="w-3 h-3 fill-green-500 text-green-500" />
+                  <span className="text-gray-400">{plugin.rating}</span>
+                  <span className="text-gray-600">({plugin.reviews})</span>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
 
         {/* Empty State */}
-        {filteredAgents.length === 0 && (
-          <div className="text-center py-24">
-            <div className="w-20 h-20 rounded-2xl bg-[#1a1a1a] border border-white/[0.08] flex items-center justify-center mx-auto mb-6">
-              <Search className="w-10 h-10 text-gray-600" />
-            </div>
-            <h3 className="text-2xl font-bold text-white mb-3">No results found</h3>
-            <p className="text-gray-400 text-base">Try adjusting your search or filters</p>
+        {filteredPlugins.length === 0 && (
+          <div className="text-center py-16">
+            <Search className="w-12 h-12 text-gray-700 mx-auto mb-3" />
+            <p className="text-sm text-gray-500">No plugins found</p>
           </div>
         )}
+      </div>
 
-        {/* Stats Footer */}
-        <div className="mt-16 pt-10 border-t border-white/[0.08]">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            <div className="text-center">
-              <div className="text-3xl font-bold text-white mb-2">{agents.length}+</div>
-              <div className="text-sm text-gray-400">AI Tools Available</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-white mb-2">
-                {agents.filter(a => a.installed).length}
+      {/* Detail Modal Overlay */}
+      {selectedPlugin && (
+        <div 
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-start justify-center overflow-y-auto"
+          onClick={() => setSelectedPlugin(null)}
+        >
+          <div 
+            className="relative w-full max-w-3xl mx-4 my-8 bg-[#0a0a0a] border border-white/[0.08] rounded-2xl shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close Button */}
+            <button
+              onClick={() => setSelectedPlugin(null)}
+              className="absolute top-4 right-4 p-2 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] transition-colors z-10"
+            >
+              <X className="w-5 h-5 text-gray-400" />
+            </button>
+
+            {/* Header */}
+            <div className="p-8 pb-6 border-b border-white/[0.06]">
+              <div className="flex items-start gap-5">
+                {/* Logo */}
+                <div className="flex-shrink-0 w-16 h-16 rounded-xl bg-[#000] border border-white/[0.08] flex items-center justify-center p-3 overflow-hidden">
+                  <img 
+                    src={selectedPlugin.logo} 
+                    alt={selectedPlugin.name}
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+
+                {/* Info */}
+                <div className="flex-1 min-w-0">
+                  <h2 className="text-2xl font-semibold text-white mb-1">
+                    {selectedPlugin.name}
+                  </h2>
+                  <p className="text-sm text-gray-400 mb-3">
+                    by {selectedPlugin.developer}
+                  </p>
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-1.5">
+                      <Star className="w-4 h-4 fill-green-500 text-green-500" />
+                      <span className="text-sm font-medium text-white">{selectedPlugin.rating}</span>
+                      <span className="text-sm text-gray-500">({selectedPlugin.reviews} reviews)</span>
+                    </div>
+                    <span className="text-sm text-gray-600">•</span>
+                    <span className="text-sm text-gray-400">{selectedPlugin.pricing}</span>
+                  </div>
+                </div>
               </div>
-              <div className="text-sm text-gray-400">Currently Installed</div>
             </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-white mb-2">
-                {agents.filter(a => a.trending).length}
+
+            {/* Content */}
+            <div className="p-8 space-y-6">
+              {/* Description */}
+              <div>
+                <h3 className="text-sm font-medium text-gray-400 mb-2">About</h3>
+                <p className="text-sm text-gray-300 leading-relaxed">
+                  {selectedPlugin.fullDescription}
+                </p>
               </div>
-              <div className="text-sm text-gray-400">Trending Now</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-white mb-2">99.9%</div>
-              <div className="text-sm text-gray-400">Platform Uptime</div>
+
+              {/* Capabilities */}
+              <div>
+                <h3 className="text-sm font-medium text-gray-400 mb-3">Capabilities</h3>
+                <div className="grid grid-cols-2 gap-2">
+                  {selectedPlugin.capabilities?.map((capability, index) => (
+                    <div 
+                      key={index}
+                      className="flex items-center justify-center gap-2 p-2.5 rounded-lg bg-[#000] border border-white/[0.06]"
+                    >
+                      <span className="text-sm text-gray-300">{capability}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* CTA Buttons */}
+              <div className="pt-4 flex gap-3">
+                <Button
+                  onClick={handleStartChat}
+                  className="flex-1 h-11 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium"
+                >
+                  <MessageSquare className="w-4 h-4 mr-2" />
+                  Start Chat
+                </Button>
+                <Button
+                  variant="outline"
+                  className="flex-1 h-11 bg-transparent border-white/[0.08] hover:bg-white/[0.05] text-white rounded-lg font-medium"
+                  onClick={() => {
+                    // Show integration options
+                  }}
+                >
+                  <Plug className="w-4 h-4 mr-2" />
+                  Integration
+                </Button>
+              </div>
+
+              {/* Integration Options Preview */}
+              <div className="pt-2 space-y-2">
+                <button 
+                  aria-label="One-Click Integration"
+                  className="w-full flex items-center justify-between p-3 rounded-lg bg-[#000] border border-white/[0.06] hover:bg-[#141414] transition-colors text-left"
+                >
+                  <div className="flex items-center gap-3">
+                    <Zap className="w-4 h-4 text-green-400" />
+                    <div>
+                      <div className="text-sm font-medium text-white">One-Click Integration</div>
+                      <div className="text-xs text-gray-500">Connect instantly with OAuth</div>
+                    </div>
+                  </div>
+                  <ExternalLink className="w-4 h-4 text-gray-500" />
+                </button>
+
+                <button 
+                  aria-label="API Key Integration"
+                  className="w-full flex items-center justify-between p-3 rounded-lg bg-[#000] border border-white/[0.06] hover:bg-[#141414] transition-colors text-left"
+                >
+                  <div className="flex items-center gap-3">
+                    <Code className="w-4 h-4 text-purple-400" />
+                    <div>
+                      <div className="text-sm font-medium text-white">API Key Integration</div>
+                      <div className="text-xs text-gray-500">Use your own API credentials</div>
+                    </div>
+                  </div>
+                  <ExternalLink className="w-4 h-4 text-gray-500" />
+                </button>
+
+                <button 
+                  aria-label="View Documentation"
+                  className="w-full flex items-center justify-between p-3 rounded-lg bg-[#000] border border-white/[0.06] hover:bg-[#141414] transition-colors text-left"
+                >
+                  <div className="flex items-center gap-3">
+                    <BookOpen className="w-4 h-4 text-orange-400" />
+                    <div>
+                      <div className="text-sm font-medium text-white">Documentation</div>
+                      <div className="text-xs text-gray-500">View integration guides and API docs</div>
+                    </div>
+                  </div>
+                  <ExternalLink className="w-4 h-4 text-gray-500" />
+                </button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }
