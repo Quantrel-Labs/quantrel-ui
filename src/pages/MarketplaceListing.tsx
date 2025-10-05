@@ -303,7 +303,7 @@ export default function MarketplaceListing({ showCreatorInfo = true }: Marketpla
                 className="group cursor-pointer"
                 onClick={() => handleTryNow(product)}
               >
-                <div className="rounded-xl p-4 transition-all duration-200 hover:bg-white/[0.02]">
+                <div className="rounded-xl p-4  transition-all duration-200 hover:bg-white/[0.02]">
                   {/* Icon and Title Row */}
                   <div className="flex items-center gap-3 mb-3">
                     <div className={`w-10 h-10 ${categoryColor} rounded-full flex items-center justify-center flex-shrink-0`}>

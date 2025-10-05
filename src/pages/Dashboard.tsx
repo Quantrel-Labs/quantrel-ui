@@ -18,13 +18,13 @@ export default function Dashboard() {
           navigate("/dashboard/admin", { replace: true })
           break
         case ROLES.STORE:
-          navigate("/dashboard/store", { replace: true })
+          navigate("/seller/dashboard", { replace: true })
           break
         case ROLES.CUSTOMER:
-          navigate("/dashboard/customer", { replace: true })
+          navigate("/chat", { replace: true })
           break
         default:
-          navigate("/dashboard/customer", { replace: true })
+          navigate("/chat", { replace: true })
       }
     }
   }, [user, role, loading, navigate])

@@ -1,18 +1,15 @@
 // DOCS: Main navigation bar with authentication state
 
 import { useState } from "react"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate, useLocation } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { useAuth } from "@/hooks/useAuth"
-
-const primaryLinks = [
-  { label: "Product", href: "/" },
-  { label: "Marketplace", href: "/marketplace" }
-]
+import { ROLES } from "@/lib/roles"
 
 export default function Navbar() {
   const { user, role, signOut, loading } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const handleSignOut = async () => {
@@ -21,8 +18,51 @@ export default function Navbar() {
   }
 
   const getDashboardPath = () => {
+    if (role === ROLES.CUSTOMER) return "/chat"
+    if (role === ROLES.STORE) return "/seller/dashboard"
+    if (role === ROLES.ADMIN) return "/dashboard/admin"
     return "/dashboard"
   }
+
+  const getHomePath = () => {
+    if (!user) return "/"
+    if (role === ROLES.CUSTOMER) return "/marketplace"
+    if (role === ROLES.STORE) return "/seller/dashboard"
+    if (role === ROLES.ADMIN) return "/dashboard/admin"
+    return "/dashboard"
+  }
+
+  const getNavLinks = () => {
+    if (!user) {
+      return [
+        { label: "Features", href: "#features", isHash: true },
+        { label: "Pricing", href: "#pricing", isHash: true }
+      ]
+    }
+
+    if (role === ROLES.CUSTOMER) {
+      return [
+        { label: "Chat", href: "/chat" },
+        { label: "Marketplace", href: "/marketplace" },
+        { label: "AI Teams", href: "/ai-teams" },
+        { label: "Billing", href: "/billing" },
+        { label: "Activity", href: "/activity" }
+      ]
+    }
+
+    if (role === ROLES.STORE) {
+      return [
+        { label: "Dashboard", href: "/seller/dashboard" },
+        { label: "Tools", href: "/seller/tools" },
+        { label: "Analytics", href: "/seller/analytics" },
+        { label: "Billing", href: "/seller/billing" }
+      ]
+    }
+
+    return []
+  }
+
+  const navLinks = getNavLinks()
 
   const renderAuthSection = () => {
     if (loading) {
@@ -83,10 +123,10 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 bg-black/95 backdrop-blur-sm border-b border-white/[0.05]">
       <div className="relative py-4">
         <nav className="relative mx-auto max-w-7xl px-8 flex h-16 items-center justify-between text-sm">
-          <Link to="/" className="flex items-center gap-3 text-xl font-display font-semibold text-white hover:opacity-80 transition-opacity">
-            <div className="relative h-10 w-10 rounded-xl overflow-hidden  flex-shrink-0">
+          <Link to={getHomePath()} className="flex items-center gap-3 text-xl font-display font-semibold text-white hover:opacity-80 transition-opacity">
+            <div className="relative h-8 w-8 rounded-xl overflow-hidden  flex-shrink-0">
               <img 
-                src="/logo.png" 
+                src="/logo_dark_theme.png" 
                 alt="Quantrel Logo" 
                 className="h-full w-full object-cover"
                 onError={(e) => {
@@ -105,15 +145,40 @@ export default function Navbar() {
           </Link>
 
           <div className="hidden items-center gap-8 md:flex">
-            {primaryLinks.map((link) => (
-              <Link
-                key={link.label}
-                to={link.href}
-                className="text-gray-400 transition duration-300 hover:text-white font-medium"
-              >
-                {link.label}
-              </Link>
-            ))}
+            {navLinks.map((link) => {
+              // @ts-ignore - isHash is optional
+              if (link.isHash) {
+                return (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    onClick={(e) => {
+                      e.preventDefault()
+                      const element = document.querySelector(link.href)
+                      if (element) {
+                        element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                      }
+                    }}
+                    className="text-gray-400 hover:text-white transition duration-300 font-medium cursor-pointer"
+                  >
+                    {link.label}
+                  </a>
+                )
+              }
+              return (
+                <Link
+                  key={link.label}
+                  to={link.href}
+                  className={`transition duration-300 font-medium ${
+                    location.pathname === link.href
+                      ? "text-white"
+                      : "text-gray-400 hover:text-white"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              )
+            })}
           </div>
 
           <div className="hidden md:flex">{renderAuthSection()}</div>
@@ -139,16 +204,42 @@ export default function Navbar() {
         <div className="mx-6 mt-4 rounded-2xl bg-black border border-white/[0.05] p-6 md:hidden">
           <div className="space-y-6">
             <div className="grid gap-3">
-              {primaryLinks.map((link) => (
-                <Link
-                  key={link.label}
-                  to={link.href}
-                  className="rounded-lg px-4 py-3 text-base font-medium text-white hover:bg-white/[0.02] transition-colors"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {link.label}
-                </Link>
-              ))}
+              {navLinks.map((link) => {
+                // @ts-ignore - isHash is optional
+                if (link.isHash) {
+                  return (
+                    <a
+                      key={link.label}
+                      href={link.href}
+                      onClick={(e) => {
+                        e.preventDefault()
+                        const element = document.querySelector(link.href)
+                        if (element) {
+                          element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                        }
+                        setIsMenuOpen(false)
+                      }}
+                      className="rounded-lg px-4 py-3 text-base font-medium text-gray-400 hover:bg-white/[0.02] hover:text-white transition-colors cursor-pointer"
+                    >
+                      {link.label}
+                    </a>
+                  )
+                }
+                return (
+                  <Link
+                    key={link.label}
+                    to={link.href}
+                    className={`rounded-lg px-4 py-3 text-base font-medium transition-colors ${
+                      location.pathname === link.href
+                        ? "bg-white/10 text-white"
+                        : "text-gray-400 hover:bg-white/[0.02] hover:text-white"
+                    }`}
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {link.label}
+                  </Link>
+                )
+              })}
             </div>
 
             <div className="pt-4 border-t border-white/[0.05]">{renderAuthSection()}</div>

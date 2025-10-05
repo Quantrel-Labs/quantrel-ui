@@ -1,4 +1,4 @@
-// DOCS: Login page component with animated CSS background
+// DOCS: Login page component - Simplified version without Three.js
 
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
@@ -57,25 +57,12 @@ export default function Login() {
   }
 
   return (
-    <div className="flex w-full flex-col min-h-screen bg-black relative overflow-hidden">
-      {/* Pure CSS Animated Background - No WebGL needed */}
+    <div className="flex w-full flex-col min-h-screen bg-black relative">
+      {/* Simplified Animated Background */}
       <div className="absolute inset-0 z-0">
-        {/* Base gradient */}
         <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-900" />
-        
-        {/* Animated gradient orbs */}
-        <div className="absolute inset-0">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '4s' }} />
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '6s', animationDelay: '2s' }} />
-          <div className="absolute top-1/2 right-1/3 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '5s', animationDelay: '1s' }} />
-        </div>
-        
-        {/* Subtle grain texture overlay */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.03)_0%,_transparent_100%)]" />
-        
-        {/* Vignette effect */}
-        <div className="absolute top-0 left-0 right-0 h-1/3 bg-gradient-to-b from-black/50 to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-black/50 to-transparent" />
+        <div className="absolute top-0 left-0 right-0 h-1/3 bg-gradient-to-b from-black to-transparent" />
       </div>
       
       {/* Content Layer */}

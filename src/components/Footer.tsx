@@ -1,12 +1,19 @@
 import { Link } from "react-router-dom"
 import { cn } from "@/lib/utils"
+import { Github, Twitter, Linkedin, Mail } from "lucide-react"
 
 const footerLinks = {
   product: [
-    { label: "Overview", href: "/" },
-    { label: "Features", href: "/marketplace" },
-    { label: "Pricing", href: "/pricing" },
-    { label: "Releases", href: "/changelog" }
+    { label: "AI Marketplace", href: "/marketplace" },
+    { label: "AI Teams", href: "/ai-teams" },
+    { label: "Privacy Shield", href: "/#privacy" },
+    { label: "Pricing", href: "/#pricing" }
+  ],
+  developers: [
+    { label: "Documentation", href: "/docs" },
+    { label: "API Reference", href: "/api" },
+    { label: "Integrations", href: "/integrations" },
+    { label: "SDKs", href: "/sdks" }
   ],
   company: [
     { label: "About", href: "/about" },
@@ -14,17 +21,11 @@ const footerLinks = {
     { label: "Careers", href: "/careers" },
     { label: "Contact", href: "/contact" }
   ],
-  resources: [
-    { label: "Community", href: "/community" },
-    { label: "Support", href: "/support" },
-    { label: "Documentation", href: "/docs" },
-    { label: "Status", href: "/status" }
-  ],
-  social: [
-    { label: "X", href: "https://x.com" },
-    { label: "Instagram", href: "https://instagram.com" },
-    { label: "YouTube", href: "https://youtube.com" },
-    { label: "Dribbble", href: "https://dribbble.com" }
+  legal: [
+    { label: "Privacy Policy", href: "/privacy" },
+    { label: "Terms of Service", href: "/terms" },
+    { label: "Security", href: "/security" },
+    { label: "GDPR", href: "/gdpr" }
   ]
 }
 
@@ -91,9 +92,53 @@ export default function Footer({ className }: { className?: string }) {
         </div>
 
         <LinkColumn title="Product" items={footerLinks.product} />
+        <LinkColumn title="Developers" items={footerLinks.developers} />
         <LinkColumn title="Company" items={footerLinks.company} />
-        <LinkColumn title="Resources" items={footerLinks.resources} />
-        <LinkColumn title="Social" items={footerLinks.social} />
+        <LinkColumn title="Legal" items={footerLinks.legal} />
+      </div>
+
+      {/* Social Links Bar */}
+      <div className="border-t border-white/10">
+        <div className="mx-auto max-w-7xl px-6 py-6 lg:px-12">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <a
+                href="https://github.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-9 h-9 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-colors flex items-center justify-center text-gray-400 hover:text-white"
+                aria-label="GitHub"
+              >
+                <Github className="w-4 h-4" />
+              </a>
+              <a
+                href="https://twitter.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-9 h-9 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-colors flex items-center justify-center text-gray-400 hover:text-white"
+                aria-label="Twitter"
+              >
+                <Twitter className="w-4 h-4" />
+              </a>
+              <a
+                href="https://linkedin.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-9 h-9 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-colors flex items-center justify-center text-gray-400 hover:text-white"
+                aria-label="LinkedIn"
+              >
+                <Linkedin className="w-4 h-4" />
+              </a>
+              <a
+                href="mailto:hello@quantrel.com"
+                className="w-9 h-9 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-colors flex items-center justify-center text-gray-400 hover:text-white"
+                aria-label="Email"
+              >
+                <Mail className="w-4 h-4" />
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
     </footer>
   )
