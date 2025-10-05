@@ -88,6 +88,7 @@ class ThermalEffectEngine implements Disposable {
   private animationId: number | null = null
   private lastTime = 0
   private isPaused = false
+  private wasVisibleBeforeHidden = true
   private animationValues: AnimationValues = {
     blendVideo: { value: 1, target: 1 },
     amount: { value: 0, target: 1 },
@@ -148,9 +149,14 @@ class ThermalEffectEngine implements Disposable {
   }
   private visibilityChangeHandler = () => {
     if (document.hidden) {
+      // Store whether animation was running before hiding
+      this.wasVisibleBeforeHidden = !this.isPaused
       this.pause()
-    } else if (!this.isPaused) {
-      this.resume()
+    } else {
+      // Resume only if it was running before we hid the tab
+      if (this.wasVisibleBeforeHidden) {
+        this.resume()
+      }
     }
   }
   
