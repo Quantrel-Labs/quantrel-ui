@@ -42,7 +42,7 @@ export default function NewLanding() {
         {/* Thermal Effect Background */}
         <div className="absolute inset-0 flex items-center justify-center opacity-70 pointer-events-none">
           <ThermalEffect 
-            logoUrl="/logo.png"
+            logoUrl="/logo_dark_theme.png"
             width={1000}
             height={1000}
             className="scale-150"
