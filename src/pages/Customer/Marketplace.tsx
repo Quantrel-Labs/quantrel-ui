@@ -189,7 +189,7 @@ export default function Marketplace() {
   }
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-black pt-24">
       {/* Minimal Header with Search */}
       <div className="border-b border-white/[0.06]">
         <div className="max-w-7xl mx-auto px-8 py-6">

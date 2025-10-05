@@ -40,11 +40,11 @@ export default function NewLanding() {
       {/* Hero Section */}
       <section id="hero" className="relative min-h-screen flex items-center overflow-hidden py-20">
         {/* Thermal Effect Background */}
-        <div className="absolute inset-0 flex items-center justify-center opacity-70 pointer-events-none">
+        <div className="absolute opacity-70 pointer-events-none">
           <ThermalEffect 
-            logoUrl="/logo_dark_theme.png"
-            width={1000}
-            height={1000}
+            logoUrl="/rectangle.png"
+            height={800}
+            width={800}
             className="scale-150"
           />
         </div>

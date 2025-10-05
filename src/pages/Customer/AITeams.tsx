@@ -58,11 +58,11 @@ export default function AITeams() {
       {/* Hero Section */}
       <section className="relative min-h-[90vh] flex items-center overflow-hidden py-20">
         {/* Thermal Effect Background */}
-        <div className="absolute inset-0 flex items-center justify-center opacity-70 pointer-events-none">
+        <div className="absolute opacity-70 pointer-events-none">
           <ThermalEffect 
-            logoUrl="/logo.png"
-            width={1000}
-            height={1000}
+            logoUrl="/rectangle.png"
+            width={800}
+            height={800}
             className="scale-150"
           />
         </div>

@@ -82,7 +82,7 @@ export default function AdminDashboard() {
   ]
 
   return (
-    <section className="min-h-screen bg-black relative space-y-10 px-6 py-10 lg:px-12">
+    <section className="min-h-screen bg-black relative space-y-10 px-6 py-10 lg:px-12 pt-24">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-4xl font-semibold text-white">Admin control center</h1>

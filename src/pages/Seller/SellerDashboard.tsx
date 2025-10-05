@@ -38,7 +38,7 @@ export default function SellerDashboard() {
   ])
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-black pt-24">
       <div className="max-w-7xl mx-auto px-6 lg:px-12 py-12">
         {/* Header */}
         <div className="mb-12">

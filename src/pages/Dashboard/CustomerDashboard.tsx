@@ -128,7 +128,7 @@ export default function CustomerDashboard() {
   }
 
   return (
-    <section className="min-h-screen bg-black space-y-10 px-6 py-10 text-white lg:px-12">
+    <section className="min-h-screen bg-black space-y-10 px-6 py-10 text-white lg:px-12 pt-24">
       <div className="flex flex-col gap-6 rounded-[32px] border border-white/12 bg-white/[0.04] p-8 shadow-[0_50px_120px_rgba(5,10,45,0.6)] lg:flex-row lg:items-center lg:justify-between">
         <div className="space-y-3">
           <p className="text-xs uppercase tracking-[0.35em] text-white/50">Customer dashboard</p>
