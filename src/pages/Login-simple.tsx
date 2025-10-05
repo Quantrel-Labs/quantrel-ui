@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import { motion, AnimatePresence } from "framer-motion"
 import { useAuth } from "@/hooks/useAuth"
 
 export default function Login() {
@@ -74,16 +73,11 @@ export default function Login() {
         {/* Main content container */}
         <div className="flex flex-1 flex-col items-center justify-center px-6">
           <div className="w-full mt-[100px] max-w-md">
-            <AnimatePresence mode="wait">
-              {step === "email" ? (
-                <motion.div 
-                  key="email-step"
-                  initial={{ opacity: 0, x: -100 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -100 }}
-                  transition={{ duration: 0.4, ease: "easeOut" }}
-                  className="space-y-6 text-center"
-                >
+            {step === "email" ? (
+              <div 
+                key="email-step"
+                className="space-y-6 text-center animate-[slideInLeft_0.3s_ease-out]"
+              >
                   <div className="space-y-1">
                     <h1 className="text-[2.5rem] font-bold leading-[1.1] tracking-tight text-white">Welcome Back</h1>
                     <p className="text-[1.8rem] text-white/70 font-light">Sign in to Quantrel</p>
@@ -153,15 +147,11 @@ export default function Login() {
                       Create an account
                     </Link>
                   </p>
-                </motion.div>
+                </div>
               ) : (
-                <motion.div 
+                <div 
                   key="password-step"
-                  initial={{ opacity: 0, x: 100 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 100 }}
-                  transition={{ duration: 0.4, ease: "easeOut" }}
-                  className="space-y-6 text-center"
+                  className="space-y-6 text-center animate-[slideInRight_0.3s_ease-out]"
                 >
                   <div className="space-y-1">
                     <h1 className="text-[2.5rem] font-bold leading-[1.1] tracking-tight text-white">Enter Password</h1>
@@ -188,23 +178,17 @@ export default function Login() {
                     </div>
                     
                     <div className="flex w-full gap-3">
-                      <motion.button 
+                      <button 
                         type="button"
                         onClick={handleBackClick}
-                        className="rounded-full bg-white/10 text-white font-medium px-8 py-3 hover:bg-white/20 transition-colors w-[30%] border border-white/10"
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        transition={{ duration: 0.2 }}
+                        className="rounded-full bg-white/10 text-white font-medium px-8 py-3 hover:bg-white/20 transition-all active:scale-95 w-[30%] border border-white/10"
                       >
                         Back
-                      </motion.button>
-                      <motion.button 
+                      </button>
+                      <button 
                         type="submit"
                         disabled={isLoading}
-                        className="flex-1 rounded-full font-medium py-3 bg-white text-black hover:bg-white/90 transition-colors disabled:opacity-50"
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        transition={{ duration: 0.2 }}
+                        className="flex-1 rounded-full font-medium py-3 bg-white text-black hover:bg-white/90 transition-all active:scale-95 disabled:opacity-50"
                       >
                         {isLoading ? (
                           <div className="flex items-center justify-center gap-2">
@@ -214,7 +198,7 @@ export default function Login() {
                         ) : (
                           "Sign In"
                         )}
-                      </motion.button>
+                      </button>
                     </div>
                   </form>
                   
@@ -223,9 +207,8 @@ export default function Login() {
                       Forgot password?
                     </Link>
                   </div>
-                </motion.div>
+                </div>
               )}
-            </AnimatePresence>
           </div>
         </div>
       </div>

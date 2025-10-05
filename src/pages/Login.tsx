@@ -1,8 +1,7 @@
-// DOCS: Login page component - Simplified version without Three.js
+// DOCS: Login page component with animated CSS background
 
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import { motion, AnimatePresence } from "framer-motion"
 import { useAuth } from "@/hooks/useAuth"
 
 export default function Login() {
@@ -58,12 +57,25 @@ export default function Login() {
   }
 
   return (
-    <div className="flex w-full flex-col min-h-screen bg-black relative">
-      {/* Simplified Animated Background */}
+    <div className="flex w-full flex-col min-h-screen bg-black relative overflow-hidden">
+      {/* Pure CSS Animated Background - No WebGL needed */}
       <div className="absolute inset-0 z-0">
+        {/* Base gradient */}
         <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-900" />
+        
+        {/* Animated gradient orbs */}
+        <div className="absolute inset-0">
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '4s' }} />
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '6s', animationDelay: '2s' }} />
+          <div className="absolute top-1/2 right-1/3 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '5s', animationDelay: '1s' }} />
+        </div>
+        
+        {/* Subtle grain texture overlay */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.03)_0%,_transparent_100%)]" />
-        <div className="absolute top-0 left-0 right-0 h-1/3 bg-gradient-to-b from-black to-transparent" />
+        
+        {/* Vignette effect */}
+        <div className="absolute top-0 left-0 right-0 h-1/3 bg-gradient-to-b from-black/50 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-black/50 to-transparent" />
       </div>
       
       {/* Content Layer */}
@@ -74,16 +86,11 @@ export default function Login() {
         {/* Main content container */}
         <div className="flex flex-1 flex-col items-center justify-center px-6">
           <div className="w-full mt-[100px] max-w-md">
-            <AnimatePresence mode="wait">
-              {step === "email" ? (
-                <motion.div 
-                  key="email-step"
-                  initial={{ opacity: 0, x: -100 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -100 }}
-                  transition={{ duration: 0.4, ease: "easeOut" }}
-                  className="space-y-6 text-center"
-                >
+            {step === "email" ? (
+              <div 
+                key="email-step"
+                className="space-y-6 text-center animate-[slideInLeft_0.3s_ease-out]"
+              >
                   <div className="space-y-1">
                     <h1 className="text-[2.5rem] font-bold leading-[1.1] tracking-tight text-white">Welcome Back</h1>
                     <p className="text-[1.8rem] text-white/70 font-light">Sign in to Quantrel</p>
@@ -153,15 +160,11 @@ export default function Login() {
                       Create an account
                     </Link>
                   </p>
-                </motion.div>
+                </div>
               ) : (
-                <motion.div 
+                <div 
                   key="password-step"
-                  initial={{ opacity: 0, x: 100 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 100 }}
-                  transition={{ duration: 0.4, ease: "easeOut" }}
-                  className="space-y-6 text-center"
+                  className="space-y-6 text-center animate-[slideInRight_0.3s_ease-out]"
                 >
                   <div className="space-y-1">
                     <h1 className="text-[2.5rem] font-bold leading-[1.1] tracking-tight text-white">Enter Password</h1>
@@ -188,23 +191,17 @@ export default function Login() {
                     </div>
                     
                     <div className="flex w-full gap-3">
-                      <motion.button 
+                      <button 
                         type="button"
                         onClick={handleBackClick}
-                        className="rounded-full bg-white/10 text-white font-medium px-8 py-3 hover:bg-white/20 transition-colors w-[30%] border border-white/10"
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        transition={{ duration: 0.2 }}
+                        className="rounded-full bg-white/10 text-white font-medium px-8 py-3 hover:bg-white/20 transition-all active:scale-95 w-[30%] border border-white/10"
                       >
                         Back
-                      </motion.button>
-                      <motion.button 
+                      </button>
+                      <button 
                         type="submit"
                         disabled={isLoading}
-                        className="flex-1 rounded-full font-medium py-3 bg-white text-black hover:bg-white/90 transition-colors disabled:opacity-50"
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        transition={{ duration: 0.2 }}
+                        className="flex-1 rounded-full font-medium py-3 bg-white text-black hover:bg-white/90 transition-all active:scale-95 disabled:opacity-50"
                       >
                         {isLoading ? (
                           <div className="flex items-center justify-center gap-2">
@@ -214,7 +211,7 @@ export default function Login() {
                         ) : (
                           "Sign In"
                         )}
-                      </motion.button>
+                      </button>
                     </div>
                   </form>
                   
@@ -223,9 +220,8 @@ export default function Login() {
                       Forgot password?
                     </Link>
                   </div>
-                </motion.div>
+                </div>
               )}
-            </AnimatePresence>
           </div>
         </div>
       </div>

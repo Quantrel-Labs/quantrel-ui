@@ -15,7 +15,6 @@
     "clsx": "^2.1.1",
     "dotenv": "^17.2.2",
     "firebase": "^12.3.0",
-    "framer-motion": "^12.23.22",
     "lucide-react": "^0.453.0",
     "next": "^15.5.4",
     "react": "^18.3.1",
