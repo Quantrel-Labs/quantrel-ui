@@ -35,8 +35,8 @@ export default function Navbar() {
   const getNavLinks = () => {
     if (!user) {
       return [
-        { label: "Features", href: "/#features" },
-        { label: "Pricing", href: "/#pricing" }
+        { label: "Features", href: "#features", isHash: true },
+        { label: "Pricing", href: "#pricing", isHash: true }
       ]
     }
 
@@ -145,19 +145,40 @@ export default function Navbar() {
           </Link>
 
           <div className="hidden items-center gap-8 md:flex">
-            {navLinks.map((link) => (
-              <Link
-                key={link.label}
-                to={link.href}
-                className={`transition duration-300 font-medium ${
-                  location.pathname === link.href
-                    ? "text-white"
-                    : "text-gray-400 hover:text-white"
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
+            {navLinks.map((link) => {
+              // @ts-ignore - isHash is optional
+              if (link.isHash) {
+                return (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    onClick={(e) => {
+                      e.preventDefault()
+                      const element = document.querySelector(link.href)
+                      if (element) {
+                        element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                      }
+                    }}
+                    className="text-gray-400 hover:text-white transition duration-300 font-medium cursor-pointer"
+                  >
+                    {link.label}
+                  </a>
+                )
+              }
+              return (
+                <Link
+                  key={link.label}
+                  to={link.href}
+                  className={`transition duration-300 font-medium ${
+                    location.pathname === link.href
+                      ? "text-white"
+                      : "text-gray-400 hover:text-white"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              )
+            })}
           </div>
 
           <div className="hidden md:flex">{renderAuthSection()}</div>
@@ -183,20 +204,42 @@ export default function Navbar() {
         <div className="mx-6 mt-4 rounded-2xl bg-black border border-white/[0.05] p-6 md:hidden">
           <div className="space-y-6">
             <div className="grid gap-3">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.label}
-                  to={link.href}
-                  className={`rounded-lg px-4 py-3 text-base font-medium transition-colors ${
-                    location.pathname === link.href
-                      ? "bg-white/10 text-white"
-                      : "text-gray-400 hover:bg-white/[0.02] hover:text-white"
-                  }`}
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {link.label}
-                </Link>
-              ))}
+              {navLinks.map((link) => {
+                // @ts-ignore - isHash is optional
+                if (link.isHash) {
+                  return (
+                    <a
+                      key={link.label}
+                      href={link.href}
+                      onClick={(e) => {
+                        e.preventDefault()
+                        const element = document.querySelector(link.href)
+                        if (element) {
+                          element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                        }
+                        setIsMenuOpen(false)
+                      }}
+                      className="rounded-lg px-4 py-3 text-base font-medium text-gray-400 hover:bg-white/[0.02] hover:text-white transition-colors cursor-pointer"
+                    >
+                      {link.label}
+                    </a>
+                  )
+                }
+                return (
+                  <Link
+                    key={link.label}
+                    to={link.href}
+                    className={`rounded-lg px-4 py-3 text-base font-medium transition-colors ${
+                      location.pathname === link.href
+                        ? "bg-white/10 text-white"
+                        : "text-gray-400 hover:bg-white/[0.02] hover:text-white"
+                    }`}
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {link.label}
+                  </Link>
+                )
+              })}
             </div>
 
             <div className="pt-4 border-t border-white/[0.05]">{renderAuthSection()}</div>
