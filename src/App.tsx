@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom"
+import { Outlet, useLocation } from "react-router-dom"
 import { AuthProvider } from "@/context/AuthContext"
 import { ToastProvider } from "@/context/ToastContext"
 import Navbar from "@/components/Navbar"
@@ -7,11 +7,16 @@ import Footer from "@/components/Footer"
 import { Squares } from "@/components/ui/squares-background"
 
 export default function App() {
+  const location = useLocation()
+  
+  // Hide navbar and footer on login/register pages
+  const isAuthPage = ['/login', '/register'].includes(location.pathname)
+  
   return (
     <AuthProvider>
       <ToastProvider>
         <div className="relative min-h-screen bg-[#000] text-white overflow-hidden">
-          {/* Animated grid background */}
+          {/* Animated grid background - hidden on auth pages */}
           {/* <div className="fixed inset-0 z-0">
             <Squares 
               direction="diagonal"
@@ -24,11 +29,11 @@ export default function App() {
           
           {/* Content layer */}
           <div className="relative z-10 flex min-h-screen flex-col">
-            <Navbar />
+            {!isAuthPage && <Navbar />}
             <main className="flex-1">
               <Outlet />
             </main>
-            <Footer />
+            {!isAuthPage && <Footer />}
             <ToastContainer />
           </div>
         </div>

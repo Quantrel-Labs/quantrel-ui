@@ -2,9 +2,7 @@
 
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { motion, AnimatePresence } from "framer-motion"
 import { useAuth } from "@/hooks/useAuth"
 import { ROLES, Role } from "@/lib/roles"
 
@@ -14,13 +12,21 @@ export default function Register() {
   const [confirmPassword, setConfirmPassword] = useState("")
   const [displayName, setDisplayName] = useState("")
   const [role, setRole] = useState<Role>(ROLES.CUSTOMER)
+  const [step, setStep] = useState<"email" | "details">("email")
   const [isLoading, setIsLoading] = useState(false)
   const [isGoogleLoading, setIsGoogleLoading] = useState(false)
   const [error, setError] = useState("")
   const { signUpEmail, signInGoogle } = useAuth()
   const navigate = useNavigate()
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleEmailSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (email) {
+      setStep("details")
+    }
+  }
+
+  const handleDetailsSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
     setError("")
@@ -61,212 +67,323 @@ export default function Register() {
     }
   }
 
+  const handleBackClick = () => {
+    setStep("email")
+    setError("")
+  }
+
   return (
-    <section className="relative overflow-hidden py-24 min-h-screen flex items-center">
-      <div className="absolute inset-0 -z-10  blur-3xl" />
-      <div className="absolute inset-0 -z-10  blur-3xl" />
+    <div className="flex w-full flex-col min-h-screen bg-black relative">
+      {/* Simplified Background - No Canvas/WebGL */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-900" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.03)_0%,_transparent_100%)]" />
+        <div className="absolute top-0 left-0 right-0 h-1/3 bg-gradient-to-b from-black to-transparent" />
+      </div>
+      
+      {/* Content Layer */}
+      <div className="relative z-10 flex flex-col flex-1">
+        {/* Top navigation */}
+        <MiniNavbar />
 
-      <div className="mx-auto grid max-w-7xl gap-20 px-6 md:grid-cols-[1fr_1.2fr] lg:px-12 items-center">
-        <div className="space-y-12 animate-fade-in-up">
-          <div className="inline-flex items-center gap-3 bg-white/5 border border-white/10 rounded-lg px-6 py-3 text-sm font-bold uppercase tracking-[0.2em] text-gray-400">
-            Join Quantrel
-          </div>
-          
-          <h1 className="font-display text-5xl font-bold leading-tight text-white md:text-6xl lg:text-7xl">
-            Build cinematic
-            <br />
-            <span className="text-white">AI experiences</span>
-            <br />
-            without touching code
-          </h1>
-          
-          <p className="text-xl text-gray-400 leading-relaxed max-w-2xl">
-            Quantrel pairs cutting-edge AI with production-ready components, so you can generate dashboards, marketplaces, and
-            immersive storefronts in minutes.
-          </p>
-          
-          <div className="grid gap-6 sm:grid-cols-2">
-            {["Role-based dashboards", "Realtime analytics", "AI-assisted workflows", "Launch-ready publishing"].map(
-              (item, index) => (
-                <div key={item} className="bg-white/5 border border-white/10 p-6 rounded-lg animate-fade-in-scale hover:bg-white/10 transition-colors" style={{ animationDelay: `${index * 0.1}s` }}>
-                  <span className="font-bold text-white">{item}</span>
-                </div>
-              )
-            )}
-          </div>
-        </div>
-
-        <Card className="relative w-full max-w-2xl justify-self-end animate-fade-in-scale bg-black border border-white/10" style={{ animationDelay: '0.2s' }}>
-          <CardHeader className="space-y-6">
-            <CardTitle className="font-display text-4xl font-bold">Create your account</CardTitle>
-            <p className="text-lg text-gray-400">Pick your role, invite your team, and start shipping with AI.</p>
-          </CardHeader>
-          <CardContent className="space-y-8">
-            {error && (
-              <div className="bg-red-500/10 border border-red-400/30 p-6 rounded-lg animate-fade-in-scale">
-                <p className="text-red-200 font-medium">{error}</p>
-              </div>
-            )}
-
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="space-y-3">
-                <label htmlFor="displayName" className="text-base font-bold text-white">
-                  Full name
-                </label>
-                <Input
-                  id="displayName"
-                  type="text"
-                  placeholder="Avery Chen"
-                  value={displayName}
-                  onChange={(e) => setDisplayName(e.target.value)}
-                  required
-                  className="h-14 text-base"
-                />
-              </div>
-
-              <div className="space-y-3">
-                <label htmlFor="email" className="text-base font-bold text-white">
-                  Work email
-                </label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="you@studio.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </div>
-
-              <div className="grid gap-2">
-                <label htmlFor="role" className="text-sm font-medium text-white/80">
-                  Role
-                </label>
-                <div className="rounded-3xl border border-white/12 bg-white/[0.05] p-2">
-                  <div className="grid grid-cols-2 gap-2">
-                    {[ROLES.CUSTOMER, ROLES.STORE].map((option) => {
-                      const isActive = role === option
-                      return (
-                        <button
-                          key={option}
-                          type="button"
-                          onClick={() => setRole(option)}
-                          className={`rounded-2xl px-4 py-3 text-left text-sm transition ${
-                            isActive
-                              ? "border border-white/30 bg-white/80 text-black shadow-[0_18px_45px_rgba(8,12,40,0.45)]"
-                              : "border border-transparent bg-transparent text-white/70 hover:border-white/10 hover:bg-white/10"
-                          }`}
+        {/* Main content container */}
+        <div className="flex flex-1 flex-col items-center justify-center px-6">
+          <div className="w-full mt-[100px] max-w-md">
+            <AnimatePresence mode="wait">
+              {step === "email" ? (
+                <motion.div 
+                  key="email-step"
+                  initial={{ opacity: 0, x: -100 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -100 }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                  className="space-y-6 text-center"
+                >
+                  <div className="space-y-1">
+                    <h1 className="text-[2.5rem] font-bold leading-[1.1] tracking-tight text-white">Join Quantrel</h1>
+                    <p className="text-[1.8rem] text-white/70 font-light">Create your account</p>
+                  </div>
+                  
+                  {error && (
+                    <div className="bg-red-500/10 border border-red-400/30 p-4 rounded-lg">
+                      <p className="text-red-200 text-sm font-medium">{error}</p>
+                    </div>
+                  )}
+                  
+                  <div className="space-y-4">
+                    <button 
+                      onClick={handleGoogleSignIn}
+                      disabled={isGoogleLoading}
+                      className="backdrop-blur-[2px] w-full flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-full py-3 px-4 transition-colors disabled:opacity-50"
+                    >
+                      {isGoogleLoading ? (
+                        <>
+                          <span className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                          <span>Connecting…</span>
+                        </>
+                      ) : (
+                        <>
+                          <span className="text-lg">G</span>
+                          <span>Sign up with Google</span>
+                        </>
+                      )}
+                    </button>
+                    
+                    <div className="flex items-center gap-4">
+                      <div className="h-px bg-white/10 flex-1" />
+                      <span className="text-white/40 text-sm">or</span>
+                      <div className="h-px bg-white/10 flex-1" />
+                    </div>
+                    
+                    <form onSubmit={handleEmailSubmit}>
+                      <div className="relative">
+                        <input 
+                          type="email" 
+                          placeholder="you@studio.com"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          className="w-full backdrop-blur-[1px] bg-transparent text-white border border-white/10 rounded-full py-3 px-4 focus:outline-none focus:border-white/30 text-center"
+                          required
+                        />
+                        <button 
+                          type="submit"
+                          className="absolute right-1.5 top-1.5 text-white w-9 h-9 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors group overflow-hidden"
                         >
-                          <span className="block font-semibold">
-                            {option === ROLES.CUSTOMER ? "Customer" : "Store"}
-                          </span>
-                          <span className="text-xs text-white/60">
-                            {option === ROLES.CUSTOMER ? "Browse models" : "Sell your AI"}
+                          <span className="relative w-full h-full block overflow-hidden">
+                            <span className="absolute inset-0 flex items-center justify-center transition-transform duration-300 group-hover:translate-x-full">
+                              →
+                            </span>
+                            <span className="absolute inset-0 flex items-center justify-center transition-transform duration-300 -translate-x-full group-hover:translate-x-0">
+                              →
+                            </span>
                           </span>
                         </button>
-                      )
-                    })}
+                      </div>
+                    </form>
                   </div>
-                </div>
-                <p className="text-xs text-white/60">
-                  {role === ROLES.CUSTOMER
-                    ? "Personalize your discovery feed, save favorites, and plug into agents instantly."
-                    : "Launch storefronts, manage credits, and sync sales data with your stack."}
-                </p>
-              </div>
-
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="grid gap-2">
-                  <label htmlFor="password" className="text-sm font-medium text-white/80">
-                    Password
-                  </label>
-                  <Input
-                    id="password"
-                    type="password"
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <label htmlFor="confirmPassword" className="text-sm font-medium text-white/80">
-                    Confirm
-                  </label>
-                  <Input
-                    id="confirmPassword"
-                    type="password"
-                    placeholder="••••••••"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="grid gap-1 text-xs text-white/55">
-                <p>Password must contain:</p>
-                <ul className="grid gap-1 text-white/45">
-                  <li className={password.length >= 6 ? "text-white" : ""}>At least 6 characters</li>
-                  <li className={/[A-Z]/.test(password) ? "text-white" : ""}>One uppercase letter</li>
-                  <li className={/\d/.test(password) ? "text-white" : ""}>One number</li>
-                </ul>
-              </div>
-
-              <Button type="submit" className="h-12 text-base" disabled={isLoading || password !== confirmPassword}>
-                {isLoading ? (
-                  <div className="flex items-center gap-2">
-                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-black/40 border-t-black" />
-                    <span>Creating account…</span>
-                  </div>
-                ) : (
-                  "Create account"
-                )}
-              </Button>
-            </form>
-
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t border-white/10" />
-              </div>
-              <div className="relative flex justify-center text-xs uppercase tracking-[0.3em] text-white/40">
-                <span className="bg-transparent px-3">Or</span>
-              </div>
-            </div>
-
-            <Button
-              variant="outline"
-              className="h-12 w-full text-base"
-              onClick={handleGoogleSignIn}
-              disabled={isGoogleLoading}
-            >
-              {isGoogleLoading ? (
-                <div className="flex items-center gap-2">
-                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
-                  <span>Connecting…</span>
-                </div>
+                  
+                  <p className="text-xs text-white/40 pt-10">
+                    Already have an account?{' '}
+                    <Link to="/login" className="underline text-white/60 hover:text-white transition-colors">
+                      Sign in
+                    </Link>
+                  </p>
+                </motion.div>
               ) : (
-                <div className="flex items-center gap-3">
-                  <svg className="h-5 w-5" viewBox="0 0 24 24">
-                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
-                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-                  </svg>
-                  <span className="font-medium">Continue with Google</span>
-                </div>
-              )}
-            </Button>
+                <motion.div 
+                  key="details-step"
+                  initial={{ opacity: 0, x: 100 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 100 }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                  className="space-y-6 text-center"
+                >
+                  <div className="space-y-1">
+                    <h1 className="text-[2.5rem] font-bold leading-[1.1] tracking-tight text-white">Complete Setup</h1>
+                    <p className="text-[1.25rem] text-white/50 font-light">{email}</p>
+                  </div>
+                  
+                  {error && (
+                    <div className="bg-red-500/10 border border-red-400/30 p-4 rounded-lg">
+                      <p className="text-red-200 text-sm font-medium">{error}</p>
+                    </div>
+                  )}
+                  
+                  <form onSubmit={handleDetailsSubmit} className="space-y-5">
+                    <div className="space-y-2">
+                      <label htmlFor="displayName" className="text-sm font-medium text-white/80 block text-left">
+                        Full Name
+                      </label>
+                      <input 
+                        id="displayName"
+                        type="text" 
+                        placeholder="Avery Chen"
+                        value={displayName}
+                        onChange={(e) => setDisplayName(e.target.value)}
+                        autoFocus
+                        className="w-full backdrop-blur-[1px] bg-transparent text-white border border-white/10 rounded-full py-3 px-4 focus:outline-none focus:border-white/30 text-center"
+                        required
+                      />
+                    </div>
 
-            <div className="text-center text-sm text-white/60">
-              Already have an account?{' '}
-              <Link to="/login" className="text-white underline-offset-4 hover:text-white">
-                Sign in
-              </Link>
-            </div>
-          </CardContent>
-        </Card>
+                    <div className="space-y-2">
+                      <label htmlFor="role" className="text-sm font-medium text-white/80 block text-left">
+                        Role
+                      </label>
+                      <div className="rounded-3xl border border-white/12 bg-white/[0.05] p-2">
+                        <div className="grid grid-cols-2 gap-2">
+                          {[ROLES.CUSTOMER, ROLES.STORE].map((option) => {
+                            const isActive = role === option
+                            return (
+                              <button
+                                key={option}
+                                type="button"
+                                onClick={() => setRole(option)}
+                                className={`rounded-2xl px-4 py-3 text-left text-sm transition ${
+                                  isActive
+                                    ? "border border-white/30 bg-white/80 text-black"
+                                    : "border border-transparent bg-transparent text-white/70 hover:border-white/10 hover:bg-white/10"
+                                }`}
+                              >
+                                <span className="block font-semibold">
+                                  {option === ROLES.CUSTOMER ? "Customer" : "Store"}
+                                </span>
+                                <span className="text-xs opacity-70">
+                                  {option === ROLES.CUSTOMER ? "Browse models" : "Sell your AI"}
+                                </span>
+                              </button>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <div className="space-y-2">
+                        <label htmlFor="password" className="text-sm font-medium text-white/80 block text-left">
+                          Password
+                        </label>
+                        <input 
+                          id="password"
+                          type="password" 
+                          placeholder="••••••••"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          className="w-full backdrop-blur-[1px] bg-transparent text-white border border-white/10 rounded-full py-3 px-4 focus:outline-none focus:border-white/30 text-center"
+                          required
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label htmlFor="confirmPassword" className="text-sm font-medium text-white/80 block text-left">
+                          Confirm
+                        </label>
+                        <input 
+                          id="confirmPassword"
+                          type="password" 
+                          placeholder="••••••••"
+                          value={confirmPassword}
+                          onChange={(e) => setConfirmPassword(e.target.value)}
+                          className="w-full backdrop-blur-[1px] bg-transparent text-white border border-white/10 rounded-full py-3 px-4 focus:outline-none focus:border-white/30 text-center"
+                          required
+                        />
+                      </div>
+                    </div>
+
+                    <div className="text-xs text-white/55 text-left space-y-1">
+                      <p>Password must contain:</p>
+                      <ul className="space-y-1 text-white/45 pl-4">
+                        <li className={password.length >= 6 ? "text-white" : ""}>✓ At least 6 characters</li>
+                        <li className={/[A-Z]/.test(password) ? "text-white" : ""}>✓ One uppercase letter</li>
+                        <li className={/\d/.test(password) ? "text-white" : ""}>✓ One number</li>
+                      </ul>
+                    </div>
+                    
+                    <div className="flex w-full gap-3 pt-2">
+                      <motion.button 
+                        type="button"
+                        onClick={handleBackClick}
+                        className="rounded-full bg-white/10 text-white font-medium px-8 py-3 hover:bg-white/20 transition-colors w-[30%] border border-white/10"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        Back
+                      </motion.button>
+                      <motion.button 
+                        type="submit"
+                        disabled={isLoading || password !== confirmPassword}
+                        className="flex-1 rounded-full font-medium py-3 bg-white text-black hover:bg-white/90 transition-colors disabled:opacity-50"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        {isLoading ? (
+                          <div className="flex items-center justify-center gap-2">
+                            <span className="h-4 w-4 animate-spin rounded-full border-2 border-black/30 border-t-black" />
+                            <span>Creating account…</span>
+                          </div>
+                        ) : (
+                          "Create Account"
+                        )}
+                      </motion.button>
+                    </div>
+                  </form>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
       </div>
-    </section>
+    </div>
   )
+}
+
+function MiniNavbar() {
+  const [isOpen, setIsOpen] = useState(false)
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen)
+  }
+
+  return (
+    <header className={`fixed top-6 left-1/2 transform -translate-x-1/2 z-20
+                       flex flex-col items-center
+                       pl-6 pr-6 py-3 backdrop-blur-sm
+                       ${isOpen ? 'rounded-xl' : 'rounded-full'}
+                       border border-[#333] bg-[#1f1f1f57]
+                       w-[calc(100%-2rem)] sm:w-auto
+                       transition-[border-radius] duration-300 ease-in-out`}>
+
+      <div className="flex items-center justify-between w-full gap-x-6 sm:gap-x-8">
+        <div className="flex items-center">
+          <Link to="/" className="flex items-center">
+            <div className="relative w-5 h-5 flex items-center justify-center">
+              <span className="absolute w-1.5 h-1.5 rounded-full bg-gray-200 top-0 left-1/2 transform -translate-x-1/2 opacity-80"></span>
+              <span className="absolute w-1.5 h-1.5 rounded-full bg-gray-200 left-0 top-1/2 transform -translate-y-1/2 opacity-80"></span>
+              <span className="absolute w-1.5 h-1.5 rounded-full bg-gray-200 right-0 top-1/2 transform -translate-y-1/2 opacity-80"></span>
+              <span className="absolute w-1.5 h-1.5 rounded-full bg-gray-200 bottom-0 left-1/2 transform -translate-x-1/2 opacity-80"></span>
+            </div>
+          </Link>
+        </div>
+
+        <nav className="hidden sm:flex items-center space-x-4 sm:space-x-6 text-sm">
+          <a href="/" className="text-gray-300 hover:text-white transition-colors">Home</a>
+          <a href="/about" className="text-gray-300 hover:text-white transition-colors">About</a>
+        </nav>
+
+        <div className="hidden sm:flex items-center gap-2 sm:gap-3">
+          <Link to="/login" className="px-4 py-2 sm:px-3 text-xs sm:text-sm border border-[#333] bg-[rgba(31,31,31,0.62)] text-gray-300 rounded-full hover:border-white/50 hover:text-white transition-colors duration-200">
+            Login
+          </Link>
+          <Link to="/register" className="px-4 py-2 sm:px-3 text-xs sm:text-sm font-semibold text-black bg-gradient-to-br from-gray-100 to-gray-300 rounded-full hover:from-gray-200 hover:to-gray-400 transition-all duration-200">
+            Sign up
+          </Link>
+        </div>
+
+        <button className="sm:hidden flex items-center justify-center w-8 h-8 text-gray-300 focus:outline-none" onClick={toggleMenu} aria-label={isOpen ? 'Close Menu' : 'Open Menu'}>
+          {isOpen ? (
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+          ) : (
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+          )}
+        </button>
+      </div>
+
+      <div className={`sm:hidden flex flex-col items-center w-full transition-all ease-in-out duration-300 overflow-hidden
+                       ${isOpen ? 'max-h-[1000px] opacity-100 pt-4' : 'max-h-0 opacity-0 pt-0 pointer-events-none'}`}>
+        <nav className="flex flex-col items-center space-y-4 text-base w-full">
+          <Link to="/" className="text-gray-300 hover:text-white transition-colors w-full text-center">Home</Link>
+          <Link to="/about" className="text-gray-300 hover:text-white transition-colors w-full text-center">About</Link>
+        </nav>
+        <div className="flex flex-col items-center space-y-4 mt-4 w-full">
+          <Link to="/login" className="px-4 py-2 text-sm border border-[#333] bg-[rgba(31,31,31,0.62)] text-gray-300 rounded-full hover:border-white/50 hover:text-white transition-colors w-full text-center">
+            Login
+          </Link>
+          <Link to="/register" className="px-4 py-2 text-sm font-semibold text-black bg-gradient-to-br from-gray-100 to-gray-300 rounded-full hover:from-gray-200 hover:to-gray-400 transition-all w-full text-center">
+            Sign up
+          </Link>
+        </div>
+      </div>
+    </header>
+  );
 }
