@@ -32,7 +32,28 @@ const ThermalEffect: React.FC<ThermalEffectProps> = ({
 
     initEngine()
 
+    // Setup Intersection Observer to pause when not visible
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (engineRef.current) {
+            if (entry.isIntersecting) {
+              engineRef.current.resume()
+            } else {
+              engineRef.current.pause()
+            }
+          }
+        })
+      },
+      { threshold: 0.1 }
+    )
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current)
+    }
+
     return () => {
+      observer.disconnect()
       if (engineRef.current) {
         engineRef.current.dispose()
         engineRef.current = null
@@ -66,6 +87,7 @@ class ThermalEffectEngine implements Disposable {
   private parameters: EffectParameters = { ...DEFAULT_PARAMETERS }
   private animationId: number | null = null
   private lastTime = 0
+  private isPaused = false
   private animationValues: AnimationValues = {
     blendVideo: { value: 1, target: 1 },
     amount: { value: 0, target: 1 },
@@ -89,11 +111,15 @@ class ThermalEffectEngine implements Disposable {
   constructor(container: HTMLElement, logoUrl: string) {
     this.container = container
     this.logoUrl = logoUrl // Store logoUrl
-    // Renderer
+    // Renderer with performance optimizations
     this.renderer = new THREE.WebGLRenderer({
       alpha: true,
       antialias: false,
       logarithmicDepthBuffer: false,
+      powerPreference: 'low-power', // Prefer low power GPU
+      precision: 'mediump', // Use medium precision
+      stencil: false, // Disable stencil buffer
+      depth: false, // Disable depth buffer
     })
     this.renderer.outputColorSpace = (THREE as any).SRGBColorSpace ?? this.renderer.outputColorSpace
     this.renderer.setClearColor(0x000000, 0)
@@ -115,12 +141,22 @@ class ThermalEffectEngine implements Disposable {
   private setupRenderer(): void {
     const rect = this.container.getBoundingClientRect()
     this.renderer.setSize(rect.width, rect.height)
-    this.renderer.setPixelRatio(window.devicePixelRatio || 1)
+    // Cap pixel ratio at 1.5 for better performance
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5))
     this.renderer.domElement.style.pointerEvents = "none"
     this.container.appendChild(this.renderer.domElement)
   }
+  private visibilityChangeHandler = () => {
+    if (document.hidden) {
+      this.pause()
+    } else if (!this.isPaused) {
+      this.resume()
+    }
+  }
+  
   private setupResizeHandler(): void {
     window.addEventListener("resize", this.resizeHandler)
+    document.addEventListener("visibilitychange", this.visibilityChangeHandler)
   }
   async init(): Promise<void> {
     const isMobile = isTouchDevice()
@@ -188,6 +224,10 @@ class ThermalEffectEngine implements Disposable {
   }
   private startAnimationLoop(): void {
     const animate = (currentTime: number) => {
+      if (this.isPaused) {
+        // Don't schedule next frame when paused
+        return
+      }
       const deltaTime = (currentTime - this.lastTime) / 1000
       this.lastTime = currentTime
       this.update(deltaTime)
@@ -195,6 +235,34 @@ class ThermalEffectEngine implements Disposable {
       this.animationId = requestAnimationFrame(animate)
     }
     this.animationId = requestAnimationFrame(animate)
+  }
+  
+  pause(): void {
+    this.isPaused = true
+    // Cancel the current animation frame
+    if (this.animationId !== null) {
+      cancelAnimationFrame(this.animationId)
+      this.animationId = null
+    }
+  }
+  
+  resume(): void {
+    if (this.isPaused) {
+      this.isPaused = false
+      this.lastTime = performance.now()
+      // Restart the animation loop
+      const animate = (currentTime: number) => {
+        if (this.isPaused) {
+          return
+        }
+        const deltaTime = (currentTime - this.lastTime) / 1000
+        this.lastTime = currentTime
+        this.update(deltaTime)
+        this.render()
+        this.animationId = requestAnimationFrame(animate)
+      }
+      this.animationId = requestAnimationFrame(animate)
+    }
   }
   private update(deltaTime: number): void {
     this.updateAnimationValues(deltaTime)
@@ -319,6 +387,7 @@ class ThermalEffectEngine implements Disposable {
       this.animationId = null
     }
     window.removeEventListener("resize", this.resizeHandler)
+    document.removeEventListener("visibilitychange", this.visibilityChangeHandler)
     this.drawRenderer?.dispose()
     this.interactionManager?.dispose()
     this.thermalMaterial?.dispose()
@@ -329,6 +398,11 @@ class ThermalEffectEngine implements Disposable {
     if (this.maskTexture) this.maskTexture.dispose()
     if (this.logoTexture) this.logoTexture.dispose()
     this.renderer.dispose()
+    // Force release of WebGL context
+    const gl = this.renderer.getContext()
+    if (gl && gl.getExtension('WEBGL_lose_context')) {
+      gl.getExtension('WEBGL_lose_context')?.loseContext()
+    }
     if (this.container.contains(this.renderer.domElement)) {
       this.container.removeChild(this.renderer.domElement)
     }
