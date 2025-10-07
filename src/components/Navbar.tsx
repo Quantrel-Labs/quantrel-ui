@@ -131,7 +131,7 @@ export default function Navbar() {
           
           <Link 
             to={getSettingsPath()}
-            className="h-10 w-10 rounded-full overflow-hidden ring-2 ring-white/10 hover:ring-white/30 transition-all cursor-pointer flex-shrink-0"
+            className="h-8 w-8 rounded-full overflow-hidden ring-2 ring-white/10 hover:ring-white/30 transition-all cursor-pointer flex-shrink-0"
             title="Settings"
           >
             <img 
@@ -146,7 +146,7 @@ export default function Navbar() {
           </Link>
           <Button
             variant="ghost"
-            size="default"
+            size="sm"
             onClick={handleSignOut}
             className="bg-white text-black hover:bg-white/70"
           >
