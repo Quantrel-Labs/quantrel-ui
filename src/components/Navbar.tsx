@@ -128,14 +128,7 @@ export default function Navbar() {
     if (user) {
       return (
         <div className="flex items-center gap-3">
-          <Button
-            variant="ghost"
-            size="default"
-            onClick={handleSignOut}
-            className="font-medium text-white"
-          >
-            Sign Out
-          </Button>
+          
           <Link 
             to={getSettingsPath()}
             className="h-10 w-10 rounded-full overflow-hidden ring-2 ring-white/10 hover:ring-white/30 transition-all cursor-pointer flex-shrink-0"
@@ -151,6 +144,14 @@ export default function Navbar() {
               }}
             />
           </Link>
+          <Button
+            variant="ghost"
+            size="default"
+            onClick={handleSignOut}
+            className="bg-white text-black hover:bg-white/70"
+          >
+            Sign Out
+          </Button>
         </div>
       )
     }
