@@ -18,15 +18,17 @@ import CustomerDashboard from "@/pages/Dashboard/CustomerDashboard"
 import Chat from "@/pages/Customer/Chat"
 import Marketplace from "@/pages/Customer/Marketplace"
 import Billing from "@/pages/Customer/Billing"
-import Activity from "@/pages/Customer/Activity"
+import ManageAgents from "@/pages/Customer/ManageAgents"
 import AITeams from "@/pages/Customer/AITeams"
 import Settings from "@/pages/Customer/Settings"
+import SettingsHelp from "@/pages/Customer/SettingsHelp"
 
 // Seller Pages
 import SellerDashboard from "@/pages/Seller/SellerDashboard"
 import Tools from "@/pages/Seller/Tools"
-import Analytics from "@/pages/Seller/Analytics"
 import SellerBilling from "@/pages/Seller/SellerBilling"
+import SellerSettings from "@/pages/Seller/SellerSettings"
+import SellerHelp from "@/pages/Seller/SellerHelp"
 
 export const router = createBrowserRouter([
   {
@@ -70,11 +72,11 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "activity",
+        path: "manage-agents",
         element: (
           <ProtectedRoute>
             <RoleRoute allow={[ROLES.CUSTOMER]}>
-              <Activity />
+              <ManageAgents />
             </RoleRoute>
           </ProtectedRoute>
         ),
@@ -95,6 +97,16 @@ export const router = createBrowserRouter([
           <ProtectedRoute>
             <RoleRoute allow={[ROLES.CUSTOMER, ROLES.STORE]}>
               <Settings />
+            </RoleRoute>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "settings-help",
+        element: (
+          <ProtectedRoute>
+            <RoleRoute allow={[ROLES.CUSTOMER]}>
+              <SettingsHelp />
             </RoleRoute>
           </ProtectedRoute>
         ),
@@ -122,21 +134,31 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "seller/analytics",
-        element: (
-          <ProtectedRoute>
-            <RoleRoute allow={[ROLES.STORE]}>
-              <Analytics />
-            </RoleRoute>
-          </ProtectedRoute>
-        ),
-      },
-      {
         path: "seller/billing",
         element: (
           <ProtectedRoute>
             <RoleRoute allow={[ROLES.STORE]}>
               <SellerBilling />
+            </RoleRoute>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "seller/settings",
+        element: (
+          <ProtectedRoute>
+            <RoleRoute allow={[ROLES.STORE]}>
+              <SellerSettings />
+            </RoleRoute>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "seller/help",
+        element: (
+          <ProtectedRoute>
+            <RoleRoute allow={[ROLES.STORE]}>
+              <SellerHelp />
             </RoleRoute>
           </ProtectedRoute>
         ),

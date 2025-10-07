@@ -196,7 +196,7 @@ export default function AITeams() {
               return (
                 <div 
                   key={idx} 
-                  className={`p-8 rounded-2xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 backdrop-blur-sm animate-on-scroll ${idx === 1 ? 'stagger-1' : idx === 2 ? 'stagger-2' : ''}`}
+                  className={`p-8 rounded-2xl backdrop-blur-sm animate-on-scroll ${idx === 1 ? 'stagger-1' : idx === 2 ? 'stagger-2' : ''}`}
                 >
                   <div className={`w-12 h-12 rounded-xl ${colors.bg} flex items-center justify-center mb-6`}>
                     <feature.icon className={`w-6 h-6 ${colors.text}`} />
@@ -216,7 +216,7 @@ export default function AITeams() {
         <div className="mx-auto max-w-6xl px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-8">
             {/* Join Waitlist */}
-            <div className="p-10 rounded-2xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 backdrop-blur-sm animate-on-scroll">
+            <div className="p-10 rounded-2xl bg-white/[0.02] border border-white/10 backdrop-blur-sm animate-on-scroll">
               <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center mb-6">
                 <Mail className="w-6 h-6 text-blue-400" />
               </div>
@@ -245,7 +245,7 @@ export default function AITeams() {
             </div>
 
             {/* Share Your Idea */}
-            <div className="p-10 rounded-2xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 backdrop-blur-sm animate-on-scroll stagger-1">
+            <div className="p-10 rounded-2xl bg-white/[0.02] border border-white/10 backdrop-blur-sm animate-on-scroll stagger-1">
               <div className="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center mb-6">
                 <Users className="w-6 h-6 text-purple-400" />
               </div>

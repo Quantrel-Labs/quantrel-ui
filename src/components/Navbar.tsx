@@ -7,7 +7,7 @@ import { useAuth } from "@/hooks/useAuth"
 import { ROLES } from "@/lib/roles"
 
 export default function Navbar() {
-  const { user, role, signOut, loading } = useAuth()
+  const { user, profile, role, signOut, loading } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -71,8 +71,9 @@ export default function Navbar() {
         { label: "Chat", href: "/chat" },
         { label: "Marketplace", href: "/marketplace" },
         { label: "AI Teams", href: "/ai-teams" },
+        { label: "Manage Agents", href: "/manage-agents" },
         { label: "Billing", href: "/billing" },
-        { label: "Activity", href: "/activity" }
+        { label: "Settings & Help", href: "/settings-help" }
       ]
     }
 
@@ -80,8 +81,9 @@ export default function Navbar() {
       return [
         { label: "Dashboard", href: "/seller/dashboard" },
         { label: "Tools", href: "/seller/tools" },
-        { label: "Analytics", href: "/seller/analytics" },
-        { label: "Billing", href: "/seller/billing" }
+        { label: "Billing", href: "/seller/billing" },
+        { label: "Settings", href: "/seller/settings" },
+        { label: "Help", href: "/seller/help" }
       ]
     }
 
@@ -90,12 +92,35 @@ export default function Navbar() {
 
   const navLinks = getNavLinks()
 
+  const getAvatarUrl = () => {
+    // First try profile photoURL from database
+    if (profile?.photoURL) {
+      return profile.photoURL
+    }
+    // Then try Firebase user photoURL
+    if (user?.photoURL) {
+      return user.photoURL
+    }
+    // Fallback to placeholder avatar - use consistent avatar based on user ID
+    if (user?.uid) {
+      const avatarIndex = (parseInt(user.uid.slice(0, 8), 16) % 8) + 1
+      return `/avatars/a${avatarIndex}.png`
+    }
+    return '/avatars/a1.png'
+  }
+
+  const getSettingsPath = () => {
+    if (role === ROLES.CUSTOMER) return "/settings-help"
+    if (role === ROLES.STORE) return "/seller/settings"
+    if (role === ROLES.ADMIN) return "/dashboard/admin"
+    return "/settings-help"
+  }
+
   const renderAuthSection = () => {
     if (loading) {
       return (
         <div className="flex items-center gap-3">
-          <div className="h-10 w-24 animate-pulse rounded-lg bg-white/[0.05]" />
-          <div className="h-10 w-28 animate-pulse rounded-lg bg-white/[0.05]" />
+          <div className="h-10 w-10 animate-pulse rounded-full bg-white/[0.05]" />
         </div>
       )
     }
@@ -103,10 +128,6 @@ export default function Navbar() {
     if (user) {
       return (
         <div className="flex items-center gap-3">
-          <div className="hidden sm:flex flex-col text-right text-sm">
-            <span className="font-medium text-white">{user.displayName || user.email}</span>
-            {role && <span className="text-xs uppercase tracking-wider text-gray-400">{role}</span>}
-          </div>
           <Button
             variant="ghost"
             size="default"
@@ -115,12 +136,21 @@ export default function Navbar() {
           >
             Sign Out
           </Button>
-          <Button
-            size="default"
-            asChild
+          <Link 
+            to={getSettingsPath()}
+            className="h-10 w-10 rounded-full overflow-hidden ring-2 ring-white/10 hover:ring-white/30 transition-all cursor-pointer flex-shrink-0"
+            title="Settings"
           >
-            <Link to={getDashboardPath()}>Dashboard</Link>
-          </Button>
+            <img 
+              src={getAvatarUrl()} 
+              alt={user.displayName || "User avatar"}
+              className="h-full w-full object-cover"
+              onError={(e) => {
+                // Fallback to default avatar if image fails
+                e.currentTarget.src = '/avatars/a1.png'
+              }}
+            />
+          </Link>
         </div>
       )
     }

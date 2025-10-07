@@ -80,6 +80,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await ensureUserProfile(cred.user.uid, {
       email: cred.user.email,
       displayName: cred.user.displayName,
+      photoURL: cred.user.photoURL,
       role: DEFAULT_ROLE,
     })
   }

@@ -228,7 +228,7 @@ export default function SellerDashboard() {
           <div className="grid md:grid-cols-3 gap-4">
             {[
               { label: "Add New Tool", icon: <Plus/> },
-              { label: "View Analytics", icon: <ChartBar/> },
+              { label: "Get Help", icon: <ChartBar/> },
               { label: "Manage Payouts", icon: <DollarSignIcon/> }
             ].map((action, idx) => (
               <button

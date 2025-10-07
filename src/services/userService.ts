@@ -8,6 +8,7 @@ export type UserProfile = {
   uid: string
   email: string | null
   displayName: string | null
+  photoURL: string | null
   role: Role
   createdAt: number
 }
@@ -20,6 +21,7 @@ export async function ensureUserProfile(uid: string, profile: Partial<UserProfil
     uid,
     email: profile.email ?? null,
     displayName: profile.displayName ?? null,
+    photoURL: profile.photoURL ?? null,
     role: (profile.role ?? "customer") as Role,
     createdAt: Date.now(),
   }
