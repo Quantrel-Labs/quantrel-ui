@@ -99,7 +99,7 @@ export default function Chat() {
   return (
     <div className="flex flex-col h-screen bg-black">
       <Navbar />
-      <div className="flex flex-1 overflow-hidden mt-24">
+      <div className="flex flex-1 overflow-hidden pt-18">
         {/* Left Sidebar - Chat History */}
         <div className="w-64 border-r border-white/[0.06] flex flex-col flex-shrink-0 h-full">
         {/* Header */}

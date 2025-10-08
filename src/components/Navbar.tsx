@@ -19,7 +19,7 @@ export default function Navbar() {
     const controlNavbar = () => {
       const currentScrollY = window.scrollY
 
-      if (currentScrollY < 10) {
+      if (currentScrollY < 10000) {
         // Always show navbar at the top
         setIsVisible(true)
       } else if (currentScrollY > lastScrollY) {
@@ -180,10 +180,10 @@ export default function Navbar() {
     <header 
       className={`fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ease-in-out ${
         isVisible ? 'translate-y-0' : '-translate-y-full'
-      } bg-black/40 backdrop-blur-md border-b border-white/[0.05]`}
+      } bg-black/40 backdrop-blur-sm border-b border-white/[0.05]`}
     >
       <div className="relative py-4">
-        <nav className="relative mx-auto max-w-7xl px-8 flex h-16 items-center justify-between text-sm">
+        <nav className="relative mx-auto max-w-7xl px-8 flex h-10 items-center justify-between text-sm">
           <Link to={getHomePath()} className="flex items-center gap-3 text-xl font-display font-semibold text-white hover:opacity-80 transition-opacity">
             <div className="relative h-8 w-8 rounded-xl overflow-hidden  flex-shrink-0">
               <img 
